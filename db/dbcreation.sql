@@ -1,26 +1,26 @@
-CREATE DATABASE forum;
+CREATE DATABASE IF NOT EXISTS forum;
 USE forum;
 
 CREATE TABLE roles (
-                       id INT PRIMARY KEY AUTO_INCREMENT,
-                       name ENUM('user', 'moderator', 'admin') NOT NULL
+                       id INT AUTO_INCREMENT PRIMARY KEY,
+                       name VARCHAR(20) NOT NULL
 );
 
 CREATE TABLE users (
-                       id INT PRIMARY KEY AUTO_INCREMENT,
-                       username VARCHAR(255) UNIQUE NOT NULL,
+                       id INT AUTO_INCREMENT PRIMARY KEY,
+                       username VARCHAR(50) UNIQUE NOT NULL,
                        password VARCHAR(255) NOT NULL,
-                       email VARCHAR(255) UNIQUE NOT NULL,
-                       first_name VARCHAR(255) NOT NULL,
-                       last_name VARCHAR(255) NOT NULL,
+                       email VARCHAR(100) UNIQUE NOT NULL,
+                       first_name VARCHAR(50),
+                       last_name VARCHAR(50),
                        role_id INT,
                        phone_number VARCHAR(20) UNIQUE,
-                       is_blocked BOOLEAN NOT NULL DEFAULT FALSE,
+                       is_blocked BOOLEAN DEFAULT FALSE,
                        FOREIGN KEY (role_id) REFERENCES roles(id)
 );
 
 CREATE TABLE posts (
-                       id INT PRIMARY KEY AUTO_INCREMENT,
+                       id INT AUTO_INCREMENT PRIMARY KEY,
                        user_id INT,
                        title VARCHAR(64) NOT NULL,
                        content TEXT NOT NULL,
@@ -31,26 +31,18 @@ CREATE TABLE posts (
 );
 
 CREATE TABLE comments (
-                          id INT PRIMARY KEY AUTO_INCREMENT,
+                          id INT AUTO_INCREMENT PRIMARY KEY,
                           creator INT,
                           content_type VARCHAR(500) NOT NULL,
                           comment_time_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                          likes INT DEFAULT 0,
-                          dislikes INT DEFAULT 0,
-                          FOREIGN KEY (creator) REFERENCES users(id)
+                          post_id INT,
+                          FOREIGN KEY (creator) REFERENCES users(id),
+                          FOREIGN KEY (post_id) REFERENCES posts(id)
 );
 
 CREATE TABLE tags (
-                      id INT PRIMARY KEY AUTO_INCREMENT,
-                      name VARCHAR(255) NOT NULL
-);
-
-CREATE TABLE posts_comments (
-                                post_id INT,
-                                comment_id INT,
-                                PRIMARY KEY (post_id, comment_id),
-                                FOREIGN KEY (post_id) REFERENCES posts(id),
-                                FOREIGN KEY (comment_id) REFERENCES comments(id)
+                      id INT AUTO_INCREMENT PRIMARY KEY,
+                      name VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE tags_posts (
@@ -61,21 +53,18 @@ CREATE TABLE tags_posts (
                             FOREIGN KEY (post_id) REFERENCES posts(id)
 );
 
-CREATE TABLE replies (
-                         id INT PRIMARY KEY AUTO_INCREMENT,
-                         user_id INT,
-                         content TEXT NOT NULL,
-                         reply_time_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                         likes INT DEFAULT 0,
-                         dislikes INT DEFAULT 0,
-                         FOREIGN KEY (user_id) REFERENCES users(id)
+CREATE TABLE posts_users_likes (
+                                   post_id INT,
+                                   user_id INT,
+                                   PRIMARY KEY (post_id, user_id),
+                                   FOREIGN KEY (post_id) REFERENCES posts(id),
+                                   FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
-CREATE TABLE replies_comments (
-                                  comment_id INT,
-                                  reply_id INT,
-                                  PRIMARY KEY (comment_id, reply_id),
-                                  FOREIGN KEY (comment_id) REFERENCES comments(id),
-                                  FOREIGN KEY (reply_id) REFERENCES replies(id)
+CREATE TABLE posts_users_dislikes (
+                                      post_id INT,
+                                      user_id INT,
+                                      PRIMARY KEY (post_id, user_id),
+                                      FOREIGN KEY (post_id) REFERENCES posts(id),
+                                      FOREIGN KEY (user_id) REFERENCES users(id)
 );
-

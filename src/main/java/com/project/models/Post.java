@@ -1,4 +1,76 @@
 package com.project.models;
 
-public class Post {
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
+import java.util.Objects;
+import java.util.Set;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "posts")
+public class Post implements Comparable<Post> {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int postId;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User postedBy;
+
+    @Column(name = "title")
+    private String title;
+
+    @Column(name = "content")
+    private String content;
+
+    @Column(name = "post_time_created")
+    private LocalDateTime createdOn;
+
+    @Column(name = "likes")
+    private int likes;
+
+    @Column(name = "dislikes")
+    private int dislikes;
+
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "posts_users_likes",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> usersWhoLikedPost;
+
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "posts_users_dislikes",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> usersWhoDislikedPost;
+
+    public Post() {
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Post post = (Post) o;
+        return postId == post.postId;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(postId);
+    }
+
+    @Override
+    public int compareTo(Post o) {
+        return Integer.compare(this.getPostId(), o.getPostId());
+    }
 }

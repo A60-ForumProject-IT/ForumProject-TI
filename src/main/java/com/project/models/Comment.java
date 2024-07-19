@@ -15,7 +15,8 @@ public class Comment implements Comparable<Comment>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @Column(name = "id")
+    private int commentId;
 
     @ManyToOne
     @JoinColumn(name = "creator")
@@ -39,16 +40,16 @@ public class Comment implements Comparable<Comment>{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Comment comment = (Comment) o;
-        return id == comment.id;
+        return commentId == comment.commentId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(commentId);
     }
 
     @Override
     public int compareTo(Comment o) {
-        return Integer.compare(this.getId(), o.getId());
+        return Integer.compare(this.getCommentId(), o.getCommentId());
     }
 }

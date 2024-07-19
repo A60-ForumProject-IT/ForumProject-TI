@@ -1,4 +1,4 @@
 package com.project.repositories;
 
-public class UserRepository {
+public class UserRepositoryImpl {
 }

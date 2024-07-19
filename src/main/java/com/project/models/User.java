@@ -34,7 +34,6 @@ public class User implements Comparable<User> {
     @Column(name = "phone_number", nullable = false, unique = true)
     private String phoneNumber;
 
-    @Enumerated(EnumType.STRING)
     @ManyToOne
     @JoinColumn (name = "role_id")
     private Role role;

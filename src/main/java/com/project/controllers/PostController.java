@@ -23,8 +23,6 @@ public class PostController {
 
     @GetMapping("/users/{userId}/posts")
     public List<Post> getAllUsersPosts(@PathVariable int userId) {
-        postService.getAllUsersPosts(userId);
-
-        return null;
+        return postService.getAllUsersPosts(userId);
     }
 }

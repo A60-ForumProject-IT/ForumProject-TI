@@ -1,6 +1,5 @@
 package com.project.models;
 
-import com.project.models.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserDTO {
+public class UserDto {
 
     @NotNull(message = "Username can't be empty.")
     @Size(min = 4, max = 32, message = "Username should be between 4 and 32.")
@@ -29,5 +29,13 @@ public class UserDTO {
     @Size(min = 4, max = 32, message = "Last name should be between 4 and 32.")
     private String lastName;
 
-    public UserDTO() {}
+    public UserDto() {}
+
+    public UserDto(String username, String password, String email, String firstName, String lastName) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 }

@@ -34,7 +34,8 @@ public class User {
     private String phoneNumber;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role_id")
+    @ManyToOne
+    @JoinColumn (name = "role_id")
     private Role role;
 
     @Column(name = "is_blocked")

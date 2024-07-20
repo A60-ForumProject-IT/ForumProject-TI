@@ -15,4 +15,6 @@ public interface UserService {
     User getByUsername(String username);
 
     void blockUser(User user, int id);
+
+    void unblocked(User user, int id);
 }

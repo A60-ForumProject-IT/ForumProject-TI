@@ -18,4 +18,6 @@ public interface UserService {
     void blockUser(User user, int id);
 
     void unblocked(User user, int id);
+
+    void deleteUser(User user, int id);
 }

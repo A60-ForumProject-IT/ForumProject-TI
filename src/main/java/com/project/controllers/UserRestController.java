@@ -22,7 +22,8 @@ import java.util.List;
 @RequestMapping("/api/forum/users")
 public class UserRestController {
     private static final String BLOCKED_SUCCESSFULLY = "User blocked successfully";
-    public static final String UNBLOCKED_SUCCESSFULLY = "User unblocked successfully";
+    private static final String UNBLOCKED_SUCCESSFULLY = "User unblocked successfully";
+    private static final String DELETING_USER_SUCCESSFULLY = "Deleting user successfully";
 
 
     private final UserService userService;
@@ -108,6 +109,21 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnblockedException e){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteUser(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            userService.deleteUser(user, id);
+            return new ResponseEntity<>(DELETING_USER_SUCCESSFULLY,HttpStatus.OK);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (AuthenticationException e){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 }

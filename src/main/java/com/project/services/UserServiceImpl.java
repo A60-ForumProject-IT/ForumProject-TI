@@ -96,4 +96,15 @@ public class UserServiceImpl implements UserService {
             throw new UnblockedException(ALREADY_NOT_BLOCKED);
         }
     }
+
+    @Override
+    public void deleteUser(User user, int id) {
+        try {
+            PermissionHelper.isAdmin(user, INVALID_PERMISSION);
+            User userToDelete = userRepository.getUserById(id);
+            userRepository.deleteUser(userToDelete);
+        } catch (EntityNotFoundException e){
+            throw new EntityNotFoundException("User", id);
+        }
+    }
 }

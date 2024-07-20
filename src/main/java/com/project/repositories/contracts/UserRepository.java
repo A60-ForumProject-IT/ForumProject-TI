@@ -18,4 +18,6 @@ public interface UserRepository {
     void blockUser(User user);
 
     void unblocked(User userToUnblock);
+
+    void deleteUser(User user);
 }

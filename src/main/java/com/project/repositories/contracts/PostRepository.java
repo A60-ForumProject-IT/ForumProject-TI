@@ -1,6 +1,7 @@
 package com.project.repositories.contracts;
 
 import com.project.models.Post;
+import com.project.models.dtos.PostDtoTopComments;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ public interface PostRepository {
 
     Post getPostById(int postId);
 
-    List<Post> getMostLikedPosts();
+    List<PostDtoTopComments> getMostLikedPosts();
 
-    List<Post> getMostCommentedPosts();
+    List<PostDtoTopComments> getMostCommentedPosts();
 }

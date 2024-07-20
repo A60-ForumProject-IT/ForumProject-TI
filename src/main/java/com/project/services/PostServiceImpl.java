@@ -1,6 +1,7 @@
 package com.project.services;
 
 import com.project.models.Post;
+import com.project.models.dtos.PostDtoTopComments;
 import com.project.repositories.contracts.PostRepository;
 import com.project.services.contracts.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +29,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> getMostLikedPosts() {
+    public List<PostDtoTopComments> getMostLikedPosts() {
         return postRepository.getMostLikedPosts();
     }
 
     @Override
-    public List<Post> getMostCommentedPosts() {
+    public List<PostDtoTopComments> getMostCommentedPosts() {
         return postRepository.getMostCommentedPosts();
     }
 

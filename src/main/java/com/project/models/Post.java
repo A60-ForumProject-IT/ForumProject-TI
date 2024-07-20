@@ -41,7 +41,8 @@ public class Post implements Comparable<Post> {
     @Column(name = "dislikes")
     private int dislikes;
 
-    @OneToMany(mappedBy = "commentedPost")
+    @JsonIgnore
+    @OneToMany(mappedBy = "commentedPost", fetch = FetchType.EAGER)
     private List<Comment> comments;
 
     @JsonIgnore

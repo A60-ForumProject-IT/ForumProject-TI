@@ -1,6 +1,7 @@
 package com.project.controllers;
 
 import com.project.models.Post;
+import com.project.models.dtos.PostDtoTopComments;
 import com.project.services.contracts.PostService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,12 +38,12 @@ public class PostController {
     }
 
     @GetMapping("/top10MostLikedPosts")
-    public List<Post> getMostLikedPosts() {
+    public List<PostDtoTopComments> getMostLikedPosts() {
         return postService.getMostLikedPosts();
     }
 
     @GetMapping("/top10MostCommentedPosts")
-    public List<Post> getMostCommentedPosts() {
+    public List<PostDtoTopComments> getMostCommentedPosts() {
         return postService.getMostCommentedPosts();
     }
 }

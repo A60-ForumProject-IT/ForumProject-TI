@@ -3,6 +3,7 @@ package com.project.repositories;
 import com.project.exceptions.EntityNotFoundException;
 import com.project.models.Post;
 import com.project.models.User;
+import com.project.models.dtos.PostDtoTopComments;
 import com.project.repositories.contracts.PostRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -42,20 +43,26 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
-    public List<Post> getMostLikedPosts() {
+    public List<PostDtoTopComments> getMostLikedPosts() {
         try(Session session = sessionFactory.openSession()) {
-            Query<Post> query = session.createQuery("FROM Post ORDER BY createdOn DESC LIMIT 10");
+            String hql = "SELECT NEW com.project.models.dtos.PostDtoTopComments(p.title, p.content, p.createdOn, p.likes, p.dislikes, COUNT(c)) " +
+                    "FROM Post p JOIN p.comments c GROUP BY p.title, p.content, p.createdOn, p.likes, p.dislikes " +
+                    "ORDER BY p.likes DESC LIMIT 10";
+            Query<PostDtoTopComments> query = session.createQuery(hql, PostDtoTopComments.class);
+
             return query.list();
         }
     }
 
     @Override
-    public List<Post> getMostCommentedPosts() {
+    public List<PostDtoTopComments> getMostCommentedPosts() {
         try(Session session = sessionFactory.openSession()) {
-            String hql = "SELECT p FROM Post p JOIN p.comments c GROUP BY p.id ORDER BY COUNT(c.id) DESC";
-            Query<Post> query = session.createQuery(hql, Post.class);
-            query.setMaxResults(5);
-            return query.getResultList();
+            String hql = "SELECT NEW com.project.models.dtos.PostDtoTopComments(p.title, p.content, p.createdOn, p.likes, p.dislikes, COUNT(c)) " +
+                    "FROM Post p JOIN p.comments c GROUP BY p.title, p.content, p.createdOn, p.likes, p.dislikes " +
+                    "ORDER BY COUNT(c) DESC LIMIT 10";
+            Query<PostDtoTopComments> query = session.createQuery(hql, PostDtoTopComments.class);
+
+            return query.list();
         }
     }
 

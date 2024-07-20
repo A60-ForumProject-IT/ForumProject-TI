@@ -10,4 +10,8 @@ public interface PostService {
     List<Post> getAllPosts();
 
     Post getPostById(int postId);
+
+    List<Post> getMostLikedPosts();
+
+    List<Post> getMostCommentedPosts();
 }

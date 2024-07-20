@@ -42,17 +42,34 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
+    public List<Post> getMostLikedPosts() {
+        try(Session session = sessionFactory.openSession()) {
+            Query<Post> query = session.createQuery("FROM Post ORDER BY createdOn DESC LIMIT 10");
+            return query.list();
+        }
+    }
+
+    @Override
+    public List<Post> getMostCommentedPosts() {
+        try(Session session = sessionFactory.openSession()) {
+            String hql = "SELECT p FROM Post p JOIN p.comments c GROUP BY p.id ORDER BY COUNT(c.id) DESC";
+            Query<Post> query = session.createQuery(hql, Post.class);
+            query.setMaxResults(5);
+            return query.getResultList();
+        }
+    }
+
+    @Override
     public List<Post> getAllUsersPosts(int userId) {
         try (Session session = sessionFactory.openSession()) {
             User user = session.get(User.class, userId);
-            Query<Post> query = session.createQuery("from Post where postedBy = :user", Post.class);
+            Query<Post> query = session.createQuery("FROM Post WHERE postedBy = :user", Post.class);
             query.setParameter("user", user);
             List<Post> posts = query.list();
             if (query.list().isEmpty()) {
                 throw new EntityNotFoundException(userId);
             }
             return posts;
-
         }
     }
 }

@@ -28,6 +28,16 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<Post> getMostLikedPosts() {
+        return postRepository.getMostLikedPosts();
+    }
+
+    @Override
+    public List<Post> getMostCommentedPosts() {
+        return postRepository.getMostCommentedPosts();
+    }
+
+    @Override
     public List<Post> getAllUsersPosts(int userId) {
         return postRepository.getAllUsersPosts(userId);
     }

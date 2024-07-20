@@ -35,4 +35,14 @@ public class PostController {
     public List<Post> getAllUsersPosts(@PathVariable int userId) {
         return postService.getAllUsersPosts(userId);
     }
+
+    @GetMapping("/top10MostLikedPosts")
+    public List<Post> getMostLikedPosts() {
+        return postService.getMostLikedPosts();
+    }
+
+    @GetMapping("/top10MostCommentedPosts")
+    public List<Post> getMostCommentedPosts() {
+        return postService.getMostCommentedPosts();
+    }
 }

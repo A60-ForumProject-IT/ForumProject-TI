@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -39,6 +40,9 @@ public class Post implements Comparable<Post> {
 
     @Column(name = "dislikes")
     private int dislikes;
+
+    @OneToMany(mappedBy = "commentedPost")
+    private List<Comment> comments;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)

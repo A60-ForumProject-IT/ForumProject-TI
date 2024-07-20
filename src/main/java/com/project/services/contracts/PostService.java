@@ -16,5 +16,5 @@ public interface PostService {
 
     List<PostDtoTopComments> getMostCommentedPosts();
 
-    void createPost(Post post);
+    Post createPost(Post post);
 }

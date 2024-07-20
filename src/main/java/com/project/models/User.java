@@ -12,7 +12,7 @@ import java.util.Objects;
 @Setter
 @Table(name = "users")
 public class User implements Comparable<User> {
-    //@JsonIgnore
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -39,11 +39,12 @@ public class User implements Comparable<User> {
     @Column(name = "phone_number", nullable = false, unique = true)
     private String phoneNumber;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn (name = "role_id")
     private Role role;
 
-   // @JsonIgnore
+    @JsonIgnore
     @Column(name = "is_blocked")
     private boolean isBlocked;
 

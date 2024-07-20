@@ -2,6 +2,7 @@ package com.project.controllers;
 
 import com.project.exceptions.AuthenticationException;
 import com.project.exceptions.DuplicateEntityException;
+import com.project.exceptions.EntityNotFoundException;
 import com.project.helpers.AuthenticationHelper;
 import com.project.helpers.MapperHelper;
 import com.project.helpers.PermissionHelper;
@@ -14,6 +15,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -38,13 +40,13 @@ public class PostRestController {
         return postService.getAllPosts();
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/posts")
-    public void createPost(@Valid @RequestBody PostDto postDto, @RequestHeader HttpHeaders headers) {
+    public ResponseEntity<String> createPost(@Valid @RequestBody PostDto postDto, @RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             Post post = mapperHelper.fromPostDto(postDto, user);
             postService.createPost(post);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Post created successfully!");
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         } catch (AuthenticationException e) {
@@ -54,7 +56,11 @@ public class PostRestController {
 
     @GetMapping("posts/{id}")
     public Post getPostById(@PathVariable int id) {
-        return postService.getPostById(id);
+        try {
+            return postService.getPostById(id);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     @GetMapping("/users/{userId}/posts")

@@ -16,12 +16,13 @@ import java.util.Set;
 @Table(name = "posts")
 public class Post implements Comparable<Post> {
 
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int postId;
 
-    @JsonIgnore
+//    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User postedBy;
@@ -41,7 +42,6 @@ public class Post implements Comparable<Post> {
     @Column(name = "dislikes")
     private int dislikes;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "commentedPost", fetch = FetchType.EAGER)
     private List<Comment> comments;
 

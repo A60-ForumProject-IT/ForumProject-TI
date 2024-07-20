@@ -1,5 +1,6 @@
 package com.project.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,12 +14,14 @@ import java.util.Objects;
 @Table(name = "comments")
 public class Comment implements Comparable<Comment>{
 
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int commentId;
 
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne()
     @JoinColumn(name = "creator")
     private User userId;
 
@@ -28,6 +31,7 @@ public class Comment implements Comparable<Comment>{
     @Column(name = "comment_time_created")
     private LocalDateTime createdOn;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post commentedPost;

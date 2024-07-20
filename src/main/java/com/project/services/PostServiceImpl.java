@@ -41,7 +41,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void createPost(Post post) {
+    public Post createPost(Post post) {
         boolean duplicateExists = true;
         try {
             postRepository.getPostByTitle(post.getTitle());
@@ -53,7 +53,7 @@ public class PostServiceImpl implements PostService {
             throw new DuplicateEntityException("Post", "title", post.getTitle());
         }
 
-        postRepository.createPost(post);
+        return postRepository.createPost(post);
     }
 
     @Override

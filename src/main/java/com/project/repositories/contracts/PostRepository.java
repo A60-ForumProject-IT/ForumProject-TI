@@ -17,4 +17,6 @@ public interface PostRepository {
     List<PostDtoTopComments> getMostCommentedPosts();
 
     void createPost(Post post);
+
+    Post getPostByTitle(String title);
 }

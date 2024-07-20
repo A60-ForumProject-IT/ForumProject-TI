@@ -1,5 +1,7 @@
 package com.project.services;
 
+import com.project.exceptions.DuplicateEntityException;
+import com.project.exceptions.EntityNotFoundException;
 import com.project.models.Post;
 import com.project.models.dtos.PostDtoTopComments;
 import com.project.repositories.contracts.PostRepository;
@@ -40,6 +42,17 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void createPost(Post post) {
+        boolean duplicateExists = true;
+        try {
+            postRepository.getPostByTitle(post.getTitle());
+        } catch (EntityNotFoundException e) {
+            duplicateExists = false;
+        }
+
+        if (duplicateExists) {
+            throw new DuplicateEntityException("Post", "title", post.getTitle());
+        }
+
         postRepository.createPost(post);
     }
 

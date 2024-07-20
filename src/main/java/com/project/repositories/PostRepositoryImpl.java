@@ -89,4 +89,14 @@ public class PostRepositoryImpl implements PostRepository {
             return posts;
         }
     }
+
+    @Override
+    public Post getPostByTitle(String title) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Post> query = session.createQuery("FROM Post WHERE title = :title", Post.class);
+            query.setParameter("title", title);
+
+            return query.list().get(0);
+        }
+    }
 }

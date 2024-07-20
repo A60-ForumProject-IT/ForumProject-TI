@@ -36,9 +36,7 @@ public class AuthenticationHelper {
             if (!user.getPassword().equals(password)) {
                 throw new AuthenticationException(INVALID_AUTHENTICATION_ERROR);
             }
-
             return user;
-
         } catch (EntityNotFoundException e) {
             throw new AuthenticationException(INVALID_AUTHENTICATION_ERROR);
         }
@@ -73,6 +71,7 @@ public class AuthenticationHelper {
 
         return userService.getByUsername(currentUser);
     }
+
     public User verifyAuthentication(String username, String password) {
         try {
             User user = userService.getByUsername(username);

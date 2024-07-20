@@ -8,4 +8,6 @@ public interface UserRepository {
     List<User> getAllUsers();
 
     User getUserById(int id);
+
+    void update(User user);
 }

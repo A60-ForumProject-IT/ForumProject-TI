@@ -38,7 +38,8 @@ public class UserRestController {
     @PutMapping("/{id}")
     public User updateUser(@PathVariable int id, @RequestBody UserDto userDto) {
         User user = mapperHelper.updateUserFromDto(userDto, id);
-
+        userService.update(user);
+        return user;
     }
 
 }

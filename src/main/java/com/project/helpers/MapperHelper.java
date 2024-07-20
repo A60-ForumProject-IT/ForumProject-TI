@@ -26,9 +26,6 @@ public class MapperHelper {
         if (user.getRole().getRoleId() == 2 || user.getRole().getRoleId() == 3) {
             user.setPhoneNumber(userDto.getPhoneNumber());
         }
-        else {
-            throw new IllegalArgumentException("You are not allowed to update a phone number");
-        }
         return user;
     }
 

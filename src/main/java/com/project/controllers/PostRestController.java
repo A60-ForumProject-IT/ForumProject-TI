@@ -54,6 +54,18 @@ public class PostRestController {
         }
     }
 
+    @PutMapping("/posts/{id}")
+    public ResponseEntity<String> updatePost(@Valid @RequestBody PostDto postDto, @RequestHeader HttpHeaders headers, @PathVariable int id) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            Post post = mapperHelper.fromPostDtoToUpdate(postDto, id);
+            postService.updatePost(user, post);
+            return ResponseEntity.status(HttpStatus.OK).body("Post updated successfully!");
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
     @GetMapping("posts/{id}")
     public Post getPostById(@PathVariable int id) {
         try {

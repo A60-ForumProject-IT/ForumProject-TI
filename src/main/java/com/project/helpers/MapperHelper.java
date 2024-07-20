@@ -5,6 +5,7 @@ import com.project.models.User;
 import com.project.models.dtos.PostDto;
 import com.project.models.dtos.RegistrationDto;
 import com.project.models.dtos.UserDto;
+import com.project.services.contracts.PostService;
 import com.project.services.contracts.RoleService;
 import com.project.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +17,13 @@ import java.time.LocalDateTime;
 public class MapperHelper {
     private UserService userService;
     private RoleService roleService;
+    private PostService postService;
 
     @Autowired
-    public MapperHelper(UserService userService, RoleService roleService) {
+    public MapperHelper(UserService userService, RoleService roleService, PostService postService) {
         this.userService = userService;
         this.roleService = roleService;
+        this.postService = postService;
     }
 
     public User updateUserFromDto(UserDto userDto, int id) {
@@ -38,6 +41,13 @@ public class MapperHelper {
         post.setContent(postDto.getContent());
         post.setPostedBy(user);
         post.setCreatedOn(LocalDateTime.now());
+        return post;
+    }
+
+    public Post fromPostDtoToUpdate(PostDto postDto, int id) {
+        Post post = postService.getPostById(id);
+        post.setTitle(postDto.getTitle());
+        post.setContent(postDto.getContent());
         return post;
     }
 

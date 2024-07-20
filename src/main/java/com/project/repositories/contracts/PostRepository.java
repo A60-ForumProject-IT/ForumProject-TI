@@ -19,4 +19,6 @@ public interface PostRepository {
     Post createPost(Post post);
 
     Post getPostByTitle(String title);
+
+    void updatePost(Post post);
 }

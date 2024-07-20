@@ -2,7 +2,9 @@ package com.project.services;
 
 import com.project.exceptions.DuplicateEntityException;
 import com.project.exceptions.EntityNotFoundException;
+import com.project.helpers.PermissionHelper;
 import com.project.models.Post;
+import com.project.models.User;
 import com.project.models.dtos.PostDtoTopComments;
 import com.project.repositories.contracts.PostRepository;
 import com.project.services.contracts.PostService;
@@ -13,11 +15,14 @@ import java.util.List;
 
 @Service
 public class PostServiceImpl implements PostService {
+    public static final String AUTHORIZATION_EXCEPTION = "You are not creator of the post to edit it!";
     private PostRepository postRepository;
+    private PermissionHelper permissionHelper;
 
     @Autowired
-    public PostServiceImpl(PostRepository postRepository) {
+    public PostServiceImpl(PostRepository postRepository, PermissionHelper permissionHelper) {
         this.postRepository = postRepository;
+        this.permissionHelper = permissionHelper;
     }
 
     @Override
@@ -54,6 +59,22 @@ public class PostServiceImpl implements PostService {
         }
 
         return postRepository.createPost(post);
+    }
+
+    @Override
+    public void updatePost(User user, Post post) {
+        permissionHelper.isSameUser(user, post.getPostedBy(), AUTHORIZATION_EXCEPTION);
+        boolean duplicateExists = true;
+        try {
+           postRepository.getPostByTitle(post.getTitle());
+        } catch (EntityNotFoundException e) {
+            duplicateExists = false;
+        }
+
+        if (duplicateExists) {
+            throw new DuplicateEntityException("Post", "title", post.getTitle());
+        }
+        postRepository.updatePost(post);
     }
 
     @Override

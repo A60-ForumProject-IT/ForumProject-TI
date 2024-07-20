@@ -40,7 +40,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void createPost(Post post) {
-
+        postRepository.createPost(post);
     }
 
     @Override

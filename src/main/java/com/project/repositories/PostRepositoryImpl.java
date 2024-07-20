@@ -68,7 +68,12 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public void createPost(Post post) {
-
+        try(Session session = sessionFactory.openSession()) {
+            //TODO:
+            session.beginTransaction();
+            session.persist(post);
+            session.getTransaction().commit();
+        }
     }
 
     @Override

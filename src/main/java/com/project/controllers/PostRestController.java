@@ -7,6 +7,7 @@ import com.project.models.dtos.PostDtoTopComments;
 import com.project.services.contracts.PostService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
 @RequestMapping("api/forum")
 public class PostRestController {
     private final MapperHelper mapperHelper;
-    private PostService postService;
+    private final PostService postService;
 
     @Autowired
     public PostRestController(PostService postService, MapperHelper mapperHelper) {
@@ -28,6 +29,7 @@ public class PostRestController {
         return postService.getAllPosts();
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/posts")
     public void createPost(@Valid @RequestBody PostDto postDto) {
         Post post = mapperHelper.fromPostDto(postDto);

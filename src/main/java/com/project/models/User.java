@@ -56,8 +56,6 @@ public class User implements Comparable<User> {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.role = new Role();
-        this.role.setRoleId(1);
     }
 
 

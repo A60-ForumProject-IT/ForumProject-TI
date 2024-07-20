@@ -2,6 +2,7 @@ package com.project.controllers;
 
 import com.project.helpers.MapperHelper;
 import com.project.models.User;
+import com.project.models.dtos.RegistrationDto;
 import com.project.models.dtos.UserDto;
 import com.project.services.contracts.UserService;
 import jakarta.validation.Valid;
@@ -43,4 +44,10 @@ public class UserRestController {
         return user;
     }
 
+    @PostMapping
+    public User createUser(@Valid @RequestBody RegistrationDto registrationDto) {
+        User user = mapperHelper.createUserFromRegistrationDto(registrationDto);
+        userService.create(user);
+        return user;
+    }
 }

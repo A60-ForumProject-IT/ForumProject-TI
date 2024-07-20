@@ -1,30 +1,37 @@
 package com.project.controllers;
 
+import com.project.helpers.MapperHelper;
 import com.project.models.Post;
+import com.project.models.dtos.PostDto;
 import com.project.models.dtos.PostDtoTopComments;
 import com.project.services.contracts.PostService;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("api/forum")
-public class PostController {
+public class PostRestController {
+    private final MapperHelper mapperHelper;
     private PostService postService;
 
     @Autowired
-    public PostController(PostService postService) {
+    public PostRestController(PostService postService, MapperHelper mapperHelper) {
         this.postService = postService;
+        this.mapperHelper = mapperHelper;
     }
 
     @GetMapping("/posts")
     public List<Post> getAllPosts() {
         return postService.getAllPosts();
+    }
+
+    @PostMapping("/posts")
+    public void createPost(@Valid @RequestBody PostDto postDto) {
+        Post post = mapperHelper.fromPostDto(postDto);
+        postService.createPost(post);
     }
 
     @GetMapping("posts/{id}")

@@ -39,6 +39,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public void createPost(Post post) {
+
+    }
+
+    @Override
     public List<Post> getAllUsersPosts(int userId) {
         return postRepository.getAllUsersPosts(userId);
     }

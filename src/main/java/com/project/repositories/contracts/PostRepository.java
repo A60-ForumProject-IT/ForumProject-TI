@@ -15,4 +15,6 @@ public interface PostRepository {
     List<PostDtoTopComments> getMostLikedPosts();
 
     List<PostDtoTopComments> getMostCommentedPosts();
+
+    void createPost(Post post);
 }

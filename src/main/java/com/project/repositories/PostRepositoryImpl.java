@@ -67,6 +67,11 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
+    public void createPost(Post post) {
+
+    }
+
+    @Override
     public List<Post> getAllUsersPosts(int userId) {
         try (Session session = sessionFactory.openSession()) {
             User user = session.get(User.class, userId);

@@ -1,6 +1,8 @@
 package com.project.helpers;
 
+import com.project.models.Post;
 import com.project.models.User;
+import com.project.models.dtos.PostDto;
 import com.project.models.dtos.UserDto;
 import com.project.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,5 +30,13 @@ public class MapperHelper {
             throw new IllegalArgumentException("You are not allowed to update a phone number");
         }
         return user;
+    }
+
+    public Post fromPostDto(PostDto postDto) {
+        Post post = new Post();
+        post.setTitle(postDto.getTitle());
+        post.setContent(postDto.getContent());
+
+        return post;
     }
 }

@@ -1,6 +1,5 @@
 package com.project.models.dtos;
 
-import com.project.models.User;
 import lombok.Getter;
 import lombok.Setter;
 

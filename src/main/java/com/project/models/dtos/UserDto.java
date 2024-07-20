@@ -11,10 +11,6 @@ import lombok.Setter;
 @Setter
 public class UserDto {
 
-    @NotNull(message = "Username can't be empty.")
-    @Size(min = 4, max = 32, message = "Username should be between 4 and 32.")
-    private String username;
-
     @NotNull(message = "Password can't be empty.")
     @Size(min = 8)
     private String password;
@@ -30,17 +26,12 @@ public class UserDto {
     @Size(min = 4, max = 32, message = "Last name should be between 4 and 32.")
     private String lastName;
 
-    @NotNull(message = "Phone number cant't be empty.")
-    private String phoneNumber;
-
     public UserDto() {}
 
-    public UserDto(String username, String password, String email, String firstName, String lastName, String phoneNumber) {
-        this.username = username;
+    public UserDto( String password, String email, String firstName, String lastName) {
         this.password = password;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
     }
 }

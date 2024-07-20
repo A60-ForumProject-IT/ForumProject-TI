@@ -23,9 +23,6 @@ public class MapperHelper {
         user.setEmail(userDto.getEmail());
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
-        if (user.getRole().getRoleId() == 2 || user.getRole().getRoleId() == 3) {
-            user.setPhoneNumber(userDto.getPhoneNumber());
-        }
         return user;
     }
 

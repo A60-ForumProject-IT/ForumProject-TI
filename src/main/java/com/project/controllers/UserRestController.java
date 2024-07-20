@@ -4,6 +4,7 @@ import com.project.helpers.MapperHelper;
 import com.project.models.User;
 import com.project.models.dtos.UserDto;
 import com.project.services.contracts.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +37,7 @@ public class UserRestController {
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable int id, @RequestBody UserDto userDto) {
+    public User updateUser(@PathVariable int id,@Valid @RequestBody UserDto userDto) {
         User user = mapperHelper.updateUserFromDto(userDto, id);
         userService.update(user);
         return user;

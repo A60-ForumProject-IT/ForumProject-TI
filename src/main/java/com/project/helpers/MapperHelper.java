@@ -5,6 +5,7 @@ import com.project.models.User;
 import com.project.models.dtos.PostDto;
 import com.project.models.dtos.RegistrationDto;
 import com.project.models.dtos.UserDto;
+import com.project.services.contracts.RoleService;
 import com.project.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,10 +15,12 @@ import java.time.LocalDateTime;
 @Component
 public class MapperHelper {
     private UserService userService;
+    private RoleService roleService;
 
     @Autowired
-    public MapperHelper(UserService userService) {
+    public MapperHelper(UserService userService, RoleService roleService) {
         this.userService = userService;
+        this.roleService = roleService;
     }
 
     public User updateUserFromDto(UserDto userDto, int id) {
@@ -45,7 +48,7 @@ public class MapperHelper {
         user.setEmail(registrationDto.getEmail());
         user.setPassword(registrationDto.getPassword());
         user.setUsername(registrationDto.getUsername());
-        user.getRole().setRoleId(1);
+        user.setRole(roleService.getRoleById(1));
         return user;
     }
 }

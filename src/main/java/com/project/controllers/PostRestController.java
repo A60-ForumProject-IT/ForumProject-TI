@@ -3,6 +3,7 @@ package com.project.controllers;
 import com.project.exceptions.AuthenticationException;
 import com.project.exceptions.DuplicateEntityException;
 import com.project.exceptions.EntityNotFoundException;
+import com.project.exceptions.UnauthorizedOperationException;
 import com.project.helpers.AuthenticationHelper;
 import com.project.helpers.MapperHelper;
 import com.project.helpers.PermissionHelper;
@@ -51,6 +52,22 @@ public class PostRestController {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/posts/{id}")
+    public ResponseEntity<String> deletePost(@PathVariable int id, @RequestHeader HttpHeaders headers) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            Post post = postService.getPostById(id);
+            postService.deletePost(user, post);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Post deleted successfully!");
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 
@@ -63,15 +80,22 @@ public class PostRestController {
             return ResponseEntity.status(HttpStatus.OK).body("Post updated successfully!");
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (DuplicateEntityException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 
     @GetMapping("posts/{id}")
-    public Post getPostById(@PathVariable int id) {
+    public Post getPostById(@PathVariable int id, @RequestHeader HttpHeaders headers) {
         try {
+            authenticationHelper.tryGetUser(headers);
             return postService.getPostById(id);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 

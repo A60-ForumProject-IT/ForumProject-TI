@@ -21,4 +21,6 @@ public interface PostRepository {
     Post getPostByTitle(String title);
 
     void updatePost(Post post);
+
+    void deletePost(Post post);
 }

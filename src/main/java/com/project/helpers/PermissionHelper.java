@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PermissionHelper {
     public static final String ROLE_ADMIN = "admin";
+    private static final String ROLE_MODERATOR = "moderator";
 
     public static void isAdmin(User authenticatedUser, String message) {
         boolean isAdmin = false;
@@ -19,12 +20,12 @@ public class PermissionHelper {
         }
     }
 
-    public static void isAdminOrSameUser(User userToBeUpdated, User userIsAuthorized, String message) {
+    public static void isAdminOrSameUser(User authorizedUser, User user, String message) {
         boolean isAuthorized = false;
-        if (userToBeUpdated.equals(userIsAuthorized)) {
+        if (authorizedUser.equals(user)) {
             isAuthorized = true;
         } else {
-            if (userIsAuthorized.getRole().getName().equals(ROLE_ADMIN)) {
+            if (authorizedUser.getRole().getName().equals(ROLE_ADMIN) || authorizedUser.getRole().getName().equals(ROLE_MODERATOR)) {
                 isAuthorized = true;
             }
         }
@@ -34,8 +35,8 @@ public class PermissionHelper {
         }
     }
 
-    public static void isSameUser(User userToBeUpdated, User userIsAuthorized, String message) {
-        if (!userToBeUpdated.equals(userIsAuthorized)) {
+    public static void isSameUser(User user, User userWhoCreatedThePost, String message) {
+        if (!user.equals(userWhoCreatedThePost)) {
             throw new UnauthorizedOperationException(message);
         }
     }

@@ -20,4 +20,6 @@ public interface PostService {
     Post createPost(Post post);
 
     void updatePost(User user, Post post);
+
+    void deletePost(User user, Post post);
 }

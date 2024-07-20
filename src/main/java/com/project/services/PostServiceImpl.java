@@ -16,13 +16,14 @@ import java.util.List;
 @Service
 public class PostServiceImpl implements PostService {
     public static final String AUTHORIZATION_EXCEPTION = "You are not creator of the post to edit it!";
-    private PostRepository postRepository;
-    private PermissionHelper permissionHelper;
+    public static final String BLOCKED_USER_ERROR = "You are blocked and cannot create posts!";
+    public static final String UNAUTHORIZED_DELETE_ERROR = "You are not authorized to delete this post";
+    private final PostRepository postRepository;
+
 
     @Autowired
-    public PostServiceImpl(PostRepository postRepository, PermissionHelper permissionHelper) {
+    public PostServiceImpl(PostRepository postRepository) {
         this.postRepository = postRepository;
-        this.permissionHelper = permissionHelper;
     }
 
     @Override
@@ -47,6 +48,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post createPost(Post post) {
+        PermissionHelper.isBlocked(post.getPostedBy(), BLOCKED_USER_ERROR);
         boolean duplicateExists = true;
         try {
             postRepository.getPostByTitle(post.getTitle());
@@ -63,7 +65,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void updatePost(User user, Post post) {
-        permissionHelper.isSameUser(user, post.getPostedBy(), AUTHORIZATION_EXCEPTION);
+        PermissionHelper.isSameUser(user, post.getPostedBy(), AUTHORIZATION_EXCEPTION);
         boolean duplicateExists = true;
         try {
            postRepository.getPostByTitle(post.getTitle());
@@ -75,6 +77,12 @@ public class PostServiceImpl implements PostService {
             throw new DuplicateEntityException("Post", "title", post.getTitle());
         }
         postRepository.updatePost(post);
+    }
+
+    @Override
+    public void deletePost(User user, Post post) {
+        PermissionHelper.isAdminOrSameUser(user, post.getPostedBy(), UNAUTHORIZED_DELETE_ERROR);
+        postRepository.deletePost(post);
     }
 
     @Override

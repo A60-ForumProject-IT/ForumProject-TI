@@ -1,5 +1,6 @@
 package com.project.models.dtos;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -29,13 +30,17 @@ public class UserDto {
     @Size(min = 4, max = 32, message = "Last name should be between 4 and 32.")
     private String lastName;
 
+    @NotNull(message = "Phone number cant't be empty.")
+    private String phoneNumber;
+
     public UserDto() {}
 
-    public UserDto(String username, String password, String email, String firstName, String lastName) {
+    public UserDto(String username, String password, String email, String firstName, String lastName, String phoneNumber) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
     }
 }

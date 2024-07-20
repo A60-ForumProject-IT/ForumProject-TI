@@ -1,12 +1,11 @@
 package com.project.controllers;
 
+import com.project.helpers.MapperHelper;
 import com.project.models.User;
+import com.project.models.dtos.UserDto;
 import com.project.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -14,10 +13,12 @@ import java.util.List;
 @RequestMapping("/api/forum/users")
 public class UserRestController {
     private final UserService userService;
+    private final MapperHelper mapperHelper;
 
     @Autowired
-    public UserRestController(UserService userService) {
+    public UserRestController(UserService userService, MapperHelper mapperHelper) {
         this.userService = userService;
+        this.mapperHelper = mapperHelper;
     }
 
 
@@ -28,8 +29,16 @@ public class UserRestController {
         return userService.getAllUsers();
     }
 
+    //админ трябва да прави това
     @GetMapping("/{id}")
     public User getUserById(@PathVariable int id) {
         return userService.getUserById(id);
     }
+
+    @PutMapping("/{id}")
+    public User updateUser(@PathVariable int id, @RequestBody UserDto userDto) {
+        User user = mapperHelper.updateUserFromDto(userDto, id);
+
+    }
+
 }

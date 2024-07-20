@@ -17,8 +17,8 @@ public class MapperHelper {
         this.userService = userService;
     }
 
-    public User updateUserFromDto(UserDto userDto) {
-        User user = new User();
+    public User updateUserFromDto(UserDto userDto, int id) {
+        User user = userService.getUserById(id);
         user.setPassword(userDto.getPassword());
         user.setEmail(userDto.getEmail());
         user.setFirstName(userDto.getFirstName());

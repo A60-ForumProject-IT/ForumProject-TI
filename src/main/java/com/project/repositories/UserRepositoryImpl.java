@@ -70,4 +70,14 @@ public class UserRepositoryImpl implements UserRepository {
                 .findFirst()
                 .orElseThrow(() -> new EntityNotFoundException("User", "username", username));
     }
+
+    @Override
+    public void blockUser(User user) {
+
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.merge(user);
+            session.getTransaction().commit();
+        }
+    }
 }

@@ -13,4 +13,6 @@ public interface UserService {
 
     void create(User user);
     User getByUsername(String username);
+
+    void blockUser(User user, int id);
 }

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PermissionHelper {
-    public static final String ROLE_ADMIN = "ADMIN";
+    public static final String ROLE_ADMIN = "admin";
 
     public static void isAdmin(User authenticatedUser, String message) {
         boolean isAdmin = false;

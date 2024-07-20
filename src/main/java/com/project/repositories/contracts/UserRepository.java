@@ -14,4 +14,6 @@ public interface UserRepository {
     void create(User user);
 
     User getByUsername(String username);
+
+    void blockUser(User user);
 }

@@ -5,13 +5,14 @@ import com.project.models.User;
 import java.util.List;
 
 public interface UserService {
-    List<User> getAllUsers();
+    List<User> getAllUsers(User user);
 
-    User getUserById(int id);
+    User getUserById(User user, int id);
 
     void update(User user);
 
     void create(User user);
+
     User getByUsername(String username);
 
     void blockUser(User user, int id);

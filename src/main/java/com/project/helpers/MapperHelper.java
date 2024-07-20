@@ -5,6 +5,7 @@ import com.project.models.User;
 import com.project.models.dtos.PostDto;
 import com.project.models.dtos.RegistrationDto;
 import com.project.models.dtos.UserDto;
+import com.project.repositories.contracts.UserRepository;
 import com.project.services.contracts.PostService;
 import com.project.services.contracts.RoleService;
 import com.project.services.contracts.UserService;
@@ -18,16 +19,19 @@ public class MapperHelper {
     private UserService userService;
     private RoleService roleService;
     private PostService postService;
+    private UserRepository userRepository;
 
     @Autowired
-    public MapperHelper(UserService userService, RoleService roleService, PostService postService) {
+    public MapperHelper(UserService userService, RoleService roleService,
+                        PostService postService, UserRepository userRepository) {
         this.userService = userService;
         this.roleService = roleService;
         this.postService = postService;
+        this.userRepository = userRepository;
     }
 
     public User updateUserFromDto(UserDto userDto, int id) {
-        User user = userService.getUserById(id);
+        User user = userRepository.getUserById( id);
         user.setPassword(userDto.getPassword());
         user.setEmail(userDto.getEmail());
         user.setFirstName(userDto.getFirstName());

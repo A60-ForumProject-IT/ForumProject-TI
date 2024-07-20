@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AuthenticationHelper {
-    public static final String INVALID_AUTHENTICATION_ERROR = "Invalid authentication.";
+    public static final String INVALID_AUTHENTICATION_ERROR = "Invalid username or password.";
     public static final String LOGGED_USER_ERROR = "No user logged in.";
 
     private final UserService userService;

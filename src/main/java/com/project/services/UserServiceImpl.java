@@ -14,7 +14,7 @@ import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
-    private static final String INVALID_PERMISSION = "You dont have permission to block this User";
+    private static final String INVALID_PERMISSION = "You dont have permission to do this Operation. Only admins can do this operation";
     private static final String ALREADY_BLOCKED = "User is already blocked";
     public static final String ALREADY_NOT_BLOCKED = "User is already not blocked";
 
@@ -28,13 +28,19 @@ public class UserServiceImpl implements UserService {
 
     //Валидация дали си админ. Направи метод!
     @Override
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers(User user) {
+        PermissionHelper.isAdmin(user, INVALID_PERMISSION);
         return userRepository.getAllUsers();
     }
 
     @Override
-    public User getUserById(int id) {
-        return userRepository.getUserById(id);
+    public User getUserById(User user, int id) {
+        try {
+            PermissionHelper.isAdmin(user, INVALID_PERMISSION );
+            return userRepository.getUserById(id);
+        } catch (EntityNotFoundException e) {
+            throw new EntityNotFoundException("User", id);
+        }
     }
 
     @Override

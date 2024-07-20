@@ -21,6 +21,16 @@ public class PostController {
         this.postService = postService;
     }
 
+    @GetMapping("/posts")
+    public List<Post> getAllPosts() {
+        return postService.getAllPosts();
+    }
+
+    @GetMapping("posts/{id}")
+    public Post getPostById(@PathVariable int id) {
+        return postService.getPostById(id);
+    }
+
     @GetMapping("/users/{userId}/posts")
     public List<Post> getAllUsersPosts(@PathVariable int userId) {
         return postService.getAllUsersPosts(userId);

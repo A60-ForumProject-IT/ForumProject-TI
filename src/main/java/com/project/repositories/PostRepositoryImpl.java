@@ -1,9 +1,9 @@
 package com.project.repositories;
 
+import com.project.exceptions.EntityNotFoundException;
 import com.project.models.Post;
 import com.project.models.User;
 import com.project.repositories.contracts.PostRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -21,6 +21,26 @@ public class PostRepositoryImpl implements PostRepository {
         this.sessionFactory = sessionFactory;
     }
 
+
+    @Override
+    public List<Post> getAllPosts() {
+        try (Session session = sessionFactory.openSession()) {
+            //TODO:
+            return null;
+        }
+    }
+
+    @Override
+    public Post getPostById(int postId) {
+        try (Session session = sessionFactory.openSession()) {
+            Post post = session.get(Post.class, postId);
+            if (post == null) {
+                throw new EntityNotFoundException("Post", postId);
+            }
+            return post;
+        }
+    }
+
     @Override
     public List<Post> getAllUsersPosts(int userId) {
         try (Session session = sessionFactory.openSession()) {
@@ -29,7 +49,7 @@ public class PostRepositoryImpl implements PostRepository {
             query.setParameter("user", user);
             List<Post> posts = query.list();
             if (query.list().isEmpty()) {
-                throw new EntityNotFoundException("Post");
+                throw new EntityNotFoundException(userId);
             }
             return posts;
 

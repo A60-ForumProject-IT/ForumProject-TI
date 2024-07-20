@@ -38,4 +38,9 @@ public class UserServiceImpl implements UserService {
     public void create(User user) {
         userRepository.create(user);
     }
+
+    @Override
+    public User getByUsername(String username) {
+        return userRepository.getByUserName(username);
+    }
 }

@@ -61,4 +61,13 @@ public class UserRepositoryImpl implements UserRepository {
             session.getTransaction().commit();
         }
     }
+
+    @Override
+    public User getByUsername(String username) {
+        return getAllUsers()
+                .stream()
+                .filter(user -> user.getUsername().equals(username))
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException("User", "username", username));
+    }
 }

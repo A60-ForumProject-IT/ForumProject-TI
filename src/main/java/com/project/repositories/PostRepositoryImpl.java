@@ -69,7 +69,6 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public void createPost(Post post) {
         try(Session session = sessionFactory.openSession()) {
-            //TODO:
             session.beginTransaction();
             session.persist(post);
             session.getTransaction().commit();
@@ -95,7 +94,9 @@ public class PostRepositoryImpl implements PostRepository {
         try (Session session = sessionFactory.openSession()) {
             Query<Post> query = session.createQuery("FROM Post WHERE title = :title", Post.class);
             query.setParameter("title", title);
-
+            if (query.list().isEmpty()) {
+                throw new EntityNotFoundException("Post", "title", title);
+            }
             return query.list().get(0);
         }
     }

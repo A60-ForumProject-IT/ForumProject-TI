@@ -1,8 +1,10 @@
 package com.project.controllers;
 
+import com.project.exceptions.AuthenticationException;
 import com.project.exceptions.DuplicateEntityException;
 import com.project.helpers.AuthenticationHelper;
 import com.project.helpers.MapperHelper;
+import com.project.helpers.PermissionHelper;
 import com.project.models.Post;
 import com.project.models.User;
 import com.project.models.dtos.PostDto;
@@ -45,6 +47,8 @@ public class PostRestController {
             postService.createPost(post);
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 

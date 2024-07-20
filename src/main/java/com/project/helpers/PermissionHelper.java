@@ -20,7 +20,7 @@ public class PermissionHelper {
         this.userService = userService;
     }
 
-    public static void isAdmin(User authenticatedUser, String message) {
+    public void isAdmin(User authenticatedUser, String message) {
         boolean isAdmin = false;
         if (authenticatedUser.getRole().getName().equals(ROLE_ADMIN)) {
             isAdmin = true;
@@ -31,7 +31,7 @@ public class PermissionHelper {
         }
     }
 
-    public static void isAdminOrSameUser(User userToBeUpdated, User userIsAuthorized, String message) {
+    public void isAdminOrSameUser(User userToBeUpdated, User userIsAuthorized, String message) {
         boolean isAuthorized = false;
         if (userToBeUpdated.equals(userIsAuthorized)) {
             isAuthorized = true;
@@ -46,13 +46,13 @@ public class PermissionHelper {
         }
     }
 
-    public static void isSameUser(User userToBeUpdated, User userIsAuthorized, String message) {
+    public void isSameUser(User userToBeUpdated, User userIsAuthorized, String message) {
         if (!userToBeUpdated.equals(userIsAuthorized)) {
             throw new UnauthorizedOperationException(message);
         }
     }
 
-    public static void isNotSameUser(User userToBeUpdated,
+    public void isNotSameUser(User userToBeUpdated,
                                      User userIsAuthorized,
                                      String message) {
 
@@ -60,7 +60,7 @@ public class PermissionHelper {
             throw new UnauthorizedOperationException(message);
         }
     }
-    public static void isBlocked(User authorizedUser, String message) {
+    public void isBlocked(User authorizedUser, String message) {
         if (authorizedUser.isBlocked()) {
             throw new UnauthorizedOperationException(message);
         }

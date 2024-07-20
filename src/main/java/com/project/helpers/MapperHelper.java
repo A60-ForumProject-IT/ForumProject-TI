@@ -9,6 +9,8 @@ import com.project.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 public class MapperHelper {
     private UserService userService;
@@ -32,6 +34,7 @@ public class MapperHelper {
         post.setTitle(postDto.getTitle());
         post.setContent(postDto.getContent());
         post.setPostedBy(user);
+        post.setCreatedOn(LocalDateTime.now());
         return post;
     }
 

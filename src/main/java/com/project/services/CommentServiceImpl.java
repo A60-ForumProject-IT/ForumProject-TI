@@ -15,9 +15,9 @@ import java.util.List;
 
 @Service
 public class CommentServiceImpl implements CommentService {
-    public static final String COMMENT_FOR_THIS_POST = "You are not the user, who is trying to create the comment for this post.";
     public static final String UPDATE_THE_COMMENT_FOR_THIS_POST = "You are not the user, who is trying to update the comment for this post.";
     public static final String UNAUTHORIZED_DELETE_ERROR = "You are not authorized to delete this post";
+    public static final String BLOCKED_USER_COMMENT_ERROR = "You are blocked and can't write comments!";
 
     private final CommentRepository commentRepository;
 
@@ -37,7 +37,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void createComment(Comment comment, User user) {
-        PermissionHelper.isSameUser(user, comment.getUserId(), COMMENT_FOR_THIS_POST);
+        PermissionHelper.isBlocked(user, BLOCKED_USER_COMMENT_ERROR);
         boolean duplicateExist = true;
         try {
             commentRepository.getCommentByContent(comment.getContent());

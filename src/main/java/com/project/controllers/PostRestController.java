@@ -7,6 +7,7 @@ import com.project.exceptions.UnauthorizedOperationException;
 import com.project.helpers.AuthenticationHelper;
 import com.project.helpers.MapperHelper;
 import com.project.helpers.PermissionHelper;
+import com.project.models.FilteredPostsOptions;
 import com.project.models.Post;
 import com.project.models.User;
 import com.project.models.dtos.PostDto;
@@ -36,9 +37,30 @@ public class PostRestController {
         this.authenticationHelper = authenticationHelper;
     }
 
+    //Само админ може да филтрира и сортира по content и title
     @GetMapping("/posts")
-    public List<Post> getAllPosts() {
-        return postService.getAllPosts();
+    public List<Post> getAllPosts(@RequestHeader HttpHeaders headers,
+                                  @RequestParam(required = false) Integer minLikes,
+                                  @RequestParam(required = false) Integer minDislikes,
+                                  @RequestParam(required = false) Integer maxLikes,
+                                  @RequestParam(required = false) Integer maxDislikes,
+                                  @RequestParam(required = false) String title,
+                                  @RequestParam(required = false) String content,
+                                  @RequestParam(required = false) String createdBefore,
+                                  @RequestParam(required = false) String createdAfter,
+                                  @RequestParam(required = false) String postedBy,
+                                  @RequestParam(required = false) String sortBy,
+                                  @RequestParam(required = false) String sortOrder) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            FilteredPostsOptions postFilterOptions =
+                    new FilteredPostsOptions(minLikes, minDislikes,maxLikes, maxDislikes, title, content, createdBefore, createdAfter, postedBy, sortBy, sortOrder);
+            return postService.getAllPosts(user, postFilterOptions);
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
     }
 
     @PostMapping("/posts")
@@ -68,6 +90,8 @@ public class PostRestController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 
@@ -84,6 +108,8 @@ public class PostRestController {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 
@@ -99,9 +125,27 @@ public class PostRestController {
         }
     }
 
+    //Всеки аутентикиран може да преглежда, филтрира и сортира постовете на друг user по content и title
     @GetMapping("/users/{userId}/posts")
-    public List<Post> getAllUsersPosts(@PathVariable int userId) {
-        return postService.getAllUsersPosts(userId);
+    public List<Post> getAllUsersPosts(@PathVariable int userId, @RequestHeader HttpHeaders headers,
+                                       @RequestParam(required = false) Integer minLikes,
+                                       @RequestParam(required = false) Integer minDislikes,
+                                       @RequestParam(required = false) Integer maxLikes,
+                                       @RequestParam(required = false) Integer maxDislikes,
+                                       @RequestParam(required = false) String title,
+                                       @RequestParam(required = false) String content,
+                                       @RequestParam(required = false) String createdBefore,
+                                       @RequestParam(required = false) String createdAfter,
+                                       @RequestParam(required = false) String sortBy,
+                                       @RequestParam(required = false) String sortOrder) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            FilteredPostsOptions postFilterOptions =
+                    new FilteredPostsOptions(minLikes, minDislikes,maxLikes, maxDislikes, title, content, createdBefore, createdAfter, sortBy, sortOrder);
+            return postService.getAllUsersPosts(userId);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     @GetMapping("/top10MostLikedPosts")

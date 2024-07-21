@@ -3,6 +3,7 @@ package com.project.services;
 import com.project.exceptions.DuplicateEntityException;
 import com.project.exceptions.EntityNotFoundException;
 import com.project.helpers.PermissionHelper;
+import com.project.models.FilteredPostsOptions;
 import com.project.models.Post;
 import com.project.models.User;
 import com.project.models.dtos.PostDtoTopComments;
@@ -18,6 +19,7 @@ public class PostServiceImpl implements PostService {
     public static final String AUTHORIZATION_EXCEPTION = "You are not creator of the post to edit it!";
     public static final String BLOCKED_USER_ERROR = "You are blocked and cannot create posts!";
     public static final String UNAUTHORIZED_DELETE_ERROR = "You are not authorized to delete this post";
+    public static final String FILTER_AND_SORT_ERROR = "You are not authorized to filter and sort posts.";
     private final PostRepository postRepository;
 
 
@@ -27,8 +29,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> getAllPosts() {
-        return postRepository.getAllPosts();
+    public List<Post> getAllPosts(User user, FilteredPostsOptions filteredPostsOptions) {
+        PermissionHelper.isAdmin(user, FILTER_AND_SORT_ERROR);
+        return postRepository.getAllPosts(filteredPostsOptions);
     }
 
     @Override

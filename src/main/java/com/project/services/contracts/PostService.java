@@ -1,5 +1,6 @@
 package com.project.services.contracts;
 
+import com.project.models.FilteredPostsOptions;
 import com.project.models.Post;
 import com.project.models.User;
 import com.project.models.dtos.PostDtoTopComments;
@@ -9,7 +10,7 @@ import java.util.List;
 public interface PostService {
     List<Post> getAllUsersPosts(int userId);
 
-    List<Post> getAllPosts();
+    List<Post> getAllPosts(User user, FilteredPostsOptions filteredPostsOptions);
 
     Post getPostById(int postId);
 

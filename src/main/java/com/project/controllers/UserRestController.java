@@ -4,6 +4,7 @@ import com.project.exceptions.*;
 import com.project.helpers.AuthenticationHelper;
 import com.project.helpers.MapperHelper;
 import com.project.helpers.PermissionHelper;
+import com.project.models.FilteredUsersOptional;
 import com.project.models.User;
 import com.project.models.dtos.RegistrationDto;
 import com.project.models.dtos.UserDto;
@@ -38,14 +39,17 @@ public class UserRestController {
         this.authenticationHelper = authenticationHelper;
     }
 
-
-    //админа трябва да прави това само
     //филтрация по username, email, firstName
     @GetMapping
-    public List<User> getAllUsers(@RequestHeader HttpHeaders headers) {
+    public List<User> getAllUsers(@RequestHeader HttpHeaders headers,
+                                  @RequestParam(required = false) String username,
+                                  @RequestParam(required = false) String email,
+                                  @RequestParam(required = false) String firstName
+                                  ){
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            return userService.getAllUsers(user);
+            FilteredUsersOptional filteredUsersOptional = new FilteredUsersOptional(username, email, firstName);
+            return userService.getAllUsers(user, filteredUsersOptional);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (AuthenticationException e) {
@@ -53,7 +57,6 @@ public class UserRestController {
         }
     }
 
-    //админ трябва да прави това
     @GetMapping("/{id}")
     public User getUserById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {

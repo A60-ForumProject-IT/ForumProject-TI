@@ -148,6 +148,11 @@ public class PostRestController {
         }
     }
 
+    @GetMapping("/totalPostsCount")
+    public int getTotalPostsCount() {
+        return postService.getTotalPostsCount();
+    }
+
     @GetMapping("/top10MostLikedPosts")
     public List<PostDtoTop> getMostLikedPosts() {
         return postService.getMostLikedPosts();

@@ -55,6 +55,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public int getTotalPostsCount() {
+        return postRepository.getTotalPostsCount();
+    }
+
+    @Override
     public Post createPost(Post post) {
         PermissionHelper.isBlocked(post.getPostedBy(), BLOCKED_USER_ERROR);
         boolean duplicateExists = true;

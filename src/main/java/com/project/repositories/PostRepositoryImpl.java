@@ -20,7 +20,7 @@ import java.util.Map;
 
 @Repository
 public class PostRepositoryImpl implements PostRepository {
-    private SessionFactory sessionFactory;
+    private final SessionFactory sessionFactory;
 
     @Autowired
     public PostRepositoryImpl(SessionFactory sessionFactory) {
@@ -80,6 +80,15 @@ public class PostRepositoryImpl implements PostRepository {
                     ORDER BY p.createdOn DESC LIMIT 10""";
             Query<PostDtoTop> query = session.createQuery(hql, PostDtoTop.class);
             return query.list();
+        }
+    }
+
+    @Override
+    public int getTotalPostsCount() {
+        try (Session session = sessionFactory.openSession()) {
+            String hql = "SELECT COUNT(p) FROM Post p";
+            Query<Long> query = session.createQuery(hql, Long.class);
+            return Math.toIntExact(query.uniqueResult());
         }
     }
 

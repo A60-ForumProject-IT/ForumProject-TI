@@ -26,4 +26,6 @@ public interface PostRepository {
     void updatePost(Post post);
 
     void deletePost(Post post);
+
+    int getTotalPostsCount();
 }

@@ -20,6 +20,8 @@ public interface PostService {
 
     List<PostDtoTop> getMostRecentPosts();
 
+    int getTotalPostsCount();
+
     Post createPost(Post post);
 
     void updatePost(User user, Post post);

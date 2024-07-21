@@ -3,7 +3,7 @@ package com.project.repositories;
 import com.project.exceptions.EntityNotFoundException;
 import com.project.models.FilteredPostsOptions;
 import com.project.models.Post;
-import com.project.models.dtos.PostDtoTopComments;
+import com.project.models.dtos.PostDtoTop;
 import com.project.repositories.contracts.PostRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -27,7 +27,6 @@ public class PostRepositoryImpl implements PostRepository {
         this.sessionFactory = sessionFactory;
     }
 
-
     @Override
     public List<Post> getAllPosts(FilteredPostsOptions filteredPostsOptions) {
         try (Session session = sessionFactory.openSession()) {
@@ -47,25 +46,39 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
-    public List<PostDtoTopComments> getMostLikedPosts() {
+    public List<PostDtoTop> getMostLikedPosts() {
         try(Session session = sessionFactory.openSession()) {
-            String hql = "SELECT NEW com.project.models.dtos.PostDtoTopComments(p.title, p.content, p.createdOn, p.likes, p.dislikes, COUNT(c)) " +
-                    "FROM Post p JOIN p.comments c GROUP BY p.title, p.content, p.createdOn, p.likes, p.dislikes " +
-                    "ORDER BY p.likes DESC LIMIT 10";
-            Query<PostDtoTopComments> query = session.createQuery(hql, PostDtoTopComments.class);
+            String hql = """
+                    SELECT NEW com.project.models.dtos.PostDtoTop(p.title, p.content, p.createdOn, p.likes, p.dislikes, COUNT(c)) \
+                    FROM Post p JOIN p.comments c GROUP BY p.title, p.content, p.createdOn, p.likes, p.dislikes \
+                    ORDER BY p.likes DESC LIMIT 10""";
+            Query<PostDtoTop> query = session.createQuery(hql, PostDtoTop.class);
 
             return query.list();
         }
     }
 
     @Override
-    public List<PostDtoTopComments> getMostCommentedPosts() {
+    public List<PostDtoTop> getMostCommentedPosts() {
         try(Session session = sessionFactory.openSession()) {
-            String hql = "SELECT NEW com.project.models.dtos.PostDtoTopComments(p.title, p.content, p.createdOn, p.likes, p.dislikes, COUNT(c)) " +
-                    "FROM Post p JOIN p.comments c GROUP BY p.title, p.content, p.createdOn, p.likes, p.dislikes " +
-                    "ORDER BY COUNT(c) DESC LIMIT 10";
-            Query<PostDtoTopComments> query = session.createQuery(hql, PostDtoTopComments.class);
+            String hql = """
+                    SELECT NEW com.project.models.dtos.PostDtoTop(p.title, p.content, p.createdOn, p.likes, p.dislikes, COUNT(c)) \
+                    FROM Post p JOIN p.comments c GROUP BY p.title, p.content, p.createdOn, p.likes, p.dislikes \
+                    ORDER BY COUNT(c) DESC LIMIT 10""";
+            Query<PostDtoTop> query = session.createQuery(hql, PostDtoTop.class);
 
+            return query.list();
+        }
+    }
+
+    @Override
+    public List<PostDtoTop> getMostRecentPosts() {
+        try (Session session = sessionFactory.openSession()) {
+            String hql = """
+                    SELECT NEW com.project.models.dtos.PostDtoTop(p.title, p.content, p.createdOn, p.likes, p.dislikes, COUNT(c)) \
+                    FROM Post p JOIN p.comments c GROUP BY p.title, p.content, p.createdOn, p.likes, p.dislikes \
+                    ORDER BY p.createdOn DESC LIMIT 10""";
+            Query<PostDtoTop> query = session.createQuery(hql, PostDtoTop.class);
             return query.list();
         }
     }

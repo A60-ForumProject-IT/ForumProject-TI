@@ -7,22 +7,15 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class PostDtoTopComments {
-
+public class PostDtoTop {
     private String title;
-
     private String content;
-
     private LocalDateTime createdOn;
-
     private Integer likes;
-
     private Integer dislikes;
-
     private Long commentsCount;
 
-
-    public PostDtoTopComments(String title, String content, LocalDateTime createdOn, Integer likes, Integer dislikes, Long commentsCount) {
+    public PostDtoTop(String title, String content, LocalDateTime createdOn, Integer likes, Integer dislikes, Long commentsCount) {
         this.title = title;
         this.content = content;
         this.createdOn = createdOn;
@@ -30,6 +23,4 @@ public class PostDtoTopComments {
         this.dislikes = dislikes;
         this.commentsCount = commentsCount;
     }
-
-
 }

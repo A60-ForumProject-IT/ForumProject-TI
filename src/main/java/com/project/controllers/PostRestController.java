@@ -10,7 +10,7 @@ import com.project.models.FilteredPostsOptions;
 import com.project.models.Post;
 import com.project.models.User;
 import com.project.models.dtos.PostDto;
-import com.project.models.dtos.PostDtoTopComments;
+import com.project.models.dtos.PostDtoTop;
 import com.project.services.contracts.PostService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -149,12 +149,17 @@ public class PostRestController {
     }
 
     @GetMapping("/top10MostLikedPosts")
-    public List<PostDtoTopComments> getMostLikedPosts() {
+    public List<PostDtoTop> getMostLikedPosts() {
         return postService.getMostLikedPosts();
     }
 
     @GetMapping("/top10MostCommentedPosts")
-    public List<PostDtoTopComments> getMostCommentedPosts() {
+    public List<PostDtoTop> getMostCommentedPosts() {
         return postService.getMostCommentedPosts();
+    }
+
+    @GetMapping("/top10MostRecentPosts")
+    public List<PostDtoTop> getMostRecentPosts() {
+        return postService.getMostRecentPosts();
     }
 }

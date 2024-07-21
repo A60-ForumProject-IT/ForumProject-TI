@@ -6,7 +6,7 @@ import com.project.helpers.PermissionHelper;
 import com.project.models.FilteredPostsOptions;
 import com.project.models.Post;
 import com.project.models.User;
-import com.project.models.dtos.PostDtoTopComments;
+import com.project.models.dtos.PostDtoTop;
 import com.project.repositories.contracts.PostRepository;
 import com.project.services.contracts.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,13 +40,18 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDtoTopComments> getMostLikedPosts() {
+    public List<PostDtoTop> getMostLikedPosts() {
         return postRepository.getMostLikedPosts();
     }
 
     @Override
-    public List<PostDtoTopComments> getMostCommentedPosts() {
+    public List<PostDtoTop> getMostCommentedPosts() {
         return postRepository.getMostCommentedPosts();
+    }
+
+    @Override
+    public List<PostDtoTop> getMostRecentPosts() {
+        return postRepository.getMostRecentPosts();
     }
 
     @Override

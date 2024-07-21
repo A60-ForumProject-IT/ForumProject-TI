@@ -1,7 +1,9 @@
 package com.project.helpers;
 
+import com.project.models.Comment;
 import com.project.models.Post;
 import com.project.models.User;
+import com.project.models.dtos.CommentDto;
 import com.project.models.dtos.PostDto;
 import com.project.models.dtos.RegistrationDto;
 import com.project.models.dtos.UserDto;
@@ -31,7 +33,7 @@ public class MapperHelper {
     }
 
     public User updateUserFromDto(UserDto userDto, int id) {
-        User user = userRepository.getUserById( id);
+        User user = userRepository.getUserById(id);
         user.setPassword(userDto.getPassword());
         user.setEmail(userDto.getEmail());
         user.setFirstName(userDto.getFirstName());
@@ -64,5 +66,14 @@ public class MapperHelper {
         user.setUsername(registrationDto.getUsername());
         user.setRole(roleService.getRoleById(1));
         return user;
+    }
+
+    public Comment createCommentForPostFromCommentDto(CommentDto commentDto, User user, Post post) {
+        Comment comment = new Comment();
+        comment.setContent(commentDto.getComment());
+        comment.setUserId(user);
+        comment.setCommentedPost(post);
+        comment.setCreatedOn(LocalDateTime.now());
+        return comment;
     }
 }

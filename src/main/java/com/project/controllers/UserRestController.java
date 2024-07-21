@@ -3,7 +3,6 @@ package com.project.controllers;
 import com.project.exceptions.*;
 import com.project.helpers.AuthenticationHelper;
 import com.project.helpers.MapperHelper;
-import com.project.helpers.PermissionHelper;
 import com.project.models.FilteredUsersOptional;
 import com.project.models.User;
 import com.project.models.dtos.RegistrationDto;

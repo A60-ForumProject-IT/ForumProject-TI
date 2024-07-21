@@ -2,9 +2,7 @@ package com.project.helpers;
 
 import com.project.exceptions.UnauthorizedOperationException;
 import com.project.models.User;
-import org.springframework.stereotype.Component;
 
-@Component
 public class PermissionHelper {
     public static final String ROLE_ADMIN = "admin";
     private static final String ROLE_MODERATOR = "moderator";
@@ -41,9 +39,7 @@ public class PermissionHelper {
         }
     }
 
-    public static void isNotSameUser(User userToBeUpdated,
-                                     User userIsAuthorized,
-                                     String message) {
+    public static void isNotSameUser(User userToBeUpdated, User userIsAuthorized, String message) {
 
         if (userToBeUpdated.equals(userIsAuthorized)) {
             throw new UnauthorizedOperationException(message);

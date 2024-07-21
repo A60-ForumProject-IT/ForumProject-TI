@@ -2,6 +2,7 @@ package com.project.services;
 
 import com.project.exceptions.DuplicateEntityException;
 import com.project.exceptions.EntityNotFoundException;
+import com.project.exceptions.UnauthorizedOperationException;
 import com.project.helpers.PermissionHelper;
 import com.project.models.FilteredPostsOptions;
 import com.project.models.Post;
@@ -13,15 +14,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class PostServiceImpl implements PostService {
     public static final String AUTHORIZATION_EXCEPTION = "You are not creator of the post to edit it!";
     public static final String BLOCKED_USER_ERROR = "You are blocked and cannot create posts!";
-    public static final String UNAUTHORIZED_DELETE_ERROR = "You are not authorized to delete this post";
-    public static final String FILTER_AND_SORT_ERROR = "You are not authorized to filter and sort posts.";
+    public static final String UNAUTHORIZED_DELETE_ERROR = "You are not authorized to delete this post!";
+    public static final String FILTER_AND_SORT_ERROR = "You are not authorized to filter and sort posts!";
+    public static final String CREATOR_LIKE_ERROR = "You are the creator of the post and can't like it!";
+    public static final String MULTIPLE_LIKE_ERROR = "You already liked this comment!";
+    private static final String CREATOR_DISLIKE_ERROR = "You are the creator of the post and can't dislike it!";
     private final PostRepository postRepository;
-
 
     @Autowired
     public PostServiceImpl(PostRepository postRepository) {
@@ -57,6 +61,44 @@ public class PostServiceImpl implements PostService {
     @Override
     public int getTotalPostsCount() {
         return postRepository.getTotalPostsCount();
+    }
+
+    @Override
+    public void likePost(Post post, User user) {
+        PermissionHelper.isNotSameUser(post.getPostedBy(), user, CREATOR_LIKE_ERROR);
+        Set<User> usersWhoDislikedThePost = post.getUsersWhoDislikedPost();
+        Set<User> usersWhoLikedThePost = post.getUsersWhoLikedPost();
+
+        if (usersWhoLikedThePost.contains(user)) {
+            throw new UnauthorizedOperationException(MULTIPLE_LIKE_ERROR);
+        }
+
+        if (usersWhoDislikedThePost.remove(user)) {
+            post.setDislikes(post.getDislikes() - 1);
+        }
+        usersWhoLikedThePost.add(user);
+        post.setLikes(post.getDislikes() + 1);
+
+        postRepository.updatePost(post);
+    }
+
+    @Override
+    public void dislikePost(Post post, User user) {
+        PermissionHelper.isNotSameUser(post.getPostedBy(), user, CREATOR_DISLIKE_ERROR);
+        Set<User> usersWhoDislikedThePost = post.getUsersWhoDislikedPost();
+        Set<User> usersWhoLikedThePost = post.getUsersWhoLikedPost();
+
+        if (usersWhoDislikedThePost.contains(user)) {
+            throw new UnauthorizedOperationException(MULTIPLE_LIKE_ERROR);
+        }
+
+        if (usersWhoLikedThePost.remove(user)) {
+            post.setLikes(post.getLikes() - 1);
+        }
+        usersWhoDislikedThePost.add(user);
+        post.setDislikes(post.getDislikes() + 1);
+
+        postRepository.updatePost(post);
     }
 
     @Override

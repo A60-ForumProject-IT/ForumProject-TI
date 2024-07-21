@@ -22,6 +22,10 @@ public interface PostService {
 
     int getTotalPostsCount();
 
+    void likePost(Post post, User user);
+
+    void dislikePost(Post post, User user);
+
     Post createPost(Post post);
 
     void updatePost(User user, Post post);

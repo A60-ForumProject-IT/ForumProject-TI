@@ -36,7 +36,6 @@ public class PostRestController {
         this.authenticationHelper = authenticationHelper;
     }
 
-    //Само админ може да филтрира и сортира по content и title
     @GetMapping("/posts")
     public List<Post> getAllPosts(@RequestHeader HttpHeaders headers,
                                   @RequestParam(required = false) Integer minLikes,
@@ -124,7 +123,6 @@ public class PostRestController {
         }
     }
 
-    //Всеки аутентикиран може да преглежда, филтрира и сортира постовете на друг user по content и title
     @GetMapping("/users/{userId}/posts")
     public List<Post> getAllUsersPosts(@PathVariable int userId, @RequestHeader HttpHeaders headers,
                                        @RequestParam(required = false) Integer minLikes,
@@ -145,6 +143,36 @@ public class PostRestController {
             return postService.getAllUsersPosts(userId, postFilterOptions);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @PutMapping("/posts/{id}/likes")
+    public void likePost(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            Post post = postService.getPostById(id);
+            postService.likePost(post, user);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
+    @PutMapping("/posts/{id}/dislikes")
+    public void dislikePost(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            Post post = postService.getPostById(id);
+            postService.dislikePost(post, user);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 

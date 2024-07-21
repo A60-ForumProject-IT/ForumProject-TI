@@ -6,7 +6,6 @@ import com.project.exceptions.EntityNotFoundException;
 import com.project.exceptions.UnauthorizedOperationException;
 import com.project.helpers.AuthenticationHelper;
 import com.project.helpers.MapperHelper;
-import com.project.helpers.PermissionHelper;
 import com.project.models.FilteredPostsOptions;
 import com.project.models.Post;
 import com.project.models.User;
@@ -136,13 +135,14 @@ public class PostRestController {
                                        @RequestParam(required = false) String content,
                                        @RequestParam(required = false) String createdBefore,
                                        @RequestParam(required = false) String createdAfter,
+                                       @RequestParam(required = false) String postedBy,
                                        @RequestParam(required = false) String sortBy,
                                        @RequestParam(required = false) String sortOrder) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             FilteredPostsOptions postFilterOptions =
-                    new FilteredPostsOptions(minLikes, minDislikes,maxLikes, maxDislikes, title, content, createdBefore, createdAfter, sortBy, sortOrder);
-            return postService.getAllUsersPosts(userId);
+                    new FilteredPostsOptions(minLikes, minDislikes,maxLikes, maxDislikes, title, content, createdBefore, createdAfter, postedBy, sortBy, sortOrder);
+            return postService.getAllUsersPosts(userId, postFilterOptions);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }

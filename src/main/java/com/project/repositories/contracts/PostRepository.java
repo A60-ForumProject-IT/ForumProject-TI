@@ -7,7 +7,7 @@ import com.project.models.dtos.PostDtoTopComments;
 import java.util.List;
 
 public interface PostRepository {
-    List<Post> getAllUsersPosts(int userId);
+    List<Post> getAllUsersPosts(int userId, FilteredPostsOptions postFilterOptions);
 
     List<Post> getAllPosts(FilteredPostsOptions filteredPostsOptions);
 

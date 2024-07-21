@@ -89,7 +89,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> getAllUsersPosts(int userId) {
-        return postRepository.getAllUsersPosts(userId);
+    public List<Post> getAllUsersPosts(int userId, FilteredPostsOptions postFilterOptions) {
+        return postRepository.getAllUsersPosts(userId, postFilterOptions);
     }
 }

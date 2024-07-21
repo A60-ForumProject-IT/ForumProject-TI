@@ -4,6 +4,7 @@ import com.project.exceptions.DuplicateEntityException;
 import com.project.exceptions.EntityNotFoundException;
 import com.project.helpers.PermissionHelper;
 import com.project.models.Comment;
+import com.project.models.Post;
 import com.project.models.User;
 import com.project.repositories.contracts.CommentRepository;
 import com.project.services.contracts.CommentService;
@@ -15,6 +16,9 @@ import java.util.List;
 @Service
 public class CommentServiceImpl implements CommentService {
     public static final String COMMENT_FOR_THIS_POST = "You are not the user, who is trying to create the comment for this post.";
+    public static final String UPDATE_THE_COMMENT_FOR_THIS_POST = "You are not the user, who is trying to update the comment for this post.";
+    public static final String UNAUTHORIZED_DELETE_ERROR = "You are not authorized to delete this post";
+
     private final CommentRepository commentRepository;
 
     @Autowired
@@ -44,5 +48,32 @@ public class CommentServiceImpl implements CommentService {
             throw new DuplicateEntityException("Comment", "content", comment.getContent());
         }
         commentRepository.createComment(comment);
+    }
+
+    @Override
+    public void updateComment(Comment comment, User user) {
+        PermissionHelper.isSameUser(user, comment.getUserId(), UPDATE_THE_COMMENT_FOR_THIS_POST);
+        boolean duplicateExists = true;
+        try {
+            commentRepository.getCommentByContent(comment.getContent());
+        } catch (EntityNotFoundException e) {
+            duplicateExists = false;
+        }
+
+        if (duplicateExists) {
+            throw new DuplicateEntityException("Comment", "content", comment.getContent());
+        }
+        commentRepository.update(comment);
+    }
+
+    @Override
+    public void deleteComment(Comment comment, User user) {
+        PermissionHelper.isAdminOrSameUser(user, comment.getUserId(), UNAUTHORIZED_DELETE_ERROR);
+        commentRepository.deleteComment(comment);
+    }
+
+    @Override
+    public Comment getCommentById(int commentId) {
+        return commentRepository.getCommentById(commentId);
     }
 }

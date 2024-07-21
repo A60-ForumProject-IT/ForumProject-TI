@@ -10,4 +10,10 @@ public interface CommentRepository {
     Comment getCommentByContent(String content);
 
     void createComment(Comment comment);
+
+    Comment getCommentById(int id);
+
+    void update(Comment comment);
+
+    void deleteComment(Comment comment);
 }

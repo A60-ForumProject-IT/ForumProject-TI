@@ -52,4 +52,34 @@ public class CommentRepositoryImpl implements CommentRepository {
             session.getTransaction().commit();
         }
     }
+
+    @Override
+    public Comment getCommentById(int id) {
+        try (Session session = sessionFactory.openSession()) {
+            Comment comment = session.get(Comment.class, id);
+            if (comment == null) {
+                throw new EntityNotFoundException("Comment", id);
+            }
+            return comment;
+        }
+    }
+
+    @Override
+    public void update(Comment comment) {
+        try(Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.merge(comment);
+            session.getTransaction().commit();
+        }
+    }
+
+    @Override
+    public void deleteComment(Comment comment) {
+
+        try(Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.remove(comment);
+            session.getTransaction().commit();
+        }
+    }
 }

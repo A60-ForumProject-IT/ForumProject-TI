@@ -27,7 +27,10 @@ import java.util.List;
 @RequestMapping("api/forum/comments")
 public class CommentRestController {
 
-    public static final String PUBLISHED_SUCCESSFULLY = "Comment published successfully.";
+    private static final String PUBLISHED_SUCCESSFULLY = "Comment published successfully.";
+    private static final String UPDATED_SUCCESSFULLY = "Updated successfully";
+    private static final String DELETED_SUCCESSFULLY = "Deleted successfully";
+
     private final CommentService commentService;
     private final PostService postService;
     private final UserService userService;
@@ -77,4 +80,42 @@ public class CommentRestController {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
+
+    @PutMapping("/{commentId}")
+    public ResponseEntity<String> updateComment(@PathVariable int commentId,
+                                                @RequestBody @Valid CommentDto commentDto,
+                                                @RequestHeader HttpHeaders headers) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            Comment comment = mapperHelper.fromCommentDtoToUpdate(commentDto, commentId);
+            commentService.updateComment(comment, user);
+            return ResponseEntity.status(HttpStatus.OK).body(UPDATED_SUCCESSFULLY);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (AuthenticationException e){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (DuplicateEntityException e){
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<String> deleteComment(@PathVariable int commentId,
+                                                @RequestHeader HttpHeaders headers) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            Comment comment = commentService.getCommentById(commentId);
+            commentService.deleteComment(comment, user);
+            return ResponseEntity.status(HttpStatus.OK).body(DELETED_SUCCESSFULLY);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (AuthenticationException e){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
 }

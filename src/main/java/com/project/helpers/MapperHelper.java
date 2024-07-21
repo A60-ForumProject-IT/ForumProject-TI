@@ -7,6 +7,7 @@ import com.project.models.dtos.CommentDto;
 import com.project.models.dtos.PostDto;
 import com.project.models.dtos.RegistrationDto;
 import com.project.models.dtos.UserDto;
+import com.project.repositories.contracts.CommentRepository;
 import com.project.repositories.contracts.UserRepository;
 import com.project.services.contracts.PostService;
 import com.project.services.contracts.RoleService;
@@ -22,14 +23,17 @@ public class MapperHelper {
     private RoleService roleService;
     private PostService postService;
     private UserRepository userRepository;
+    private CommentRepository commentRepository;
 
     @Autowired
     public MapperHelper(UserService userService, RoleService roleService,
-                        PostService postService, UserRepository userRepository) {
+                        PostService postService, UserRepository userRepository,
+                        CommentRepository commentRepository) {
         this.userService = userService;
         this.roleService = roleService;
         this.postService = postService;
         this.userRepository = userRepository;
+        this.commentRepository = commentRepository;
     }
 
     public User updateUserFromDto(UserDto userDto, int id) {
@@ -73,6 +77,13 @@ public class MapperHelper {
         comment.setContent(commentDto.getComment());
         comment.setUserId(user);
         comment.setCommentedPost(post);
+        comment.setCreatedOn(LocalDateTime.now());
+        return comment;
+    }
+
+    public Comment fromCommentDtoToUpdate(CommentDto commentDto, int id) {
+        Comment comment = commentRepository.getCommentById(id);
+        comment.setContent(commentDto.getComment());
         comment.setCreatedOn(LocalDateTime.now());
         return comment;
     }

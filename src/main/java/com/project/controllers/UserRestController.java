@@ -10,6 +10,7 @@ import com.project.models.dtos.UserDto;
 import com.project.services.contracts.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -71,17 +72,32 @@ public class UserRestController {
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable int id, @Valid @RequestBody UserDto userDto) {
-        User user = mapperHelper.updateUserFromDto(userDto, id);
-        userService.update(user);
-        return user;
+    public User updateUser( @RequestHeader HttpHeaders headers,@PathVariable int id, @Valid @RequestBody UserDto userDto) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            User userToBeUpdated = mapperHelper.updateUserFromDto(userDto, id);
+            userService.update(user, userToBeUpdated);
+            return user;
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        }
     }
 
     @PostMapping
-    public User createUser(@Valid @RequestBody RegistrationDto registrationDto) {
-        User user = mapperHelper.createUserFromRegistrationDto(registrationDto);
-        userService.create(user);
-        return user;
+    public ResponseEntity<String> createUser(@Valid @RequestBody RegistrationDto registrationDto) {
+        try {
+            User user = mapperHelper.createUserFromRegistrationDto(registrationDto);
+            userService.create(user);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (DuplicateEntityException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        }
     }
 
     @PutMapping("/{id}/block")

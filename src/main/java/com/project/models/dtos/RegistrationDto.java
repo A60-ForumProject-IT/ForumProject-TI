@@ -30,7 +30,6 @@ public class RegistrationDto {
     @Size(min = 4, max = 32, message = "Last name should be between 4 and 32.")
     private String lastName;
 
-    private Role role;
 
     public RegistrationDto() {
     }
@@ -40,7 +39,5 @@ public class RegistrationDto {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.role = new Role();
-        this.role.setRoleId(1);
     }
 }

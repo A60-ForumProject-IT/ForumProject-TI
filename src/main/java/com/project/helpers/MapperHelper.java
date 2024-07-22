@@ -67,6 +67,8 @@ public class MapperHelper {
         user.setPassword(registrationDto.getPassword());
         user.setUsername(registrationDto.getUsername());
         user.setRole(roleService.getRoleById(1));
+        user.setPhoneNumber(null);
+        user.setBlocked(false);
         return user;
     }
 

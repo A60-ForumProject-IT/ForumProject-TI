@@ -51,14 +51,6 @@ public class User implements Comparable<User> {
     public User() {
     }
 
-    public User(String username, String password, String email, String firstName, String lastName) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
-
 
     @Override
     public int compareTo(User o) {

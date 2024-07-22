@@ -16,6 +16,8 @@ public interface UserRepository {
 
     User getByUsername(String username);
 
+    User getByEmail(String email);
+
     void blockUser(User user);
 
     void unblocked(User userToUnblock);

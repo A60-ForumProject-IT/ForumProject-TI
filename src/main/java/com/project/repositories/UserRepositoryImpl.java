@@ -92,11 +92,24 @@ public class UserRepositoryImpl implements UserRepository {
         try (Session session = sessionFactory.openSession()) {
             Query<User> query = session.createQuery("from User where username = :username", User.class);
             query.setParameter("username", username);
-            List<User> beers = query.list();
-            if (beers.isEmpty()) {
+            List<User> users = query.list();
+            if (users.isEmpty()) {
                 throw new EntityNotFoundException("User", "username", username);
             }
-            return beers.get(0);
+            return users.get(0);
+        }
+    }
+
+    @Override
+    public User getByEmail(String email) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<User> query = session.createQuery("from User where email = :email", User.class);
+            query.setParameter("email", email);
+            List<User> users = query.list();
+            if (users.isEmpty()) {
+                throw new EntityNotFoundException("User", "email", email);
+            }
+            return users.get(0);
         }
     }
 

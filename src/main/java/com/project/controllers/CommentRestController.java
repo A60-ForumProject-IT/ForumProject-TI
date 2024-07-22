@@ -30,15 +30,13 @@ public class CommentRestController {
 
     private final CommentService commentService;
     private final PostService postService;
-    private final UserService userService;
     private final MapperHelper mapperHelper;
     private final AuthenticationHelper authenticationHelper;
 
     @Autowired
-    public CommentRestController(CommentService commentService, PostService postService, UserService userService, MapperHelper mapperHelper, AuthenticationHelper authenticationHelper) {
+    public CommentRestController(CommentService commentService, PostService postService, MapperHelper mapperHelper, AuthenticationHelper authenticationHelper) {
         this.commentService = commentService;
         this.postService = postService;
-        this.userService = userService;
         this.mapperHelper = mapperHelper;
         this.authenticationHelper = authenticationHelper;
     }

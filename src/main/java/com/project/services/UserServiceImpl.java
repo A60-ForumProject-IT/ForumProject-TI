@@ -1,6 +1,7 @@
 package com.project.services;
 
 import com.project.exceptions.BlockedException;
+import com.project.exceptions.DuplicateEntityException;
 import com.project.exceptions.EntityNotFoundException;
 import com.project.exceptions.UnblockedException;
 import com.project.helpers.PermissionHelper;
@@ -18,6 +19,7 @@ public class UserServiceImpl implements UserService {
     private static final String INVALID_PERMISSION = "You dont have permission to do this Operation. Only admins can do this operation";
     private static final String ALREADY_BLOCKED = "User is already blocked";
     public static final String ALREADY_NOT_BLOCKED = "User is already not blocked";
+    public static final String CAN_T_EDIT_INFORMATION_IN_OTHER_USER_ACCOUNTS = "You can't edit information in other user accounts";
 
     private final UserRepository userRepository;
 
@@ -45,12 +47,50 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(User user) {
-         userRepository.update(user);
+    public void update(User user, User userToBeUpdated) {
+        PermissionHelper.isSameUser(user, userToBeUpdated, CAN_T_EDIT_INFORMATION_IN_OTHER_USER_ACCOUNTS);
+        boolean duplicateExists = true;
+
+        try {
+            User existingUser = userRepository.getByUsername(userToBeUpdated.getUsername());
+            if (existingUser.getId() == userToBeUpdated.getId()) {
+                duplicateExists = false;
+            }
+        } catch (EntityNotFoundException e) {
+            duplicateExists = false;
+        }
+
+        if (duplicateExists) {
+            throw new DuplicateEntityException("User", "username", userToBeUpdated.getUsername());
+        }
+        userRepository.update(userToBeUpdated);
     }
 
     @Override
     public void create(User user) {
+        boolean duplicateUsernameExist = true;
+        boolean duplicateEmailExist = true;
+
+        try {
+            userRepository.getByUsername(user.getUsername());
+        } catch (EntityNotFoundException e) {
+            duplicateUsernameExist = false;
+        }
+
+        try {
+            userRepository.getByEmail(user.getEmail());
+        } catch (EntityNotFoundException e) {
+            duplicateEmailExist = false;
+        }
+
+        if (duplicateUsernameExist) {
+            throw new DuplicateEntityException("User", "username", user.getUsername());
+        }
+
+        if (duplicateEmailExist) {
+            throw new DuplicateEntityException("User", "email", user.getEmail());
+        }
+
         userRepository.create(user);
     }
 

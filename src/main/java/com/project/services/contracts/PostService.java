@@ -34,4 +34,6 @@ public interface PostService {
     void deletePost(User user, Post post);
 
     void addTagToPost(User user, Post post, Tag tag);
+
+    void deleteTagFromPost(User user, Post post, Tag tag);
 }

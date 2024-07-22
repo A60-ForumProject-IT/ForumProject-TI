@@ -198,7 +198,7 @@ public class PostRestController {
     }
 
     @PutMapping("/posts/{postId}/addTag")
-    public void addTaskToPost(@Valid @RequestBody TagDto tagDto, @PathVariable int postId, @RequestHeader HttpHeaders headers) {
+    public void addTagToPost(@Valid @RequestBody TagDto tagDto, @PathVariable int postId, @RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             Post post = postService.getPostById(postId);
@@ -206,6 +206,30 @@ public class PostRestController {
             postService.addTagToPost(user, post, tag);
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (DuplicateEntityException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (BlockedException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+        }
+    }
+
+    @PutMapping("/posts/{postId}/deleteTag")
+    public void deleteTagFromPost(@Valid @RequestBody TagDto tagDto, @PathVariable int postId, @RequestHeader HttpHeaders headers) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            Post post = postService.getPostById(postId);
+            Tag tag = mapperHelper.fromTagDto(tagDto);
+            postService.deleteTagFromPost(user, post, tag);
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (DuplicateEntityException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (BlockedException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         }
     }
 }

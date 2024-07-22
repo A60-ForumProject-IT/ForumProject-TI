@@ -172,6 +172,20 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public void deleteTagFromPost(User user, Post post, Tag tag) {
+        PermissionHelper.isBlocked(user, USER_BLOCKED_ERROR);
+        PermissionHelper.isAdminOrSameUser(user, post.getPostedBy(), AUTHORIZATION_ERROR_FOR_TAGS);
+
+        Set<Tag> tagSet = post.getPostTags();
+
+        if (!tagSet.contains(tag)) {
+            throw new EntityNotFoundException("Tag", "name", tag.getTag());
+        }
+        tagSet.remove(tag);
+        postRepository.deleteTagFromPost(post);
+    }
+
+    @Override
     public List<Post> getAllUsersPosts(int userId, FilteredPostsOptions postFilterOptions) {
         return postRepository.getAllUsersPosts(userId, postFilterOptions);
     }

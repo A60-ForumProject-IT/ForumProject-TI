@@ -3,6 +3,8 @@ package com.project.services;
 import com.project.exceptions.DuplicateEntityException;
 import com.project.exceptions.EntityNotFoundException;
 import com.project.helpers.PermissionHelper;
+import com.project.models.FilteredCommentsOptions;
+import com.project.models.Post;
 import com.project.models.Tag;
 import com.project.models.User;
 import com.project.repositories.contracts.TagRepository;
@@ -28,8 +30,8 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> getAllTags() {
-        return tagRepository.getAllTags();
+    public List<Post> getAllPostsWithSpecificTag(FilteredCommentsOptions filteredCommentsOptions) {
+        return tagRepository.getAllPostsWithSpecificTag(filteredCommentsOptions);
     }
 
     @Override

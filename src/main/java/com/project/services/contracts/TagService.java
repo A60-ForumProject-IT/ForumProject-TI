@@ -1,5 +1,7 @@
 package com.project.services.contracts;
 
+import com.project.models.FilteredCommentsOptions;
+import com.project.models.Post;
 import com.project.models.Tag;
 import com.project.models.User;
 
@@ -9,7 +11,7 @@ public interface TagService {
 
     Tag getTagById(int id);
 
-    List<Tag> getAllTags();
+    List<Post> getAllPostsWithSpecificTag(FilteredCommentsOptions filteredCommentsOptions);
 
     void createTag(Tag tag, User user);
 

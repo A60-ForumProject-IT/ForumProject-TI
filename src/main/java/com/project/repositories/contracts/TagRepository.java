@@ -1,5 +1,7 @@
 package com.project.repositories.contracts;
 
+import com.project.models.FilteredCommentsOptions;
+import com.project.models.Post;
 import com.project.models.Tag;
 
 import java.util.List;
@@ -8,7 +10,7 @@ public interface TagRepository {
 
     Tag getTagById(int id);
 
-    List<Tag> getAllTags();
+    List<Post> getAllPostsWithSpecificTag(FilteredCommentsOptions filteredCommentsOptions);
 
     void createTag(Tag tag);
 

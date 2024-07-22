@@ -4,6 +4,7 @@ import com.project.exceptions.AuthenticationException;
 import com.project.exceptions.EntityNotFoundException;
 import com.project.helpers.AuthenticationHelper;
 import com.project.helpers.MapperHelper;
+import com.project.models.FilteredCommentsOptions;
 import com.project.models.Post;
 import com.project.models.Tag;
 import com.project.models.User;
@@ -33,10 +34,11 @@ public class TagRestController {
     }
 
     @GetMapping("/tags")
-    public List<Tag> getAllTags(@RequestHeader HttpHeaders headers) {
+    public List<Post> getAllPostsWithSpecificTag(@RequestHeader HttpHeaders headers, @RequestParam(required = false) String keyWord) {
         try {
             authenticationHelper.tryGetUser(headers);
-            return tagService.getAllTags();
+            FilteredCommentsOptions filteredCommentsOptions = new FilteredCommentsOptions(keyWord);
+            return tagService.getAllPostsWithSpecificTag(filteredCommentsOptions);
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {

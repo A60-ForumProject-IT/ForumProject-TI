@@ -148,4 +148,9 @@ public class UserServiceImpl implements UserService {
             throw new EntityNotFoundException("User", id);
         }
     }
+
+    @Override
+    public Long countAllUsers() {
+       return userRepository.countAllUsers();
+    }
 }

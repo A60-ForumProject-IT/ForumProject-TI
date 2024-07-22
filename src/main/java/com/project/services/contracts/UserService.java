@@ -21,4 +21,6 @@ public interface UserService {
     void unblocked(User user, int id);
 
     void deleteUser(User user, int id);
+
+    Long countAllUsers();
 }

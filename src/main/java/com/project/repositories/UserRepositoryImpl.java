@@ -142,4 +142,22 @@ public class UserRepositoryImpl implements UserRepository {
             session.getTransaction().commit();
         }
     }
+
+//    try (Session session = sessionFactory.openSession()) {
+//        Query<User> query = session.createQuery("from User where username = :username", User.class);
+//        query.setParameter("username", username);
+//        List<User> users = query.list();
+//        if (users.isEmpty()) {
+//            throw new EntityNotFoundException("User", "username", username);
+//        }
+//        return users.get(0);
+
+    @Override
+    public Long countAllUsers() {
+
+        try(Session session = sessionFactory.openSession()) {
+            Query<Long> query = session.createQuery("SELECT COUNT(u) FROM User u", Long.class);
+            return query.uniqueResult();
+        }
+    }
 }

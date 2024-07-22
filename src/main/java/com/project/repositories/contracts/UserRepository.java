@@ -23,4 +23,6 @@ public interface UserRepository {
     void unblocked(User userToUnblock);
 
     void deleteUser(User user);
+
+    Long countAllUsers();
 }

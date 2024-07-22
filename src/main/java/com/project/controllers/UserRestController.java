@@ -144,4 +144,10 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> countAllUsers() {
+        Long count = userService.countAllUsers();
+        return new ResponseEntity<>(count, HttpStatus.OK);
+    }
 }

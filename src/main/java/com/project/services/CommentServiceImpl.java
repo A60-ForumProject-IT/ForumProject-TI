@@ -53,6 +53,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void updateComment(Comment comment, User user) {
         PermissionHelper.isSameUser(user, comment.getUserId(), UPDATE_THE_COMMENT_FOR_THIS_POST);
+        PermissionHelper.isBlocked(user, BLOCKED_USER_COMMENT_ERROR);
         boolean duplicateExists = true;
         try {
             commentRepository.getCommentByContent(comment.getContent());

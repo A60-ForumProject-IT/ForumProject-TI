@@ -1,9 +1,6 @@
 package com.project.controllers;
 
-import com.project.exceptions.AuthenticationException;
-import com.project.exceptions.DuplicateEntityException;
-import com.project.exceptions.EntityNotFoundException;
-import com.project.exceptions.UnauthorizedOperationException;
+import com.project.exceptions.*;
 import com.project.helpers.AuthenticationHelper;
 import com.project.helpers.MapperHelper;
 import com.project.models.Comment;
@@ -78,9 +75,12 @@ public class CommentRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (DuplicateEntityException e){
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (BlockedException e){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         }
     }
 
+    //сложи дали юзъра е блокиран
     @PutMapping("/{commentId}")
     public ResponseEntity<String> updateComment(@PathVariable int commentId,
                                                 @RequestBody @Valid CommentDto commentDto,
@@ -98,6 +98,8 @@ public class CommentRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (DuplicateEntityException e){
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (BlockedException e){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         }
     }
 

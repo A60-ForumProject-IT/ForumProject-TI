@@ -2,7 +2,7 @@ package com.project.repositories;
 
 import com.project.exceptions.EntityNotFoundException;
 import com.project.models.Comment;
-import com.project.models.Post;
+import com.project.models.FilteredCommentsOptions;
 import com.project.repositories.contracts.CommentRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,7 +10,10 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class CommentRepositoryImpl implements CommentRepository {
@@ -22,11 +25,25 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
-    public List<Comment> getAllCommentsFromPost(int id) {
+    public List<Comment> getAllCommentsFromPost(int id, FilteredCommentsOptions filteredCommentsOptions) {
         try (Session session = sessionFactory.openSession()) {
-            String hql = "FROM Comment WHERE commentedPost.id = :postId";
-            Query<Comment> query = session.createQuery(hql, Comment.class);
+            StringBuilder hql = new StringBuilder("FROM Comment WHERE commentedPost.id = :postId");
+
+            List<String> filtered = new ArrayList<>();
+            Map<String, Object> params = new HashMap<>();
+
+            filteredCommentsOptions.getKewWord().ifPresent(value -> {
+                filtered.add("content like :keyWord");
+                params.put("keyWord", String.format("%%%s%%", value));
+            });
+
+            if (!filtered.isEmpty()) {
+                hql.append(" AND ").append(String.join(" AND ", filtered));
+            }
+
+            Query<Comment> query = session.createQuery(hql.toString(), Comment.class);
             query.setParameter("postId", id);
+            query.setProperties(params);
             return query.list();
         }
     }

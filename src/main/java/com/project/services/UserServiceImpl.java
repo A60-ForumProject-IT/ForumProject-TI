@@ -5,7 +5,7 @@ import com.project.exceptions.DuplicateEntityException;
 import com.project.exceptions.EntityNotFoundException;
 import com.project.exceptions.UnblockedException;
 import com.project.helpers.PermissionHelper;
-import com.project.models.FilteredUsersOptional;
+import com.project.models.FilteredUsersOptions;
 import com.project.models.User;
 import com.project.repositories.contracts.UserRepository;
 import com.project.services.contracts.UserService;
@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
 
     //Валидация дали си админ. Направи метод!
     @Override
-    public List<User> getAllUsers(User user, FilteredUsersOptional filteredUsersOptional) {
+    public List<User> getAllUsers(User user, FilteredUsersOptions filteredUsersOptional) {
         PermissionHelper.isAdmin(user, INVALID_PERMISSION);
         return userRepository.getAllUsers(filteredUsersOptional);
     }

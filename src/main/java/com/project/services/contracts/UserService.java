@@ -1,12 +1,12 @@
 package com.project.services.contracts;
 
-import com.project.models.FilteredUsersOptional;
+import com.project.models.FilteredUsersOptions;
 import com.project.models.User;
 
 import java.util.List;
 
 public interface UserService {
-    List<User> getAllUsers(User user, FilteredUsersOptional filteredUsersOptional);
+    List<User> getAllUsers(User user, FilteredUsersOptions filteredUsersOptional);
 
     User getUserById(User user, int id);
 

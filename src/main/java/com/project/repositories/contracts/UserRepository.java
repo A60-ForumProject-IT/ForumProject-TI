@@ -1,12 +1,12 @@
 package com.project.repositories.contracts;
 
-import com.project.models.FilteredUsersOptional;
+import com.project.models.FilteredUsersOptions;
 import com.project.models.User;
 
 import java.util.List;
 
 public interface UserRepository {
-    List<User> getAllUsers(FilteredUsersOptional filteredUsersOptional);
+    List<User> getAllUsers(FilteredUsersOptions filteredUsersOptional);
 
     User getUserById(int id);
 

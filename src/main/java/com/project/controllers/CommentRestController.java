@@ -4,6 +4,7 @@ import com.project.exceptions.*;
 import com.project.helpers.AuthenticationHelper;
 import com.project.helpers.MapperHelper;
 import com.project.models.Comment;
+import com.project.models.FilteredCommentsOptions;
 import com.project.models.Post;
 import com.project.models.User;
 import com.project.models.dtos.CommentDto;
@@ -42,15 +43,18 @@ public class CommentRestController {
     }
 
     @GetMapping("/post/{id}")
-    public List<Comment> getAllCommentsFromPost(@RequestHeader HttpHeaders headers, @PathVariable int id){
+    public List<Comment> getAllCommentsFromPost(@RequestHeader HttpHeaders headers,
+                                                @PathVariable int id,
+                                                @RequestParam(required = false) String keyWord) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            return commentService.getAllCommentsFromPost(id);
-        } catch (UnauthorizedOperationException e){
+            FilteredCommentsOptions filteredCommentsOptions = new FilteredCommentsOptions(keyWord);
+            return commentService.getAllCommentsFromPost(id, filteredCommentsOptions);
+        } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        } catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (AuthenticationException e){
+        } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
@@ -58,7 +62,7 @@ public class CommentRestController {
     @PostMapping("/{postId}")
     public ResponseEntity<String> createComment(@RequestBody @Valid CommentDto commentDto,
                                                 @RequestHeader HttpHeaders headers,
-                                                 @PathVariable int postId){
+                                                @PathVariable int postId) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             Post post = postService.getPostById(postId);
@@ -67,13 +71,13 @@ public class CommentRestController {
             return ResponseEntity.status(HttpStatus.CREATED).body(PUBLISHED_SUCCESSFULLY);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        } catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (AuthenticationException e){
+        } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        } catch (DuplicateEntityException e){
+        } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
-        } catch (BlockedException e){
+        } catch (BlockedException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         }
     }
@@ -90,13 +94,13 @@ public class CommentRestController {
             return ResponseEntity.status(HttpStatus.OK).body(UPDATED_SUCCESSFULLY);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        } catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (AuthenticationException e){
+        } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        } catch (DuplicateEntityException e){
+        } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
-        } catch (BlockedException e){
+        } catch (BlockedException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         }
     }
@@ -111,9 +115,9 @@ public class CommentRestController {
             return ResponseEntity.status(HttpStatus.OK).body(DELETED_SUCCESSFULLY);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        } catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (AuthenticationException e){
+        } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }

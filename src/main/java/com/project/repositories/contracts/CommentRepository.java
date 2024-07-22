@@ -1,11 +1,12 @@
 package com.project.repositories.contracts;
 
 import com.project.models.Comment;
+import com.project.models.FilteredCommentsOptions;
 
 import java.util.List;
 
 public interface CommentRepository {
-    List<Comment> getAllCommentsFromPost(int id);
+    List<Comment> getAllCommentsFromPost(int id, FilteredCommentsOptions filteredCommentsOptions);
     
     Comment getCommentByContent(String content);
 

@@ -3,7 +3,7 @@ package com.project.controllers;
 import com.project.exceptions.*;
 import com.project.helpers.AuthenticationHelper;
 import com.project.helpers.MapperHelper;
-import com.project.models.FilteredUsersOptional;
+import com.project.models.FilteredUsersOptions;
 import com.project.models.User;
 import com.project.models.dtos.RegistrationDto;
 import com.project.models.dtos.UserDto;
@@ -48,7 +48,7 @@ public class UserRestController {
                                   ){
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            FilteredUsersOptional filteredUsersOptional = new FilteredUsersOptional(username, email, firstName);
+            FilteredUsersOptions filteredUsersOptional = new FilteredUsersOptions(username, email, firstName);
             return userService.getAllUsers(user, filteredUsersOptional);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());

@@ -1,7 +1,7 @@
 package com.project.repositories;
 
 import com.project.exceptions.EntityNotFoundException;
-import com.project.models.FilteredUsersOptional;
+import com.project.models.FilteredUsersOptions;
 import com.project.models.User;
 import com.project.repositories.contracts.UserRepository;
 import org.hibernate.Session;
@@ -25,7 +25,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<User> getAllUsers(FilteredUsersOptional filteredUsersOptional) {
+    public List<User> getAllUsers(FilteredUsersOptions filteredUsersOptional) {
         try (Session session = sessionFactory.openSession()) {
             StringBuilder hql = new StringBuilder("from User ");
             List<String> filtered = new ArrayList<>();

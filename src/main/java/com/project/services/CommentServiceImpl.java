@@ -4,7 +4,7 @@ import com.project.exceptions.DuplicateEntityException;
 import com.project.exceptions.EntityNotFoundException;
 import com.project.helpers.PermissionHelper;
 import com.project.models.Comment;
-import com.project.models.Post;
+import com.project.models.FilteredCommentsOptions;
 import com.project.models.User;
 import com.project.repositories.contracts.CommentRepository;
 import com.project.services.contracts.CommentService;
@@ -27,9 +27,9 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<Comment> getAllCommentsFromPost(int id) {
+    public List<Comment> getAllCommentsFromPost(int id, FilteredCommentsOptions filteredCommentsOptions) {
         try {
-            return commentRepository.getAllCommentsFromPost(id);
+            return commentRepository.getAllCommentsFromPost(id, filteredCommentsOptions);
         } catch (EntityNotFoundException e){
             throw new EntityNotFoundException("Post", id);
         }

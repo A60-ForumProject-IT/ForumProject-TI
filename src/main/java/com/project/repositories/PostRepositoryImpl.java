@@ -93,6 +93,15 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
+    public void addTagToPost(Post post) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.merge(post);
+            session.getTransaction().commit();
+        }
+    }
+
+    @Override
     public Post createPost(Post post) {
         try(Session session = sessionFactory.openSession()) {
             session.beginTransaction();

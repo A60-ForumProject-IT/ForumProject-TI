@@ -28,4 +28,6 @@ public interface PostRepository {
     void deletePost(Post post);
 
     int getTotalPostsCount();
+
+    void addTagToPost(Post post);
 }

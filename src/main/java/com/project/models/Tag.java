@@ -1,6 +1,5 @@
 package com.project.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,23 +16,19 @@ public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int postId;
+    private int id;
 
     @Column(name = "name")
     private String tag;
 
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "tags_posts",
-            joinColumns = @JoinColumn(name = "tag_id"),
-            inverseJoinColumns = @JoinColumn(name = "post_id"))
-    private Set<Post> taggedPosts;
+    @ManyToMany(mappedBy = "postTags")
+    private Set<Post> posts;
 
     public Tag() {
     }
 
-    public Tag(int postId, String tag) {
-        this.postId = postId;
+    public Tag(int id, String tag) {
+        this.id = id;
         this.tag = tag;
     }
 
@@ -42,12 +37,12 @@ public class Tag {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Tag tag = (Tag) o;
-        return postId == tag.postId;
+        return id == tag.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(postId);
+        return Objects.hashCode(id);
     }
 
     @Override

@@ -5,9 +5,11 @@ import com.project.helpers.AuthenticationHelper;
 import com.project.helpers.MapperHelper;
 import com.project.models.FilteredPostsOptions;
 import com.project.models.Post;
+import com.project.models.Tag;
 import com.project.models.User;
 import com.project.models.dtos.PostDto;
 import com.project.models.dtos.PostDtoTop;
+import com.project.models.dtos.TagDto;
 import com.project.services.contracts.PostService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -175,23 +177,35 @@ public class PostRestController {
         }
     }
 
-    @GetMapping("/totalPostsCount")
+    @GetMapping("/posts/totalPostsCount")
     public int getTotalPostsCount() {
         return postService.getTotalPostsCount();
     }
 
-    @GetMapping("/top10MostLikedPosts")
+    @GetMapping("/posts/top10MostLikedPosts")
     public List<PostDtoTop> getMostLikedPosts() {
         return postService.getMostLikedPosts();
     }
 
-    @GetMapping("/top10MostCommentedPosts")
+    @GetMapping("/posts/top10MostCommentedPosts")
     public List<PostDtoTop> getMostCommentedPosts() {
         return postService.getMostCommentedPosts();
     }
 
-    @GetMapping("/top10MostRecentPosts")
+    @GetMapping("/posts/top10MostRecentPosts")
     public List<PostDtoTop> getMostRecentPosts() {
         return postService.getMostRecentPosts();
+    }
+
+    @PutMapping("/posts/{postId}/addTag")
+    public void addTaskToPost(@Valid @RequestBody TagDto tagDto, @PathVariable int postId, @RequestHeader HttpHeaders headers) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            Post post = postService.getPostById(postId);
+            Tag tag = mapperHelper.fromTagDto(tagDto);
+            postService.addTagToPost(user, post, tag);
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
     }
 }

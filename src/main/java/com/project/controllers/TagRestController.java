@@ -4,7 +4,9 @@ import com.project.exceptions.AuthenticationException;
 import com.project.exceptions.EntityNotFoundException;
 import com.project.helpers.AuthenticationHelper;
 import com.project.helpers.MapperHelper;
+import com.project.models.Post;
 import com.project.models.Tag;
+import com.project.models.User;
 import com.project.models.dtos.TagDto;
 import com.project.services.contracts.TagService;
 import jakarta.validation.Valid;
@@ -17,7 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/forum/tags")
+@RequestMapping("api/forum")
 public class TagRestController {
     private final TagService tagService;
     private AuthenticationHelper authenticationHelper;
@@ -30,7 +32,7 @@ public class TagRestController {
         this.mapperHelper = mapperHelper;
     }
 
-    @GetMapping
+    @GetMapping("/tags")
     public List<Tag> getAllTags(@RequestHeader HttpHeaders headers) {
         try {
             authenticationHelper.tryGetUser(headers);
@@ -42,7 +44,7 @@ public class TagRestController {
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/tags/{id}")
     public Tag getTagById(@PathVariable int id, @RequestHeader HttpHeaders headers) {
         try {
             authenticationHelper.tryGetUser(headers);
@@ -54,14 +56,16 @@ public class TagRestController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/tags")
     public void createTag(@Valid @RequestBody TagDto tagDto, @RequestHeader HttpHeaders headers) {
         try {
-            authenticationHelper.tryGetUser(headers);
+            User user = authenticationHelper.tryGetUser(headers);
             Tag tag = mapperHelper.fromTagDto(tagDto);
-            tagService.createTag(tag);
+            tagService.createTag(tag, user);
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
+
+
 }

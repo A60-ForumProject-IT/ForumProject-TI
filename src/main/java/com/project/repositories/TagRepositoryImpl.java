@@ -1,8 +1,6 @@
 package com.project.repositories;
 
 import com.project.exceptions.EntityNotFoundException;
-import com.project.models.Comment;
-import com.project.models.Role;
 import com.project.models.Tag;
 import com.project.repositories.contracts.TagRepository;
 import org.hibernate.Session;
@@ -46,7 +44,11 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public void createTag(Tag tag) {
-
+        try(Session session = sessionFactory.openSession()){
+            session.beginTransaction();
+            session.persist(tag);
+            session.getTransaction().commit();
+        }
     }
 
     @Override

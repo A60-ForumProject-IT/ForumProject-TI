@@ -1,6 +1,10 @@
 package com.project.services;
 
+import com.project.exceptions.DuplicateEntityException;
+import com.project.exceptions.EntityNotFoundException;
+import com.project.helpers.PermissionHelper;
 import com.project.models.Tag;
+import com.project.models.User;
 import com.project.repositories.contracts.TagRepository;
 import com.project.services.contracts.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +14,7 @@ import java.util.List;
 
 @Service
 public class TagServiceImpl implements TagService {
+    public static final String USER_BLOCKED_ERROR = "You are blocked and cannot create tags!";
     private TagRepository tagRepository;
 
     @Autowired
@@ -24,12 +29,24 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<Tag> getAllTags() {
-        return List.of();
+        return tagRepository.getAllTags();
     }
 
     @Override
-    public void createTag(Tag tag) {
+    public void createTag(Tag tag, User user) {
+        PermissionHelper.isBlocked(user, USER_BLOCKED_ERROR);
+        boolean duplicateExist = true;
 
+        try {
+            tagRepository.getTagByName(tag.getTag());
+        } catch (EntityNotFoundException e) {
+            duplicateExist = false;
+        }
+
+        if (duplicateExist) {
+            throw new DuplicateEntityException("Tag", "name", tag.getTag());
+        }
+        tagRepository.createTag(tag);
     }
 
     @Override

@@ -6,9 +6,11 @@ import com.project.exceptions.UnauthorizedOperationException;
 import com.project.helpers.PermissionHelper;
 import com.project.models.FilteredPostsOptions;
 import com.project.models.Post;
+import com.project.models.Tag;
 import com.project.models.User;
 import com.project.models.dtos.PostDtoTop;
 import com.project.repositories.contracts.PostRepository;
+import com.project.repositories.contracts.TagRepository;
 import com.project.services.contracts.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,12 +26,18 @@ public class PostServiceImpl implements PostService {
     public static final String FILTER_AND_SORT_ERROR = "You are not authorized to filter and sort posts!";
     public static final String CREATOR_LIKE_ERROR = "You are the creator of the post and can't like it!";
     public static final String MULTIPLE_LIKE_ERROR = "You already liked this comment!";
+    public static final String BLOCKED_USER_EDIT_ERROR = "You are blocked and can't edit your post!";
     private static final String CREATOR_DISLIKE_ERROR = "You are the creator of the post and can't dislike it!";
+    public static final String USER_BLOCKED_ERROR = "You are blocked and can't add tags!";
+    public static final String AUTHORIZATION_ERROR_FOR_TAGS = "You are not the creator of the post and can't add tags!";
+
     private final PostRepository postRepository;
+    private final TagRepository tagRepository;
 
     @Autowired
-    public PostServiceImpl(PostRepository postRepository) {
+    public PostServiceImpl(PostRepository postRepository, TagRepository tagRepository) {
         this.postRepository = postRepository;
+        this.tagRepository = tagRepository;
     }
 
     @Override
@@ -121,7 +129,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public void updatePost(User user, Post post) {
         PermissionHelper.isSameUser(user, post.getPostedBy(), AUTHORIZATION_EXCEPTION);
-        PermissionHelper.isBlocked(post.getPostedBy(), "You are blocked and can't edit your post!");
+        PermissionHelper.isBlocked(post.getPostedBy(), BLOCKED_USER_EDIT_ERROR);
         boolean duplicateExists = true;
         try {
            postRepository.getPostByTitle(post.getTitle());
@@ -139,6 +147,28 @@ public class PostServiceImpl implements PostService {
     public void deletePost(User user, Post post) {
         PermissionHelper.isAdminOrSameUser(user, post.getPostedBy(), UNAUTHORIZED_DELETE_ERROR);
         postRepository.deletePost(post);
+    }
+
+    @Override
+    public void addTagToPost(User user, Post post, Tag tag) {
+        PermissionHelper.isBlocked(user, USER_BLOCKED_ERROR);
+        PermissionHelper.isSameUser(user, post.getPostedBy(), AUTHORIZATION_ERROR_FOR_TAGS);
+
+        Set<Tag> tagSet = post.getPostTags();
+
+        if (tagSet.contains(tag)) {
+            throw new DuplicateEntityException("Tag", "name", tag.getTag());
+        }
+
+        Tag existingTag;
+        try {
+            existingTag = tagRepository.getTagByName(tag.getTag());
+        } catch (EntityNotFoundException e) {
+            tagRepository.createTag(tag);
+            existingTag = tag;
+        }
+        tagSet.add(existingTag);
+        postRepository.addTagToPost(post);
     }
 
     @Override

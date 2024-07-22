@@ -59,6 +59,13 @@ public class Post implements Comparable<Post> {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> usersWhoDislikedPost;
 
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "tags_posts",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private Set<Tag> postTags;
+
     public Post() {
     }
 

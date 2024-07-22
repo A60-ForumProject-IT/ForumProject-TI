@@ -2,6 +2,7 @@ package com.project.services.contracts;
 
 import com.project.models.FilteredPostsOptions;
 import com.project.models.Post;
+import com.project.models.Tag;
 import com.project.models.User;
 import com.project.models.dtos.PostDtoTop;
 
@@ -31,4 +32,6 @@ public interface PostService {
     void updatePost(User user, Post post);
 
     void deletePost(User user, Post post);
+
+    void addTagToPost(User user, Post post, Tag tag);
 }

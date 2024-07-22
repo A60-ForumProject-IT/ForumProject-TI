@@ -1,9 +1,6 @@
 package com.project.controllers;
 
-import com.project.exceptions.AuthenticationException;
-import com.project.exceptions.DuplicateEntityException;
-import com.project.exceptions.EntityNotFoundException;
-import com.project.exceptions.UnauthorizedOperationException;
+import com.project.exceptions.*;
 import com.project.helpers.AuthenticationHelper;
 import com.project.helpers.MapperHelper;
 import com.project.models.FilteredPostsOptions;
@@ -72,7 +69,7 @@ public class PostRestController {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        } catch (UnauthorizedOperationException e) {
+        } catch (BlockedException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         }
     }
@@ -108,6 +105,8 @@ public class PostRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (BlockedException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         }
     }
 

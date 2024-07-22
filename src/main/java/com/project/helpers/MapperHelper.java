@@ -2,11 +2,9 @@ package com.project.helpers;
 
 import com.project.models.Comment;
 import com.project.models.Post;
+import com.project.models.Tag;
 import com.project.models.User;
-import com.project.models.dtos.CommentDto;
-import com.project.models.dtos.PostDto;
-import com.project.models.dtos.RegistrationDto;
-import com.project.models.dtos.UserDto;
+import com.project.models.dtos.*;
 import com.project.repositories.contracts.CommentRepository;
 import com.project.repositories.contracts.UserRepository;
 import com.project.services.contracts.PostService;
@@ -86,5 +84,11 @@ public class MapperHelper {
         comment.setContent(commentDto.getComment());
         comment.setCreatedOn(LocalDateTime.now());
         return comment;
+    }
+
+    public Tag fromTagDto(TagDto tagDto) {
+        Tag tag = new Tag();
+        tag.setTag(tagDto.getTagName());
+        return tag;
     }
 }

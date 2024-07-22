@@ -121,6 +121,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public void updatePost(User user, Post post) {
         PermissionHelper.isSameUser(user, post.getPostedBy(), AUTHORIZATION_EXCEPTION);
+        PermissionHelper.isBlocked(post.getPostedBy(), "You are blocked and can't edit your post!");
         boolean duplicateExists = true;
         try {
            postRepository.getPostByTitle(post.getTitle());

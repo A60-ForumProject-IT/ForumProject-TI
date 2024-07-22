@@ -14,4 +14,8 @@ public class EntityNotFoundException extends RuntimeException {
         super(String.format("User with %s has no posts found.", id));
     }
 
+    public EntityNotFoundException(String attribute) {
+        super(String.format("The %s list is empty at the moment!", attribute));
+    }
+
 }

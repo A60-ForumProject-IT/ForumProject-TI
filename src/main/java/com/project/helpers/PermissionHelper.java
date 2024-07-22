@@ -1,5 +1,6 @@
 package com.project.helpers;
 
+import com.project.exceptions.BlockedException;
 import com.project.exceptions.UnauthorizedOperationException;
 import com.project.models.User;
 
@@ -47,7 +48,7 @@ public class PermissionHelper {
     }
     public static void isBlocked(User authorizedUser, String message) {
         if (authorizedUser.isBlocked()) {
-            throw new UnauthorizedOperationException(message);
+            throw new BlockedException(message);
         }
     }
 }

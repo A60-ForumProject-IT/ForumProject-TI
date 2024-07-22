@@ -137,7 +137,7 @@ public class PostRestController {
                                        @RequestParam(required = false) String sortBy,
                                        @RequestParam(required = false) String sortOrder) {
         try {
-            User user = authenticationHelper.tryGetUser(headers);
+            authenticationHelper.tryGetUser(headers);
             FilteredPostsOptions postFilterOptions =
                     new FilteredPostsOptions(minLikes, minDislikes,maxLikes, maxDislikes, title, content, createdBefore, createdAfter, postedBy, sortBy, sortOrder);
             return postService.getAllUsersPosts(userId, postFilterOptions);

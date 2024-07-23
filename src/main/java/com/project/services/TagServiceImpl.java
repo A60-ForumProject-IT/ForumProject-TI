@@ -16,7 +16,7 @@ import java.util.List;
 
 @Service
 public class TagServiceImpl implements TagService {
-    public static final String USER_BLOCKED_ERROR = "You are blocked and cannot create tags!";
+    public static final String USER_BLOCKED_ERROR = "You are blocked and cannot create or update tags!";
     private TagRepository tagRepository;
 
     @Autowired
@@ -52,8 +52,9 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public void updateTag(Tag tag) {
-
+    public void updateTag(Tag tag, User user) {
+        PermissionHelper.isBlocked(user, USER_BLOCKED_ERROR);
+        tagRepository.updateTag(tag);
     }
 
     @Override

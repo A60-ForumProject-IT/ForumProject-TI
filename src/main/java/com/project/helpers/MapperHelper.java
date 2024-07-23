@@ -7,8 +7,10 @@ import com.project.models.User;
 import com.project.models.dtos.*;
 import com.project.repositories.contracts.CommentRepository;
 import com.project.repositories.contracts.UserRepository;
+import com.project.services.TagServiceImpl;
 import com.project.services.contracts.PostService;
 import com.project.services.contracts.RoleService;
+import com.project.services.contracts.TagService;
 import com.project.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,6 +19,7 @@ import java.time.LocalDateTime;
 
 @Component
 public class MapperHelper {
+    private final TagService tagService;
     private UserService userService;
     private RoleService roleService;
     private PostService postService;
@@ -26,12 +29,13 @@ public class MapperHelper {
     @Autowired
     public MapperHelper(UserService userService, RoleService roleService,
                         PostService postService, UserRepository userRepository,
-                        CommentRepository commentRepository) {
+                        CommentRepository commentRepository, TagService tagService) {
         this.userService = userService;
         this.roleService = roleService;
         this.postService = postService;
         this.userRepository = userRepository;
         this.commentRepository = commentRepository;
+        this.tagService = tagService;
     }
 
     public User updateUserFromDto(UserDto userDto, int id) {
@@ -90,6 +94,12 @@ public class MapperHelper {
 
     public Tag fromTagDto(TagDto tagDto) {
         Tag tag = new Tag();
+        tag.setTag(tagDto.getTagName());
+        return tag;
+    }
+
+    public Tag fromTagDtoToUpdate(TagDto tagDto, int id) {
+        Tag tag = tagService.getTagById(id);
         tag.setTag(tagDto.getTagName());
         return tag;
     }

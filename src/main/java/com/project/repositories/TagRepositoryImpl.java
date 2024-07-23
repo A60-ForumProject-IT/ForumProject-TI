@@ -71,7 +71,11 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public void updateTag(Tag tag) {
-
+        try (Session session = sessionFactory.openSession()){
+            session.beginTransaction();
+            session.merge(tag);
+            session.getTransaction().commit();
+        }
     }
 
     @Override

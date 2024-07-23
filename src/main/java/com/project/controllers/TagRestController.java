@@ -69,5 +69,16 @@ public class TagRestController {
         }
     }
 
+    @PutMapping("/tags/{tagId}")
+    public void updateTag(@Valid @RequestBody TagDto tagDto, @PathVariable int tagId, @RequestHeader HttpHeaders headers) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            Tag tag = mapperHelper.fromTagDtoToUpdate(tagDto, tagId);
+            tagService.updateTag(tag, user);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
 
 }

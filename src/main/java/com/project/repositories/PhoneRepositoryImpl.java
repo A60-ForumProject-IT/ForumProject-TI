@@ -31,13 +31,13 @@ public class PhoneRepositoryImpl implements PhoneRepository {
     }
 
     @Override
-    public PhoneNumber getPhoneNumber(PhoneNumber phoneNumber) {
+    public PhoneNumber getPhoneNumber(String phoneNumber) {
         try (Session session = sessionFactory.openSession()) {
             Query<PhoneNumber> query = session.createQuery("from PhoneNumber where phoneNumber = :phoneNumber", PhoneNumber.class);
             query.setParameter("phoneNumber", phoneNumber);
             List<PhoneNumber> phoneNumbers = query.list();
             if (phoneNumbers.isEmpty()) {
-                throw new EntityNotFoundException("Phone", "number", phoneNumber.getPhoneNumber());
+                throw new EntityNotFoundException("Phone", "number", phoneNumber);
             }
             return phoneNumbers.get(0);
         }

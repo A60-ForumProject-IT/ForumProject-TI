@@ -26,7 +26,7 @@ public class PhoneServiceImpl implements PhoneService {
         PermissionHelper.isAdmin(userToAddPhone, INVALID_PERMISSION);
         boolean duplicateExist = true;
         try {
-            phoneRepository.getPhoneNumber(phoneNumber);
+            phoneRepository.getPhoneNumber(phoneNumber.getPhoneNumber());
         } catch (EntityNotFoundException e) {
             duplicateExist = false;
         }

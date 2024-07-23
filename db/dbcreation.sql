@@ -1,70 +1,120 @@
 CREATE DATABASE IF NOT EXISTS forum;
 USE forum;
 
-CREATE TABLE roles (
-                       id INT AUTO_INCREMENT PRIMARY KEY,
-                       name VARCHAR(20) NOT NULL
+create table roles
+(
+    id   int auto_increment
+        primary key,
+    name varchar(20) not null
 );
 
-CREATE TABLE users (
-                       id INT AUTO_INCREMENT PRIMARY KEY,
-                       username VARCHAR(50) UNIQUE NOT NULL,
-                       password VARCHAR(255) NOT NULL,
-                       email VARCHAR(100) UNIQUE NOT NULL,
-                       first_name VARCHAR(50),
-                       last_name VARCHAR(50),
-                       role_id INT,
-                       phone_number VARCHAR(20) UNIQUE,
-                       is_blocked BOOLEAN DEFAULT FALSE,
-                       FOREIGN KEY (role_id) REFERENCES roles(id)
+create table tags
+(
+    id   int auto_increment
+        primary key,
+    name varchar(50) not null
 );
 
-CREATE TABLE posts (
-                       id INT AUTO_INCREMENT PRIMARY KEY,
-                       user_id INT,
-                       title VARCHAR(64) NOT NULL,
-                       content TEXT NOT NULL,
-                       post_time_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                       likes INT DEFAULT 0,
-                       dislikes INT DEFAULT 0,
-                       FOREIGN KEY (user_id) REFERENCES users(id)
+create table users
+(
+    id           int auto_increment
+        primary key,
+    username     varchar(50)          not null,
+    password     varchar(255)         not null,
+    email        varchar(100)         not null,
+    first_name   varchar(50)          null,
+    last_name    varchar(50)          null,
+    role_id      int                  null,
+    phone_number varchar(20)          null,
+    is_blocked   tinyint(1) default 0 null,
+    constraint email
+        unique (email),
+    constraint phone_number
+        unique (phone_number),
+    constraint username
+        unique (username),
+    constraint users_ibfk_1
+        foreign key (role_id) references roles (id)
 );
 
-CREATE TABLE comments (
-                          id INT AUTO_INCREMENT PRIMARY KEY,
-                          creator INT,
-                          content_type VARCHAR(500) NOT NULL,
-                          comment_time_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                          post_id INT,
-                          FOREIGN KEY (creator) REFERENCES users(id),
-                          FOREIGN KEY (post_id) REFERENCES posts(id)
+create table posts
+(
+    id                int auto_increment
+        primary key,
+    user_id           int                                   null,
+    title             varchar(64)                           not null,
+    content           text                                  not null,
+    post_time_created timestamp default current_timestamp() null,
+    likes             int       default 0                   null,
+    dislikes          int       default 0                   null,
+    constraint posts_ibfk_1
+        foreign key (user_id) references users (id)
 );
 
-CREATE TABLE tags (
-                      id INT AUTO_INCREMENT PRIMARY KEY,
-                      name VARCHAR(50) NOT NULL
+create table comments
+(
+    id                   int auto_increment
+        primary key,
+    creator              int                                   null,
+    content_type         varchar(500)                          not null,
+    comment_time_created timestamp default current_timestamp() null,
+    post_id              int                                   null,
+    constraint comments_ibfk_1
+        foreign key (creator) references users (id),
+    constraint comments_ibfk_2
+        foreign key (post_id) references posts (id)
 );
 
-CREATE TABLE tags_posts (
-                            tag_id INT,
-                            post_id INT,
-                            PRIMARY KEY (tag_id, post_id),
-                            FOREIGN KEY (tag_id) REFERENCES tags(id),
-                            FOREIGN KEY (post_id) REFERENCES posts(id)
+create index creator
+    on comments (creator);
+
+create index post_id
+    on comments (post_id);
+
+create index user_id
+    on posts (user_id);
+
+create table posts_users_dislikes
+(
+    post_id int not null,
+    user_id int not null,
+    primary key (post_id, user_id),
+    constraint posts_users_dislikes_ibfk_1
+        foreign key (post_id) references posts (id),
+    constraint posts_users_dislikes_ibfk_2
+        foreign key (user_id) references users (id)
 );
 
-CREATE TABLE posts_users_likes (
-                                   post_id INT,
-                                   user_id INT,
-                                   PRIMARY KEY (post_id, user_id),
-                                   FOREIGN KEY (post_id) REFERENCES posts(id),
-                                   FOREIGN KEY (user_id) REFERENCES users(id)
+create index user_id
+    on posts_users_dislikes (user_id);
+
+create table posts_users_likes
+(
+    post_id int not null,
+    user_id int not null,
+    primary key (post_id, user_id),
+    constraint posts_users_likes_ibfk_1
+        foreign key (post_id) references posts (id),
+    constraint posts_users_likes_ibfk_2
+        foreign key (user_id) references users (id)
 );
 
-CREATE TABLE posts_users_dislikes (
-                                      post_id INT,
-                                      user_id INT,
-                                      PRIMARY KEY (post_id, user_id),
-                                      FOREIGN KEY (post_id) REFERENCES posts(id),
-                                      FOREIGN KEY (user_id) REFERENCES users(id)
+create index user_id
+    on posts_users_likes (user_id);
+
+create table tags_posts
+(
+    tag_id  int not null,
+    post_id int not null,
+    primary key (tag_id, post_id),
+    constraint tags_posts_ibfk_1
+        foreign key (tag_id) references tags (id),
+    constraint tags_posts_ibfk_2
+        foreign key (post_id) references posts (id)
 );
+
+create index post_id
+    on tags_posts (post_id);
+
+create index role_id
+    on users (role_id);

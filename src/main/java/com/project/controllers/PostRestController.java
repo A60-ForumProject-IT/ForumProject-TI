@@ -11,6 +11,7 @@ import com.project.models.dtos.PostDto;
 import com.project.models.dtos.PostDtoTop;
 import com.project.models.dtos.TagDto;
 import com.project.services.contracts.PostService;
+import com.project.services.contracts.TagService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -27,12 +28,14 @@ public class PostRestController {
     private final MapperHelper mapperHelper;
     private final PostService postService;
     private final AuthenticationHelper authenticationHelper;
+    private final TagService tagService;
 
     @Autowired
-    public PostRestController(PostService postService, MapperHelper mapperHelper, AuthenticationHelper authenticationHelper) {
+    public PostRestController(PostService postService, MapperHelper mapperHelper, AuthenticationHelper authenticationHelper, TagService tagService) {
         this.postService = postService;
         this.mapperHelper = mapperHelper;
         this.authenticationHelper = authenticationHelper;
+        this.tagService = tagService;
     }
 
     @GetMapping("/posts")
@@ -112,7 +115,7 @@ public class PostRestController {
         }
     }
 
-    @GetMapping("posts/{id}")
+    @GetMapping("/posts/{id}")
     public Post getPostById(@PathVariable int id, @RequestHeader HttpHeaders headers) {
         try {
             authenticationHelper.tryGetUser(headers);
@@ -197,7 +200,7 @@ public class PostRestController {
         return postService.getMostRecentPosts();
     }
 
-    @PutMapping("/posts/{postId}/addTag")
+    @PutMapping("/posts/{postId}/tags")
     public void addTagToPost(@Valid @RequestBody TagDto tagDto, @PathVariable int postId, @RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
@@ -215,12 +218,12 @@ public class PostRestController {
         }
     }
 
-    @PutMapping("/posts/{postId}/deleteTag")
-    public void deleteTagFromPost(@Valid @RequestBody TagDto tagDto, @PathVariable int postId, @RequestHeader HttpHeaders headers) {
+    @PutMapping("/posts/{postId}/{tagId}")
+    public void deleteTagFromPost(@PathVariable int tagId, @PathVariable int postId, @RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             Post post = postService.getPostById(postId);
-            Tag tag = mapperHelper.fromTagDto(tagDto);
+            Tag tag = tagService.getTagById(tagId);
             postService.deleteTagFromPost(user, post, tag);
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());

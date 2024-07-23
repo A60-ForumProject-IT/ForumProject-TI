@@ -20,11 +20,12 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/forum/users")
+@RequestMapping("/api/forum")
 public class UserRestController {
     private static final String BLOCKED_SUCCESSFULLY = "User blocked successfully";
     private static final String UNBLOCKED_SUCCESSFULLY = "User unblocked successfully";
     private static final String DELETING_USER_SUCCESSFULLY = "Deleting user successfully";
+    public static final String NOW_MODERATOR = "User is now moderator.";
 
 
     private final UserService userService;
@@ -45,7 +46,7 @@ public class UserRestController {
                                   @RequestParam(required = false) String username,
                                   @RequestParam(required = false) String email,
                                   @RequestParam(required = false) String firstName
-                                  ){
+    ) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             FilteredUsersOptions filteredUsersOptional = new FilteredUsersOptions(username, email, firstName);
@@ -57,7 +58,7 @@ public class UserRestController {
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/users/{id}")
     public User getUserById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
@@ -71,8 +72,8 @@ public class UserRestController {
         }
     }
 
-    @PutMapping("/{id}")
-    public User updateUser( @RequestHeader HttpHeaders headers,@PathVariable int id, @Valid @RequestBody UserDto userDto) {
+    @PutMapping("/users/{id}")
+    public User updateUser(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody UserDto userDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             User userToBeUpdated = mapperHelper.updateUserFromDto(userDto, id);
@@ -100,52 +101,75 @@ public class UserRestController {
         }
     }
 
-    @PutMapping("/{id}/block")
-    public ResponseEntity<String> blockUser(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+    @PutMapping("/users/{userId}/moderators")
+    public ResponseEntity<String> updateUserAdmin(@RequestHeader HttpHeaders headers, @PathVariable int userId) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            userService.blockUser(user, id);
-            return new ResponseEntity<>(BLOCKED_SUCCESSFULLY,HttpStatus.OK);
+            User userToBeAdmin = userService.getUserById(user, userId);
+            userService.userToBeAdmin(userToBeAdmin);
+            return new ResponseEntity<>(NOW_MODERATOR,HttpStatus.OK );
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (BlockedException e){
+        } catch (BlockedException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
-        }
-    }
-
-    @PutMapping("/{id}/unblock")
-    public ResponseEntity<String> unblockUser(@RequestHeader HttpHeaders headers, @PathVariable int id) {
-        try {
-            User user = authenticationHelper.tryGetUser(headers);
-            userService.unblocked(user, id);
-            return new ResponseEntity<>(UNBLOCKED_SUCCESSFULLY,HttpStatus.OK);
-        } catch (UnauthorizedOperationException e){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        } catch (EntityNotFoundException e){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (UnblockedException e){
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
-        }
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@RequestHeader HttpHeaders headers, @PathVariable int id) {
-        try {
-            User user = authenticationHelper.tryGetUser(headers);
-            userService.deleteUser(user, id);
-            return new ResponseEntity<>(DELETING_USER_SUCCESSFULLY,HttpStatus.OK);
-        } catch (UnauthorizedOperationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        } catch (EntityNotFoundException e){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (AuthenticationException e){
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 
-    @GetMapping("/count")
+
+    @PutMapping("/users/{id}/block")
+    public ResponseEntity<String> blockUser(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            userService.blockUser(user, id);
+            return new ResponseEntity<>(BLOCKED_SUCCESSFULLY, HttpStatus.OK);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (BlockedException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
+    @PutMapping("/users/{id}/unblock")
+    public ResponseEntity<String> unblockUser(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            userService.unblocked(user, id);
+            return new ResponseEntity<>(UNBLOCKED_SUCCESSFULLY, HttpStatus.OK);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnblockedException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<String> deleteUser(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            userService.deleteUser(user, id);
+            return new ResponseEntity<>(DELETING_USER_SUCCESSFULLY, HttpStatus.OK);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
+    @GetMapping("/users/count")
     public ResponseEntity<Long> countAllUsers() {
         Long count = userService.countAllUsers();
         return new ResponseEntity<>(count, HttpStatus.OK);

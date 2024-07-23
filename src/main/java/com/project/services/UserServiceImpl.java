@@ -1,12 +1,10 @@
 package com.project.services;
 
-import com.project.exceptions.BlockedException;
-import com.project.exceptions.DuplicateEntityException;
-import com.project.exceptions.EntityNotFoundException;
-import com.project.exceptions.UnblockedException;
+import com.project.exceptions.*;
 import com.project.helpers.PermissionHelper;
 import com.project.models.FilteredUsersOptions;
 import com.project.models.User;
+import com.project.repositories.contracts.RoleRepository;
 import com.project.repositories.contracts.UserRepository;
 import com.project.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,20 +14,20 @@ import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
-    private static final String INVALID_PERMISSION = "You dont have permission to do this Operation. Only admins can do this operation";
+    private static final String INVALID_PERMISSION = "You dont have permissions! Only admins can do this operation.";
     private static final String ALREADY_BLOCKED = "User is already blocked";
     public static final String ALREADY_NOT_BLOCKED = "User is already not blocked";
     public static final String CAN_T_EDIT_INFORMATION_IN_OTHER_USER_ACCOUNTS = "You can't edit information in other user accounts";
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
 
-
-    //Валидация дали си админ. Направи метод!
     @Override
     public List<User> getAllUsers(User user, FilteredUsersOptions filteredUsersOptional) {
         PermissionHelper.isAdmin(user, INVALID_PERMISSION);
@@ -152,5 +150,29 @@ public class UserServiceImpl implements UserService {
     @Override
     public Long countAllUsers() {
        return userRepository.countAllUsers();
+    }
+
+    @Override
+    public void userToBeAdmin(User userToBeAdmin) {
+        boolean isBlocked = false;
+        boolean isAdminOrModerator = true;
+        try {
+            PermissionHelper.isBlocked(userToBeAdmin, INVALID_PERMISSION);
+        } catch (BlockedException e) {
+            isBlocked = true;
+        }
+        try {
+            PermissionHelper.isAdminOrModerator(userToBeAdmin, INVALID_PERMISSION);
+        } catch (UnauthorizedOperationException e){
+            isAdminOrModerator = false;
+        }
+        if (isBlocked) {
+            userToBeAdmin.setBlocked(false);
+        }
+
+        if (!isAdminOrModerator) {
+            userToBeAdmin.setRole(roleRepository.getRoleById(2));
+        }
+        userRepository.userToBeModerator(userToBeAdmin);
     }
 }

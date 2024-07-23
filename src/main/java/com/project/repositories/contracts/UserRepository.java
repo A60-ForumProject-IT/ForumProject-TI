@@ -25,4 +25,6 @@ public interface UserRepository {
     void deleteUser(User user);
 
     Long countAllUsers();
+
+    void userToBeModerator(User userToBeAdmin);
 }

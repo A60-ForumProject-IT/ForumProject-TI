@@ -9,6 +9,8 @@ public interface UserService {
     List<User> getAllUsers(User user, FilteredUsersOptions filteredUsersOptional);
 
     User getUserById(User user, int id);
+    
+  //  User getUserById(int id);
 
     void update(User user, User userToBeUpdated);
 
@@ -23,4 +25,6 @@ public interface UserService {
     void deleteUser(User user, int id);
 
     Long countAllUsers();
+
+    void userToBeAdmin(User userToBeAdmin);
 }

@@ -46,9 +46,22 @@ public class PermissionHelper {
             throw new UnauthorizedOperationException(message);
         }
     }
+
     public static void isBlocked(User authorizedUser, String message) {
         if (authorizedUser.isBlocked()) {
             throw new BlockedException(message);
+        }
+    }
+
+    public static void isAdminOrModerator(User user, String message) {
+        boolean isAuthorized = false;
+
+        if (user.getRole().getName().equals(ROLE_ADMIN) || user.getRole().getName().equals(ROLE_MODERATOR)) {
+            isAuthorized = true;
+        }
+
+        if (!isAuthorized) {
+            throw new UnauthorizedOperationException(message);
         }
     }
 }

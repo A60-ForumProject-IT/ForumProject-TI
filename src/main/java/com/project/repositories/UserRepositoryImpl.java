@@ -160,4 +160,13 @@ public class UserRepositoryImpl implements UserRepository {
             return query.uniqueResult();
         }
     }
+
+    @Override
+    public void userToBeModerator(User userToBeAdmin) {
+        try(Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.merge(userToBeAdmin);
+            session.getTransaction().commit();
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package com.project.controllers;
 
 import com.project.exceptions.AuthenticationException;
+import com.project.exceptions.BlockedException;
 import com.project.exceptions.EntityNotFoundException;
 import com.project.helpers.AuthenticationHelper;
 import com.project.helpers.MapperHelper;
@@ -77,6 +78,25 @@ public class TagRestController {
             tagService.updateTag(tag, user);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (BlockedException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/tags/{id}")
+    public void deleteTag(@PathVariable int id, @RequestHeader HttpHeaders headers) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            Tag tag = tagService.getTagById(id);
+            tagService.deleteTag(tag, user);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (BlockedException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 

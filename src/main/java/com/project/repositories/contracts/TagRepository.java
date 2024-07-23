@@ -16,7 +16,7 @@ public interface TagRepository {
 
     void updateTag(Tag tag);
 
-    void deleteTag(int id);
+    void deleteTag(Tag tag);
 
     Tag getTagByName(String name);
 

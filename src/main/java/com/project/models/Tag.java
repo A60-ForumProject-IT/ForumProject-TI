@@ -22,7 +22,7 @@ public class Tag {
     private String tag;
 
     @ManyToMany(mappedBy = "postTags")
-    private Set<Post> posts;
+    private Set<Post> postTags;
 
     public Tag() {
     }

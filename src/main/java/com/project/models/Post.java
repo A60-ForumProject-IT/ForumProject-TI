@@ -22,7 +22,7 @@ public class Post implements Comparable<Post> {
     @Column(name = "id")
     private int postId;
 
-//    @JsonIgnore
+    //    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User postedBy;

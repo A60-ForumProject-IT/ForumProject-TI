@@ -23,4 +23,7 @@ public class PostDtoTop {
         this.dislikes = dislikes;
         this.commentsCount = commentsCount;
     }
+
+    public PostDtoTop() {
+    }
 }

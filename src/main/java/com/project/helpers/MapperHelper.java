@@ -68,11 +68,10 @@ public class MapperHelper {
         user.setFirstName(registrationDto.getFirstName());
         user.setLastName(registrationDto.getLastName());
         user.setEmail(registrationDto.getEmail());
-        //TODO confirmetion password!
+        //TODO confirmation password!
         user.setPassword(registrationDto.getPassword());
         user.setUsername(registrationDto.getUsername());
         user.setRole(roleService.getRoleById(1));
-        user.setPhoneNumber(null);
         user.setBlocked(false);
         return user;
     }

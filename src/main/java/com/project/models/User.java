@@ -36,10 +36,6 @@ public class User implements Comparable<User> {
     private String lastName;
 
     @JsonIgnore
-    @Column(name = "phone_number", nullable = false, unique = true)
-    private String phoneNumber;
-
-    @JsonIgnore
     @ManyToOne
     @JoinColumn (name = "role_id")
     private Role role;

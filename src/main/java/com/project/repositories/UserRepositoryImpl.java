@@ -2,6 +2,7 @@ package com.project.repositories;
 
 import com.project.exceptions.EntityNotFoundException;
 import com.project.models.FilteredUsersOptions;
+import com.project.models.PhoneNumber;
 import com.project.models.User;
 import com.project.repositories.contracts.UserRepository;
 import org.hibernate.Session;
@@ -169,4 +170,6 @@ public class UserRepositoryImpl implements UserRepository {
             session.getTransaction().commit();
         }
     }
+
+
 }

@@ -3,6 +3,7 @@ package com.project.services;
 import com.project.exceptions.*;
 import com.project.helpers.PermissionHelper;
 import com.project.models.FilteredUsersOptions;
+import com.project.models.PhoneNumber;
 import com.project.models.User;
 import com.project.repositories.contracts.RoleRepository;
 import com.project.repositories.contracts.UserRepository;
@@ -36,12 +37,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(User user, int id) {
-        try {
-            PermissionHelper.isAdmin(user, INVALID_PERMISSION );
-            return userRepository.getUserById(id);
-        } catch (EntityNotFoundException e) {
-            throw new EntityNotFoundException("User", id);
-        }
+        PermissionHelper.isAdmin(user, INVALID_PERMISSION);
+        return userRepository.getUserById(id);
     }
 
     @Override
@@ -142,14 +139,14 @@ public class UserServiceImpl implements UserService {
             PermissionHelper.isAdmin(user, INVALID_PERMISSION);
             User userToDelete = userRepository.getUserById(id);
             userRepository.deleteUser(userToDelete);
-        } catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             throw new EntityNotFoundException("User", id);
         }
     }
 
     @Override
     public Long countAllUsers() {
-       return userRepository.countAllUsers();
+        return userRepository.countAllUsers();
     }
 
     @Override
@@ -163,7 +160,7 @@ public class UserServiceImpl implements UserService {
         }
         try {
             PermissionHelper.isAdminOrModerator(userToBeAdmin, INVALID_PERMISSION);
-        } catch (UnauthorizedOperationException e){
+        } catch (UnauthorizedOperationException e) {
             isAdminOrModerator = false;
         }
         if (isBlocked) {

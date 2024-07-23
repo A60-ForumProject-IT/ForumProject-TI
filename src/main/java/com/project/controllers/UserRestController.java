@@ -4,9 +4,12 @@ import com.project.exceptions.*;
 import com.project.helpers.AuthenticationHelper;
 import com.project.helpers.MapperHelper;
 import com.project.models.FilteredUsersOptions;
+import com.project.models.PhoneNumber;
 import com.project.models.User;
+import com.project.models.dtos.PhoneNumberDto;
 import com.project.models.dtos.RegistrationDto;
 import com.project.models.dtos.UserDto;
+import com.project.services.contracts.PhoneService;
 import com.project.services.contracts.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +34,15 @@ public class UserRestController {
     private final UserService userService;
     private final MapperHelper mapperHelper;
     private final AuthenticationHelper authenticationHelper;
+    private final PhoneService phoneService;
 
     @Autowired
     public UserRestController(UserService userService, MapperHelper mapperHelper,
-                              AuthenticationHelper authenticationHelper) {
+                              AuthenticationHelper authenticationHelper, PhoneService phoneService) {
         this.userService = userService;
         this.mapperHelper = mapperHelper;
         this.authenticationHelper = authenticationHelper;
+        this.phoneService = phoneService;
     }
 
     //филтрация по username, email, firstName
@@ -173,5 +178,24 @@ public class UserRestController {
     public ResponseEntity<Long> countAllUsers() {
         Long count = userService.countAllUsers();
         return new ResponseEntity<>(count, HttpStatus.OK);
+    }
+
+    @PostMapping("/users/phones")
+    public ResponseEntity<String> addPhoneToAnAdmin(@RequestHeader HttpHeaders headers,
+                                                    @RequestBody @Valid PhoneNumberDto phoneNumberDto) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            PhoneNumber phoneNumber = mapperHelper.getFromPhoneDto(phoneNumberDto);
+            phoneService.addPhoneToAnAdmin(user,phoneNumber);
+            return new  ResponseEntity<>("Added phone to an admin successfully.", HttpStatus.OK);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (DuplicateEntityException e){
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        }
     }
 }

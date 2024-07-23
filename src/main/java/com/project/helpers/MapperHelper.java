@@ -1,9 +1,6 @@
 package com.project.helpers;
 
-import com.project.models.Comment;
-import com.project.models.Post;
-import com.project.models.Tag;
-import com.project.models.User;
+import com.project.models.*;
 import com.project.models.dtos.*;
 import com.project.repositories.contracts.CommentRepository;
 import com.project.repositories.contracts.UserRepository;
@@ -102,5 +99,11 @@ public class MapperHelper {
         Tag tag = tagService.getTagById(id);
         tag.setTag(tagDto.getTagName());
         return tag;
+    }
+
+    public PhoneNumber getFromPhoneDto(PhoneNumberDto phoneNumberDto) {
+        PhoneNumber phoneNumber = new PhoneNumber();
+        phoneNumber.setPhoneNumber(phoneNumberDto.getPhoneNumber());
+        return phoneNumber;
     }
 }

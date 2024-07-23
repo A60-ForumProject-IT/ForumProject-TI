@@ -23,8 +23,8 @@ public class PhoneNumber {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @Column(name = "user_id")
+    @OneToOne
+    @JoinColumn(name = "user_id")
     private User userId;
 
     public PhoneNumber() {}

@@ -1,6 +1,7 @@
 package com.project.repositories.contracts;
 
 import com.project.models.FilteredUsersOptions;
+import com.project.models.PhoneNumber;
 import com.project.models.User;
 
 import java.util.List;
@@ -27,4 +28,6 @@ public interface UserRepository {
     Long countAllUsers();
 
     void userToBeModerator(User userToBeAdmin);
+
+
 }

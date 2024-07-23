@@ -10,7 +10,6 @@ import com.project.models.User;
 import com.project.models.dtos.CommentDto;
 import com.project.services.contracts.CommentService;
 import com.project.services.contracts.PostService;
-import com.project.services.contracts.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;

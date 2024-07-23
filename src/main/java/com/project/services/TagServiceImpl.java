@@ -17,6 +17,7 @@ import java.util.List;
 @Service
 public class TagServiceImpl implements TagService {
     public static final String USER_BLOCKED_ERROR = "You are blocked and cannot create or update tags!";
+    public static final String NOT_ADMIN_UPDATE_DELETE_ERROR = "You are not admin and can't update or delete tags!";
     private TagRepository tagRepository;
 
     @Autowired
@@ -54,12 +55,15 @@ public class TagServiceImpl implements TagService {
     @Override
     public void updateTag(Tag tag, User user) {
         PermissionHelper.isBlocked(user, USER_BLOCKED_ERROR);
+        PermissionHelper.isAdmin(user, NOT_ADMIN_UPDATE_DELETE_ERROR);
         tagRepository.updateTag(tag);
     }
 
     @Override
-    public void deleteTag(int id) {
-
+    public void deleteTag(Tag tag, User user) {
+        PermissionHelper.isBlocked(user, USER_BLOCKED_ERROR);
+        PermissionHelper.isAdmin(user, NOT_ADMIN_UPDATE_DELETE_ERROR);
+        tagRepository.deleteTag(tag);
     }
 
     @Override

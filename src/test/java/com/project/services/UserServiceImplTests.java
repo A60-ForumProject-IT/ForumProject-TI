@@ -149,9 +149,6 @@ public class UserServiceImplTests {
                 () -> userService.create(user));
     }
 
-//    @Test
-//    public void createUser_Should_ThrowDuplicateExist_When_
-
     @Test
     @MockitoSettings(strictness = Strictness.LENIENT)
     public void createUser_Should_Throw_When_UsernameExists() {
@@ -235,14 +232,11 @@ public class UserServiceImplTests {
         PhoneNumber phoneNumber = new PhoneNumber();
         phoneNumber.setPhoneNumber("088913141414");
         User userTryingToAdd = TestHelpers.createMockNoAdminUser();
-//    User userToBeUpdated = TestHelpers.createMockNoAdminUser();
-//    userToBeUpdated.setId(777);
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
                 () -> phoneService.addPhoneToAnAdmin(userTryingToAdd, phoneNumber));
     }
 
-    //TODO
     @Test
     public void addPhoneNumber_Should_CallRepository_When_UserIsAdmin() {
         PhoneNumber phoneNumber = new PhoneNumber();
@@ -310,10 +304,6 @@ public class UserServiceImplTests {
 
         Assertions.assertThrows(EntityNotFoundException.class,
                 () -> userService.deleteUser(adminUser, userToDelete.getId()));
-
-//        userService.deleteUser(adminUser, userToDelete.getId());
-//
-//        Mockito.verify(userRepository, Mockito.times(1)).deleteUser(userToDelete);
     }
 
     @Test
@@ -330,7 +320,6 @@ public class UserServiceImplTests {
 
         Assertions.assertEquals(user, result);
     }
-
 
     @Test
     public void getAllUsersCount_Should_Pass() {
@@ -364,7 +353,6 @@ public class UserServiceImplTests {
 
         userService.blockUser(adminUser, userToBlock.getId());
         Mockito.verify(userRepository, Mockito.times(1)).blockUser(userToBlock);
-
     }
 
     @Test

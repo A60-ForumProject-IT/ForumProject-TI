@@ -5,16 +5,16 @@ INSERT INTO roles (name) VALUES
 
 
 INSERT INTO users (username, password, email, first_name, last_name, role_id, is_blocked) VALUES
-                                                                                                            ('gamer1', 'password1', 'gamer1@example.com', 'John', 'Doe', 1, NULL, FALSE),
-                                                                                                            ('gamer2', 'password2', 'gamer2@example.com', 'Jane', 'Smith', 2, '0987654321', FALSE),
-                                                                                                            ('gamer3', 'password3', 'gamer3@example.com', 'Alice', 'Johnson', 1, NULL, FALSE),
-                                                                                                            ('gamer4', 'password4', 'gamer4@example.com', 'Bob', 'Brown', 3, '2222222222', FALSE),
-                                                                                                            ('gamer5', 'password5', 'gamer5@example.com', 'Charlie', 'Davis', 2, '3333333333', FALSE),
-                                                                                                            ('gamer6', 'password6', 'gamer6@example.com', 'David', 'Wilson', 1, NULL, FALSE),
-                                                                                                            ('gamer7', 'password7', 'gamer7@example.com', 'Eve', 'Taylor', 2, '5555555555', FALSE),
-                                                                                                            ('gamer8', 'password8', 'gamer8@example.com', 'Frank', 'Anderson', 1, NULL, TRUE),
-                                                                                                            ('gamer9', 'password9', 'gamer9@example.com', 'Grace', 'Thomas', 3, '7777777777', FALSE),
-                                                                                                            ('gamer10', 'password10', 'gamer10@example.com', 'Hank', 'Moore', 1, NULL, FALSE);
+                                                                                                            ('gamer1', 'password1', 'gamer1@example.com', 'John', 'Doe', 1, FALSE),
+                                                                                                            ('gamer2', 'password2', 'gamer2@example.com', 'Jane', 'Smith', 2, FALSE),
+                                                                                                            ('gamer3', 'password3', 'gamer3@example.com', 'Alice', 'Johnson', 1, FALSE),
+                                                                                                            ('gamer4', 'password4', 'gamer4@example.com', 'Bob', 'Brown', 3, FALSE),
+                                                                                                            ('gamer5', 'password5', 'gamer5@example.com', 'Charlie', 'Davis', 2, FALSE),
+                                                                                                            ('gamer6', 'password6', 'gamer6@example.com', 'David', 'Wilson', 1, FALSE),
+                                                                                                            ('gamer7', 'password7', 'gamer7@example.com', 'Eve', 'Taylor', 2, FALSE),
+                                                                                                            ('gamer8', 'password8', 'gamer8@example.com', 'Frank', 'Anderson', 1, TRUE),
+                                                                                                            ('gamer9', 'password9', 'gamer9@example.com', 'Grace', 'Thomas', 3, FALSE),
+                                                                                                            ('gamer10', 'password10', 'gamer10@example.com', 'Hank', 'Moore', 1, FALSE);
 
 INSERT INTO posts (user_id, title, content, post_time_created, likes, dislikes) VALUES
                                                                                     (1, 'Best RPG Games of 2024', 'Let\'s discuss the best RPG games released this year...', '2024-01-01 10:00:00', 10, 2),

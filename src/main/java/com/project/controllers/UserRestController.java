@@ -46,7 +46,7 @@ public class UserRestController {
     }
 
     //филтрация по username, email, firstName
-    @GetMapping
+    @GetMapping("/users")
     public List<User> getAllUsers(@RequestHeader HttpHeaders headers,
                                   @RequestParam(required = false) String username,
                                   @RequestParam(required = false) String email,

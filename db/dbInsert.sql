@@ -4,7 +4,7 @@ INSERT INTO roles (name) VALUES
                              ('admin');
 
 
-INSERT INTO users (username, password, email, first_name, last_name, role_id, phone_number, is_blocked) VALUES
+INSERT INTO users (username, password, email, first_name, last_name, role_id, is_blocked) VALUES
                                                                                                             ('gamer1', 'password1', 'gamer1@example.com', 'John', 'Doe', 1, NULL, FALSE),
                                                                                                             ('gamer2', 'password2', 'gamer2@example.com', 'Jane', 'Smith', 2, '0987654321', FALSE),
                                                                                                             ('gamer3', 'password3', 'gamer3@example.com', 'Alice', 'Johnson', 1, NULL, FALSE),

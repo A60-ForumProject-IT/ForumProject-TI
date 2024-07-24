@@ -199,16 +199,12 @@ public class UserServiceImplTests {
         users.add(TestHelpers.createMockNoAdminUser());
         FilteredUsersOptions filteredUsersOptions = TestHelpers.createUserFilterOptions();
 
-        // Мокиране на поведението на userRepository
         Mockito.when(userRepository.getAllUsers(filteredUsersOptions)).thenReturn(users);
 
-        // Извикване на метода на userService, който трябва да направи повикването към userRepository
         List<User> result = userService.getAllUsers(adminUser, filteredUsersOptions);
 
-        // Проверка дали методът getAllUsers на userRepository е извикан веднъж
         Mockito.verify(userRepository, Mockito.times(1)).getAllUsers(filteredUsersOptions);
 
-        // Проверка дали върнатият резултат е същият като мокирания
         Assertions.assertEquals(users, result);
     }
 

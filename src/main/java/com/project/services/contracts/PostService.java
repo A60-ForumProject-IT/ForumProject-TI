@@ -36,4 +36,6 @@ public interface PostService {
     void addTagToPost(User user, Post post, Tag tag);
 
     void deleteTagFromPost(User user, Post post, Tag tag);
+
+    Post getPostByTitle(String title);
 }

@@ -61,10 +61,10 @@ public class TestHelpers {
         Set<Tag> relatedTags = new HashSet<>();
         relatedTags.add(createMockTag());
 
-        Set<User> usersWhoLikedThePost = new TreeSet<>();
+        Set<User> usersWhoLikedThePost = new HashSet<>();
         usersWhoLikedThePost.add(createMockAdminUser());
 
-        Set<User> usersWhoDislikedThePost = new TreeSet<>();
+        Set<User> usersWhoDislikedThePost = new HashSet<>();
         User userWhoDisliked = createMockNoAdminUser();
         userWhoDisliked.setId(3);
         usersWhoDislikedThePost.add(userWhoDisliked);
@@ -91,10 +91,10 @@ public class TestHelpers {
         Set<Tag> relatedTags = new HashSet<>();
         relatedTags.add(createMockTag());
 
-        Set<User> usersWhoLikedThePost = new TreeSet<>();
+        Set<User> usersWhoLikedThePost = new HashSet<>();
         usersWhoLikedThePost.add(createMockAdminUser());
 
-        Set<User> usersWhoDislikedThePost = new TreeSet<>();
+        Set<User> usersWhoDislikedThePost = new HashSet<>();
         User userWhoDisliked = createMockNoAdminUser();
         userWhoDisliked.setId(3);
         usersWhoDislikedThePost.add(userWhoDisliked);

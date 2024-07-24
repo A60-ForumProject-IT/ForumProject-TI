@@ -186,6 +186,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public Post getPostByTitle(String title) {
+        return postRepository.getPostByTitle(title);
+    }
+
+    @Override
     public List<Post> getAllUsersPosts(int userId, FilteredPostsOptions postFilterOptions) {
         return postRepository.getAllUsersPosts(userId, postFilterOptions);
     }

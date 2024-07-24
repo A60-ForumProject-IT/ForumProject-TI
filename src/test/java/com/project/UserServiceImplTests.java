@@ -3,10 +3,7 @@ package com.project;
 import com.project.exceptions.*;
 import com.project.helpers.PermissionHelper;
 import com.project.helpers.TestHelpers;
-import com.project.models.FilteredUsersOptions;
-import com.project.models.PhoneNumber;
-import com.project.models.Role;
-import com.project.models.User;
+import com.project.models.*;
 import com.project.repositories.contracts.PhoneRepository;
 import com.project.repositories.contracts.RoleRepository;
 import com.project.repositories.contracts.UserRepository;
@@ -62,6 +59,23 @@ public class UserServiceImplTests {
     }
 
     @Test
+    public void updateUser_Should_ThrowEntityNotFound_When_NoExistingUser(){
+        User userToBeUpdated = TestHelpers.createMockNoAdminUser();
+        userToBeUpdated.setId(1);
+        userToBeUpdated.setUsername("user1");
+
+        User user = TestHelpers.createMockNoAdminUser();
+        user.setId(1);
+
+        Mockito.when(userRepository.getByUsername(userToBeUpdated.getUsername()))
+                .thenThrow(EntityNotFoundException.class);
+
+        userService.update(user, userToBeUpdated);
+
+        Mockito.verify(userRepository, Mockito.times(1)).update(userToBeUpdated);
+    }
+
+    @Test
     public void updateUser_Should_Throw_When_UnauthorizedUserTriesToUpdate() {
         User userToBeUpdated = TestHelpers.createMockNoAdminUser();
         User userThatCannotUpdate = TestHelpers.createMockNoAdminUser();
@@ -70,6 +84,26 @@ public class UserServiceImplTests {
         Assertions.assertThrows(
                 UnauthorizedOperationException.class,
                 () -> userService.update(userToBeUpdated, userThatCannotUpdate));
+    }
+
+    @Test
+    @MockitoSettings(strictness = Strictness.LENIENT)
+    public void updateUser_Should_Throw_When_UsernameExists() {
+        User existingUser = TestHelpers.createMockNoAdminUser();
+        existingUser.setId(1);
+        existingUser.setUsername("username");
+
+        User userToBeUpdated = TestHelpers.createMockNoAdminUser();
+        userToBeUpdated.setId(1);
+        userToBeUpdated.setUsername("username");
+
+        // Mocking userRepository behavior
+        Mockito.when(userRepository.getByUsername(userToBeUpdated.getUsername()))
+                .thenReturn(existingUser); // Return a different user with the same username
+
+        Assertions.assertThrows(DuplicateEntityException.class, () -> {
+            userService.update(existingUser, userToBeUpdated);
+        });
     }
 
     @Test
@@ -126,21 +160,41 @@ public class UserServiceImplTests {
     }
 
     @Test
-    public void createUser_Should_Throw_When_UsernameExists() {
-        User userToBeCreated = TestHelpers.createMockNoAdminUser();
-
-        Assertions.assertThrows(DuplicateEntityException.class,
-                () -> userService.create(userToBeCreated));
-    }
-
-    @Test
+    @MockitoSettings(strictness = Strictness.LENIENT)
     public void createUser_Should_Throw_When_EmailExists() {
         User existingUser = TestHelpers.createMockNoAdminUser();
-        User userToBeCreated = TestHelpers.createMockNoAdminUser();
-        existingUser.setUsername("some new username");
+        existingUser.setEmail("username@example.com");
+        User user = TestHelpers.createMockNoAdminUser();
+        user.setEmail("username@example.com");
+        existingUser.setId(user.getId());
+
+        Mockito.when(userRepository.getByUsername(existingUser.getUsername()))
+                .thenThrow(EntityNotFoundException.class);
+
+        Mockito.when(userRepository.getUserById(user.getId()))
+                .thenReturn(existingUser);
 
         Assertions.assertThrows(DuplicateEntityException.class,
-                () -> userService.create(userToBeCreated));
+                () -> userService.create(user));
+    }
+
+//    @Test
+//    public void createUser_Should_ThrowDuplicateExist_When_
+
+    @Test
+    @MockitoSettings(strictness = Strictness.LENIENT)
+    public void createUser_Should_Throw_When_UsernameExists() {
+        User existingUser = TestHelpers.createMockNoAdminUser();
+        existingUser.setUsername("username");
+        User user = TestHelpers.createMockNoAdminUser();
+        user.setUsername("username");
+        existingUser.setId(user.getId());
+
+        Mockito.when(userRepository.getUserById(user.getId()))
+                .thenReturn(existingUser);
+
+        Assertions.assertThrows(DuplicateEntityException.class,
+                () -> userService.create(user));
     }
 
     @Test

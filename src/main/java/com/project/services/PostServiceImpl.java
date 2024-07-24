@@ -146,6 +146,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public void deletePost(User user, Post post) {
         PermissionHelper.isAdminOrSameUser(user, post.getPostedBy(), UNAUTHORIZED_DELETE_ERROR);
+        PermissionHelper.isBlocked(user, BLOCKED_USER_ERROR);
         postRepository.deletePost(post);
     }
 

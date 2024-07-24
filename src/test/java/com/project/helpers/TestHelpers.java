@@ -2,18 +2,11 @@ package com.project.helpers;
 
 import com.project.models.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import java.time.LocalDateTime;
 
 public class TestHelpers {
     public static User createMockAdminUser() {
-        Set<Role> roles = new TreeSet<>();
-        roles.add(createMockRoleAdmin());
-        roles.add(createMockRoleStaffMember());
-        roles.add(createMockRoleMember());
 
         User mockUser = new User();
         mockUser.setId(1);
@@ -42,7 +35,7 @@ public class TestHelpers {
     }
 
     public static User createMockNoAdminUser() {
-        Set<Role> roles = new TreeSet<>(Set.of(createMockRoleMember()));
+
         User mockUser = new User();
         mockUser.setId(2);
         mockUser.setEmail("Mock_NoAdmin_User@gmail.com");
@@ -65,7 +58,7 @@ public class TestHelpers {
 
     public static Post createMockPost1() {
         List<Comment> relatedComments = new ArrayList<>();
-        Set<Tag> relatedTags = new TreeSet<>();
+        Set<Tag> relatedTags = new HashSet<>();
         relatedTags.add(createMockTag());
 
         Set<User> usersWhoLikedThePost = new TreeSet<>();
@@ -95,7 +88,7 @@ public class TestHelpers {
 
     public static Post createMockPost2() {
         List<Comment> relatedComments = new ArrayList<>();
-        Set<Tag> relatedTags = new TreeSet<>();
+        Set<Tag> relatedTags = new HashSet<>();
         relatedTags.add(createMockTag());
 
         Set<User> usersWhoLikedThePost = new TreeSet<>();
@@ -123,31 +116,9 @@ public class TestHelpers {
         return mockPost;
     }
 
-    public static Role createMockRoleAdmin() {
-        Role mockRole = new Role();
-        mockRole.setRoleId(1);
-        mockRole.setName("ADMIN");
-        return mockRole;
-    }
-
-    public static Role createMockRoleStaffMember() {
-        Role mockRole = new Role();
-        mockRole.setRoleId(3);
-        mockRole.setName("STAFF_MEMBER");
-        return mockRole;
-    }
-
-    public static Role createMockRoleMember() {
-        Role mockRole = new Role();
-        mockRole.setRoleId(2);
-        mockRole.setName("MEMBER");
-        return mockRole;
-    }
 
     public static Comment createMockComment1() {
         Comment mockComment = new Comment();
-        Set<User> usersWhoLikedTheComment = new TreeSet<>();
-        Set<User> usersWhoDislikedTheComment = new TreeSet<>();
 
         mockComment.setCommentId(1);
         mockComment.setContent("Mock comment random content.");

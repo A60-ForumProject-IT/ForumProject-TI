@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -43,6 +45,22 @@ public class User implements Comparable<User> {
     @JsonIgnore
     @Column(name = "is_blocked")
     private boolean isBlocked;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "postedBy", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Post> posts;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "usersWhoLikedPost", cascade = CascadeType.ALL)
+    private Set<Post> likedPosts;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "usersWhoDislikedPost", cascade = CascadeType.ALL)
+    private Set<Post> dislikedPosts;
 
     public User() {
     }

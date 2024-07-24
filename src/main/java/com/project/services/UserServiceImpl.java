@@ -111,7 +111,6 @@ public class UserServiceImpl implements UserService {
         if (alreadyBlocked) {
             throw new BlockedException(ALREADY_BLOCKED);
         }
-
     }
 
     @Override

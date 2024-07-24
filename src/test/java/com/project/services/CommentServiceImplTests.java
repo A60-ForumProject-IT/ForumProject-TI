@@ -1,4 +1,4 @@
-package com.project;
+package com.project.services;
 
 import com.project.exceptions.DuplicateEntityException;
 import com.project.exceptions.EntityNotFoundException;
@@ -6,8 +6,6 @@ import com.project.exceptions.UnauthorizedOperationException;
 import com.project.helpers.TestHelpers;
 import com.project.models.Comment;
 import com.project.repositories.contracts.CommentRepository;
-import com.project.services.CommentServiceImpl;
-import com.project.services.contracts.CommentService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,11 +16,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.project.models.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
-public class CommentServiceTests {
+public class CommentServiceImplTests {
 
     @Mock
     CommentRepository commentRepository;

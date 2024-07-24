@@ -1,4 +1,4 @@
-package com.project;
+package com.project.services;
 
 import com.project.exceptions.*;
 import com.project.helpers.TestHelpers;
@@ -6,7 +6,6 @@ import com.project.models.*;
 import com.project.models.dtos.PostDtoTop;
 import com.project.repositories.contracts.PostRepository;
 import com.project.repositories.contracts.TagRepository;
-import com.project.services.PostServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

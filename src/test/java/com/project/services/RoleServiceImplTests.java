@@ -1,9 +1,8 @@
-package com.project;
+package com.project.services;
 
 import com.project.helpers.TestHelpers;
 import com.project.models.Role;
 import com.project.repositories.contracts.RoleRepository;
-import com.project.services.RoleServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

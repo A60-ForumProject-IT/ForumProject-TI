@@ -1,4 +1,4 @@
-package com.project;
+package com.project.services;
 
 import com.project.exceptions.BlockedException;
 import com.project.exceptions.DuplicateEntityException;
@@ -6,11 +6,9 @@ import com.project.exceptions.EntityNotFoundException;
 import com.project.exceptions.UnauthorizedOperationException;
 import com.project.helpers.TestHelpers;
 import com.project.models.FilteredCommentsOptions;
-import com.project.models.Post;
 import com.project.models.Tag;
 import com.project.models.User;
 import com.project.repositories.contracts.TagRepository;
-import com.project.services.TagServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,11 +16,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @ExtendWith(MockitoExtension.class)
 public class TagServiceImplTests {

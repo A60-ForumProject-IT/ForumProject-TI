@@ -1,14 +1,11 @@
-package com.project;
+package com.project.services;
 
 import com.project.exceptions.*;
-import com.project.helpers.PermissionHelper;
 import com.project.helpers.TestHelpers;
 import com.project.models.*;
 import com.project.repositories.contracts.PhoneRepository;
 import com.project.repositories.contracts.RoleRepository;
 import com.project.repositories.contracts.UserRepository;
-import com.project.services.PhoneServiceImpl;
-import com.project.services.UserServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -87,22 +84,20 @@ public class UserServiceImplTests {
     }
 
     @Test
-    @MockitoSettings(strictness = Strictness.LENIENT)
     public void updateUser_Should_Throw_When_UsernameExists() {
         User existingUser = TestHelpers.createMockNoAdminUser();
         existingUser.setId(1);
         existingUser.setUsername("username");
 
         User userToBeUpdated = TestHelpers.createMockNoAdminUser();
-        userToBeUpdated.setId(1);
+        userToBeUpdated.setId(2);
         userToBeUpdated.setUsername("username");
 
-        // Mocking userRepository behavior
         Mockito.when(userRepository.getByUsername(userToBeUpdated.getUsername()))
-                .thenReturn(existingUser); // Return a different user with the same username
+                .thenReturn(existingUser);
 
         Assertions.assertThrows(DuplicateEntityException.class, () -> {
-            userService.update(existingUser, userToBeUpdated);
+            userService.update(userToBeUpdated, userToBeUpdated);
         });
     }
 
@@ -118,30 +113,6 @@ public class UserServiceImplTests {
         Mockito.verify(userRepository, Mockito.times(1))
                 .getByUsername(mockUserNameByWhichWeSearchUser);
     }
-
-
-//@Test
-//public void makeAdministrativeChanges_Should_Pass_When_TheUserTryingToMakeTheChangesIsAdmin() {
-//    User adminUser = TestHelpers.createMockAdminUser();
-//    User userToBeUpdated = TestHelpers.createMockNoAdminUser();
-//
-//    Mockito.when(userRepository.makeAdministrativeChanges(userToBeUpdated))
-//            .thenReturn(userToBeUpdated);
-//
-//    userService.makeAdministrativeChanges(adminUser, userToBeUpdated);
-//
-//    Mockito.verify(userRepository, Mockito.times(1))
-//            .makeAdministrativeChanges(userToBeUpdated);
-//}
-
-//@Test
-//public void makeAdministrativeChanges_Should_Throw_When_UserTryingToMakeChangesIsNotAdmin() {
-//    User nonAdminUser = TestHelpers.createMockNoAdminUser();
-//    User userToBeUpdated = TestHelpers.createMockNoAdminUser();
-//
-//    Assertions.assertThrows(UnauthorizedOperationException.class,
-//            () -> userService.makeAdministrativeChanges(nonAdminUser, userToBeUpdated));
-//}
 
     @Test
     public void createUser_Should_CallRepository() {

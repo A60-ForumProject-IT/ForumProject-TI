@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+
 @Component
 public class AuthenticationHelper {
     public static final String INVALID_AUTHENTICATION_ERROR = "Invalid username or password.";
@@ -27,39 +30,28 @@ public class AuthenticationHelper {
         }
 
         try {
-            String userInfo = headers.getFirst(HttpHeaders.AUTHORIZATION);
-            String username = getUsername(userInfo);
-            String password = getPassword(userInfo);
+            String authHeader = headers.getFirst(HttpHeaders.AUTHORIZATION);
+            if (authHeader.startsWith("Basic ")) {
+                String base64Credentials = authHeader.substring("Basic".length()).trim();
+                byte[] credDecoded = Base64.getDecoder().decode(base64Credentials);
+                String credentials = new String(credDecoded, StandardCharsets.UTF_8);
+                final String[] values = credentials.split(":", 2);
 
-            User user = userService.getByUsername(username);
+                String username = values[0];
+                String password = values[1];
 
-            if (!user.getPassword().equals(password)) {
+                User user = userService.getByUsername(username);
+
+                if (!user.getPassword().equals(password)) {
+                    throw new AuthenticationException(INVALID_AUTHENTICATION_ERROR);
+                }
+                return user;
+            } else {
                 throw new AuthenticationException(INVALID_AUTHENTICATION_ERROR);
             }
-            return user;
-        } catch (EntityNotFoundException e) {
+        } catch (EntityNotFoundException | ArrayIndexOutOfBoundsException e) {
             throw new AuthenticationException(INVALID_AUTHENTICATION_ERROR);
         }
-    }
-
-    private String getPassword(String userInfo) {
-        int firstSpaceIndex = userInfo.indexOf(" ");
-
-        if (firstSpaceIndex == -1) {
-            throw new AuthenticationException(INVALID_AUTHENTICATION_ERROR);
-        }
-
-        return userInfo.substring(firstSpaceIndex + 1);
-    }
-
-    private String getUsername(String userInfo) {
-        int firstSpaceIndex = userInfo.indexOf(" ");
-
-        if (firstSpaceIndex == -1) {
-            throw new AuthenticationException(INVALID_AUTHENTICATION_ERROR);
-        }
-
-        return userInfo.substring(0, firstSpaceIndex);
     }
 
     public User tryGetUserFromSession(HttpSession httpSession) {

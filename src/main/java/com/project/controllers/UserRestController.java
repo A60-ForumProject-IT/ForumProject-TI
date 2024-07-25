@@ -95,7 +95,7 @@ public class UserRestController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/users")
     public ResponseEntity<String> createUser(@Valid @RequestBody RegistrationDto registrationDto) {
         try {
             User user = mapperHelper.createUserFromRegistrationDto(registrationDto);

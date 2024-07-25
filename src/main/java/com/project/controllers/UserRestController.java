@@ -29,6 +29,7 @@ public class UserRestController {
     private static final String UNBLOCKED_SUCCESSFULLY = "User unblocked successfully";
     private static final String DELETING_USER_SUCCESSFULLY = "Deleting user successfully";
     public static final String NOW_MODERATOR = "User is now moderator.";
+    public static final String PHONE_TO_AN_ADMIN_SUCCESSFULLY = "Added phone to an admin successfully.";
 
 
     private final UserService userService;
@@ -187,7 +188,7 @@ public class UserRestController {
             User user = authenticationHelper.tryGetUser(headers);
             PhoneNumber phoneNumber = mapperHelper.getFromPhoneDto(phoneNumberDto);
             phoneService.addPhoneToAnAdmin(user,phoneNumber);
-            return new  ResponseEntity<>("Added phone to an admin successfully.", HttpStatus.OK);
+            return new  ResponseEntity<>(PHONE_TO_AN_ADMIN_SUCCESSFULLY, HttpStatus.OK);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {

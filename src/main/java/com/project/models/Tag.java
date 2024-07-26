@@ -21,7 +21,7 @@ public class Tag {
     @Column(name = "name")
     private String tag;
 
-    @ManyToMany(mappedBy = "postTags")
+    @ManyToMany(mappedBy = "postTags", fetch = FetchType.EAGER)
     private Set<Post> postTags;
 
     public Tag() {

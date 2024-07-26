@@ -82,6 +82,14 @@ public class TagRepositoryImpl implements TagRepository {
     public void deleteTag(Tag tag) {
         try (Session session = sessionFactory.openSession()){
             session.beginTransaction();
+            session.evict(tag);
+            tag = session.merge(tag);
+
+            for (Post post : tag.getPostTags()) {
+                post.getPostTags().remove(tag);
+                session.merge(post);
+            }
+
             session.remove(tag);
             session.getTransaction().commit();
         }

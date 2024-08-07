@@ -65,13 +65,23 @@ public class MapperHelper {
         user.setFirstName(registrationDto.getFirstName());
         user.setLastName(registrationDto.getLastName());
         user.setEmail(registrationDto.getEmail());
-        //TODO confirmation password!
         user.setPassword(registrationDto.getPassword());
         user.setUsername(registrationDto.getUsername());
         user.setRole(roleService.getRoleById(1));
         user.setBlocked(false);
         return user;
     }
+
+//    public User registerFromDto(RegistrationDto dto){
+//        User user = new User();
+//        user.setUsername(dto.getUsername());
+//        user.setPassword(dto.getPassword());
+//        user.setFirstName(dto.getFirstName());
+//        user.setLastName(dto.getLastName());
+//        user.setEmail(dto.getEmail());
+//        user.setAdmin(false);
+//        return user;
+//    }
 
     public Comment createCommentForPostFromCommentDto(CommentDto commentDto, User user, Post post) {
         Comment comment = new Comment();

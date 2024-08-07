@@ -19,6 +19,10 @@ public class RegistrationDto {
     @Size(min = 8)
     private String password;
 
+    @NotNull(message = "Confirmation password can't be empty.")
+    @Size(min = 8)
+    private String confirmPassword;
+
     @Email(message = "Email is invalid.")
     private String email;
 

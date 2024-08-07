@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+</head>
+<body>
+<div class="body-content">
+    <h2 id="login-h2">Register</h2>
+    <form class="create-beer-form" th:action="@{/auth/register}" th:object="${register}" method="post">
+        <div class="form-group">
+            <label class="form-label" th:text="#{user.label.username}">Username</label>
+            <input type="text" class="form-input" th:field="*{username}"/>
+            <label class="error form-error" th:errors="*{username}"></label>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" th:text="#{user.label.password}">Password</label>
+            <input type="password" class="form-input" th:field="*{password}"/>
+            <label class="error form-error" th:errors="*{password}"></label>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" th:text="#{user.label.password-confirm}">Confirm password</label>
+            <input type="password" class="form-input" th:field="*{confirmPassword}"/>
+            <label class="error form-error" th:errors="*{confirmPassword}"></label>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" th:text="#{user.label.email}">Email</label>
+            <input type="email" class="form-input" th:field="*{email}"/>
+            <label class="error form-error" th:errors="*{email}"></label>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" th:text="#{user.label.firstName}">First name</label>
+            <input type="text" class="form-input" th:field="*{firstName}"/>
+            <label class="error form-error" th:errors="*{firstName}"></label>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" th:text="#{user.label.lastName}">Last name</label>
+            <input type="text" class="form-input" th:field="*{lastName}"/>
+            <label class="error form-error" th:errors="*{lastName}"></label>
+        </div>
+
+        <input type="submit" value="Register" class="btn-primary"/>
+    </form>
+</body>
+</html>

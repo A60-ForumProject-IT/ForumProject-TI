@@ -1,8 +1,12 @@
 package com.project.controllers.mvc;
 
 import com.project.exceptions.AuthenticationException;
+import com.project.exceptions.DuplicateEntityException;
 import com.project.helpers.AuthenticationHelper;
+import com.project.helpers.MapperHelper;
+import com.project.models.User;
 import com.project.models.dtos.LoginDto;
+import com.project.models.dtos.RegistrationDto;
 import com.project.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -21,11 +25,13 @@ public class AuthenticationMvcController {
 
     private final UserService userService;
     private final AuthenticationHelper authenticationHelper;
+    private final MapperHelper mapperHelper;
 
     @Autowired
-    public AuthenticationMvcController(UserService userService, AuthenticationHelper authenticationHelper) {
+    public AuthenticationMvcController(UserService userService, AuthenticationHelper authenticationHelper, MapperHelper mapperHelper) {
         this.userService = userService;
         this.authenticationHelper = authenticationHelper;
+        this.mapperHelper = mapperHelper;
     }
 
     @ModelAttribute("isAuthenticated")
@@ -59,5 +65,31 @@ public class AuthenticationMvcController {
     public String handleLogout(HttpSession session) {
         session.removeAttribute("currentUser");
         return "redirect:/";
+    }
+
+    @GetMapping("/register")
+    public String showRegister(Model model) {
+        model.addAttribute("register", new RegistrationDto());
+        return "RegisterView";
+    }
+
+    @PostMapping("/register")
+    public String handleRegister(@Valid @ModelAttribute("register") RegistrationDto registrationDto,
+                                 BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "RegisterView";
+        }
+        if (!registrationDto.getPassword().equals(registrationDto.getConfirmPassword())) {
+            bindingResult.rejectValue("confirmPassword", "registration_error", "Passwords do not match");
+            return "RegisterView";
+        }
+        try {
+            User user = mapperHelper.createUserFromRegistrationDto(registrationDto);
+            userService.create(user);
+            return "redirect:/auth/login";
+        } catch (DuplicateEntityException e) {
+            bindingResult.rejectValue("username", "registration_error", e.getMessage());
+        }
+        return "RegisterView";
     }
 }

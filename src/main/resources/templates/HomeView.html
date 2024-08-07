@@ -6,11 +6,29 @@
 </head>
 <body>
 <header>
-    <h1>Game Forum</h1>
+    <div>
+        <div>
+            <h3>
+                <a th:href="@{/}">Home</a>
+            </h3>
+        </div>
+        <div>
+            <h3>
+                <a  th:if="${isAuthenticated}" th:href="@{/auth/logout}">Logout</a>
+                <a  th:unless="${isAuthenticated}" th:href="@{/auth/login}">Login</a>
+                <a  th:unless="${isAuthenticated}" th:href="@{/auth/register}">Registration</a>
+
+            </h3>
+        </div>
+    </div>
 </header>
 <main>
+    <h1>Game Forum</h1>
     <h2 th:text="#{home.label.welcome}">Welcome (design)!</h2>
     <p>This is a place where gamers can discuss their favorite games, share tips, and connect with others.</p>
+
+    <h4 th:text="#{home.label.welcome.user}">welcome user</h4>
+    <h4 th:if="${username != null}" th:text="${username}">username</h4>
 </main>
 <footer>
     <p>&copy; 2024 Game Forum. All rights reserved.</p>

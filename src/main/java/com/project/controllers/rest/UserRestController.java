@@ -1,4 +1,4 @@
-package com.project.controllers;
+package com.project.controllers.rest;
 
 import com.project.exceptions.*;
 import com.project.helpers.AuthenticationHelper;

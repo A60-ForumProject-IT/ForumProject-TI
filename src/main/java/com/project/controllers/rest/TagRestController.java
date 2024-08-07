@@ -1,4 +1,4 @@
-package com.project.controllers;
+package com.project.controllers.rest;
 
 import com.project.exceptions.AuthenticationException;
 import com.project.exceptions.BlockedException;

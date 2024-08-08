@@ -27,8 +27,6 @@ public class UserMvcController {
         this.mapperHelper = mapperHelper;
     }
 
-    //write me please an edit point for editing user information get and post methods
-
     @GetMapping("/edit")
     public String showEditUserPage(Model model, HttpSession session) {
         User currentUser = authenticationHelper.tryGetUserFromSession(session);
@@ -52,5 +50,4 @@ public class UserMvcController {
             return "EditUserView";
         }
     }
-
 }

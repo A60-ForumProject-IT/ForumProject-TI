@@ -9,14 +9,21 @@ import java.util.Optional;
 public class FilteredUsersOptions {
 
     private Optional<String> username;
-    private Optional<String> email;
     private Optional<String> firstName;
+    private Optional<String> email;
+    private Optional<String> sortBy;
+    private Optional<String> sortOrder;
 
     public FilteredUsersOptions(String username,
+                                String firstName,
                                 String email,
-                                String firstName) {
+                                String sortBy,
+                                String sortOrder
+    ) {
         this.username = Optional.ofNullable(username);
-        this.email = Optional.ofNullable(email);
         this.firstName = Optional.ofNullable(firstName);
+        this.email = Optional.ofNullable(email);
+        this.sortBy = Optional.ofNullable(sortBy);
+        this.sortOrder = Optional.ofNullable(sortOrder);
     }
 }

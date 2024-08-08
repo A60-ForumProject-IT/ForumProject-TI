@@ -7,7 +7,7 @@
 <body>
 <div class="body-content">
     <h2 id="login-h2">Register</h2>
-    <form class="create-beer-form" th:action="@{/auth/register}" th:object="${register}" method="post">
+    <form class="create-beer-form" th:action="@{/ti/auth/register}" th:object="${register}" method="post">
         <div class="form-group">
             <label class="form-label" th:text="#{user.label.username}">Username</label>
             <input type="text" class="form-input" th:field="*{username}"/>

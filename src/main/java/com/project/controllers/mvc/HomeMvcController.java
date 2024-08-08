@@ -26,6 +26,20 @@ public class HomeMvcController {
         return session.getAttribute("currentUser") !=null;
     }
 
+    @ModelAttribute("isAdminOrModerator")
+    public boolean populateIsAdmin(HttpSession session) {
+        if (session.getAttribute("currentUser") != null) {
+            User user = authenticationHelper.tryGetUserFromSession(session);
+            if (user.getRole().getRoleId() == 2 || user.getRole().getRoleId() == 3) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+
+
     @ModelAttribute("username")
     public String populateUsername(HttpSession session) {
         if (session.getAttribute("currentUser") != null) {

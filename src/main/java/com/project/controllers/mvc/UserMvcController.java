@@ -4,7 +4,9 @@ import com.project.exceptions.AuthenticationException;
 import com.project.exceptions.UnauthorizedOperationException;
 import com.project.helpers.AuthenticationHelper;
 import com.project.helpers.MapperHelper;
+import com.project.models.FilteredUsersOptions;
 import com.project.models.User;
+import com.project.models.dtos.FilterUserDto;
 import com.project.models.dtos.UserDto;
 import com.project.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/ti/users")
@@ -43,6 +47,11 @@ public class UserMvcController {
         return false;
     }
 
+    @ModelAttribute("isAuthenticated")
+    public boolean populateIsAuthenticated(HttpSession session) {
+        return session.getAttribute("currentUser") != null;
+    }
+
     @GetMapping("/edit")
     public String showEditUserPage(Model model, HttpSession session) {
         User currentUser;
@@ -69,6 +78,73 @@ public class UserMvcController {
         } catch (Exception e) {
             bindingResult.rejectValue("username", "error.user", e.getMessage());
             return "EditUserView";
+        }
+    }
+
+    @GetMapping("/admin")
+    public String showAdminPortal(HttpSession session, Model model) {
+        try {
+            User user = authenticationHelper.tryGetUserFromSession(session);
+            if (user.getRole().getRoleId() == 3) {
+                return "AdminPanelView";
+            }
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", "You dont have access to this page");
+            return "ErrorView";
+        } catch (AuthenticationException e) {
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", "You dont have access to this page");
+            return "ErrorView";
+        }
+    }
+
+    @GetMapping("/admin/users")
+    public String showAllUsers(@ModelAttribute("filterUsersOptions") FilterUserDto filterUserDto,
+                               Model model, HttpSession session) {
+        try {
+            User user = authenticationHelper.tryGetUserFromSession(session);
+
+            if (user.getRole().getRoleId() == 1){
+                model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+                model.addAttribute("error", "You dont have access to this page");
+                return "ErrorView";
+            }
+
+            if (user.getRole().getRoleId() == 3) {
+                FilteredUsersOptions filteredUsersOptions = new FilteredUsersOptions(
+                        filterUserDto.getUsername(),
+                        filterUserDto.getFirstName(),
+                        filterUserDto.getEmail(),
+                        filterUserDto.getSortBy(),
+                        filterUserDto.getSortOrder()
+                );
+                List<User> users = userService.getAllUsers(user, filteredUsersOptions);
+                model.addAttribute("filterUsersOptions", filterUserDto);
+                model.addAttribute("users", users);
+                return "AllUsersView";
+            }
+            return "ErrorView";
+        } catch (AuthenticationException e) {
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", "You dont have access to this page");
+            return "ErrorView";
+        }
+    }
+
+    @GetMapping("/admin/users/{id}")
+    public String showUserDetails(@PathVariable int id, Model model, HttpSession session) {
+        try {
+            User user = authenticationHelper.tryGetUserFromSession(session);
+            if (user.getRole().getRoleId() == 3) {
+                User userToDisplay = userService.getUserById(user, id);
+                model.addAttribute("user", userToDisplay);
+                return "UserDetailsView";
+            }
+            return "ErrorView";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
         }
     }
 }

@@ -50,12 +50,14 @@ public class UserRestController {
     @GetMapping("/users")
     public List<User> getAllUsers(@RequestHeader HttpHeaders headers,
                                   @RequestParam(required = false) String username,
+                                  @RequestParam(required = false) String firstName,
                                   @RequestParam(required = false) String email,
-                                  @RequestParam(required = false) String firstName
+                                  @RequestParam(required = false) String sortBy,
+                                  @RequestParam(required = false) String SortOrder
     ) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            FilteredUsersOptions filteredUsersOptional = new FilteredUsersOptions(username, email, firstName);
+            FilteredUsersOptions filteredUsersOptional = new FilteredUsersOptions(username, firstName, email, sortBy, SortOrder);
             return userService.getAllUsers(user, filteredUsersOptional);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
@@ -113,14 +115,14 @@ public class UserRestController {
             User user = authenticationHelper.tryGetUser(headers);
             User userToBeAdmin = userService.getUserById(user, userId);
             userService.userToBeAdmin(userToBeAdmin);
-            return new ResponseEntity<>(NOW_MODERATOR,HttpStatus.OK );
+            return new ResponseEntity<>(NOW_MODERATOR, HttpStatus.OK);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (BlockedException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
-        } catch (AuthenticationException e){
+        } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
@@ -187,15 +189,15 @@ public class UserRestController {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             PhoneNumber phoneNumber = mapperHelper.getFromPhoneDto(phoneNumberDto);
-            phoneService.addPhoneToAnAdmin(user,phoneNumber);
-            return new  ResponseEntity<>(PHONE_TO_AN_ADMIN_SUCCESSFULLY, HttpStatus.OK);
+            phoneService.addPhoneToAnAdmin(user, phoneNumber);
+            return new ResponseEntity<>(PHONE_TO_AN_ADMIN_SUCCESSFULLY, HttpStatus.OK);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        } catch (DuplicateEntityException e){
+        } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }

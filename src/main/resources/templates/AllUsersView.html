@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+    <link rel="stylesheet" href="../static/css/styles.css" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header>
+    <div>
+        <h3>
+            <a th:href="@{/ti}">Home</a>
+            <a th:href="@{/ti/forum/posts}">Posts</a>
+            <a th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}">Logout</a>
+            <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}">Login</a>
+            <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/register}">Registration</a>
+        </h3>
+    </div>
+</header>
+<div class="body-content">
+    <form action="#" th:action="@{/ti/users/admin/users}" method="get" th:object="${filterUsersOptions}">
+        <label th:text="#{posts.filter.options}">Filter Options</label>
+        <br/><br/>
+        <input type="text" placeholder="username" th:field="*{username}"/>
+        <input type="text" placeholder="first name" th:field="*{firstName}"/>
+        <input type="text" placeholder="email" th:field="*{email}"/>
+
+        <select th:field="*{sortBy}">
+            <option value="">Sort By</option>
+            <option value="username">Username</option>
+            <option value="firstName">First name</option>
+            <option value="email">Email</option>
+        </select>
+
+        <select th:field="*{sortOrder}">
+            <option value="">Sort Order</option>
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+        </select>
+
+        <input type="submit" value="Search"/>
+    </form>
+
+    <div th:if="${users.isEmpty()}">
+        <h2 th:text="#{users.title.empty}">No Users</h2>
+    </div>
+    <div th:unless="${users.isEmpty()}">
+        <h2 th:text="#{users.title}">All Users</h2>
+
+        <div class="table">
+            <div class="header">
+                <div class="cell" th:text="#{user.label.username}">Username</div>
+                <div class="cell" th:text="#{user.label.firstName}">First name</div>
+                <div class="cell" th:text="#{user.label.email}">Email</div>
+            </div>
+            <div class="row" th:each="user : ${users}">
+                <div class="cell">
+                    <a href="#" th:href="@{/ti/users/admin/users/__${user.id}__}" th:text="${user.username}">Username</a>
+                </div>
+                <div class="cell" th:text="${user.firstName}">First name</div>
+                <div class="cell" th:text="${user.email}">Email</div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -36,33 +36,59 @@ public class UserRepositoryImpl implements UserRepository {
                 filtered.add("username like :username ");
                 params.put("username", String.format("%%%s%%", value));
             });
+            filteredUsersOptional.getFirstName().ifPresent(value -> {
+                filtered.add("firstName like :firstName ");
+                params.put("firstName", String.format("%%%s%%", value));
+            });
 
             filteredUsersOptional.getEmail().ifPresent(value -> {
                 filtered.add("email like :email ");
                 params.put("email", String.format("%%%s%%", value));
             });
 
-            filteredUsersOptional.getFirstName().ifPresent(value -> {
-                filtered.add("firstName like :firstName ");
-                params.put("firstName", String.format("%%%s%%", value));
-            });
 
             if (!filtered.isEmpty()) {
                 hql.append(" where ").append(String.join(" AND ", filtered));
             }
-
-            Query <User> query = session.createQuery(hql.toString(), User.class);
+            hql.append(generateOrderBy(filteredUsersOptional));
+            Query<User> query = session.createQuery(hql.toString(), User.class);
             query.setProperties(params);
             return query.list();
         }
 
     }
 
+    private String generateOrderBy(FilteredUsersOptions filteredUsersOptional) {
+        if (filteredUsersOptional.getSortBy().isEmpty()) {
+            return "";
+        }
+        String orderBy = "";
+        switch (filteredUsersOptional.getSortBy().get()) {
+            case "username":
+                orderBy = "username";
+                break;
+            case "email":
+                orderBy = "email";
+                break;
+            case "firstName":
+                orderBy = "firstName";
+                break;
+            default:
+                return "";
+        }
+        orderBy=String.format(" ORDER BY %s", orderBy);
+        if(filteredUsersOptional.getSortOrder().isPresent() &&
+                filteredUsersOptional.getSortOrder().get().equalsIgnoreCase("desc")){
+            orderBy = String.format("%s DESC", orderBy);
+        }
+        return orderBy;
+    }
+
     @Override
     public User getUserById(int id) {
         try (Session session = sessionFactory.openSession()) {
             User user = session.get(User.class, id);
-            if(user == null){
+            if (user == null) {
                 throw new EntityNotFoundException("User", id);
             }
             return user;
@@ -156,7 +182,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public Long countAllUsers() {
 
-        try(Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             Query<Long> query = session.createQuery("SELECT COUNT(u) FROM User u", Long.class);
             return query.uniqueResult();
         }
@@ -164,7 +190,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void userToBeModerator(User userToBeAdmin) {
-        try(Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.merge(userToBeAdmin);
             session.getTransaction().commit();

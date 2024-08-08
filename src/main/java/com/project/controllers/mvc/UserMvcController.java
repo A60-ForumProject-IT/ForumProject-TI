@@ -35,11 +35,25 @@ public class UserMvcController {
         this.mapperHelper = mapperHelper;
     }
 
+
     @ModelAttribute("isAdminOrModerator")
     public boolean populateIsAdmin(HttpSession session) {
         if (session.getAttribute("currentUser") != null) {
             User user = authenticationHelper.tryGetUserFromSession(session);
             if (user.getRole().getRoleId() == 2 || user.getRole().getRoleId() == 3) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    @ModelAttribute("isBlocked")
+    public boolean populateIsBlocked(HttpSession session) {
+        if (session.getAttribute("currentUser") != null) {
+            User user = authenticationHelper.tryGetUserFromSession(session);
+            if (user.isBlocked()) {
                 return true;
             } else {
                 return false;
@@ -171,6 +185,54 @@ public class UserMvcController {
             User user = authenticationHelper.tryGetUserFromSession(session);
             if (user.getRole().getRoleId() == 3) {
                 userService.deleteUser(user, id);
+                return "redirect:/ti/users/admin/users";
+            }
+            return "ErrorView";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (AuthenticationException e) {
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", "You dont have access to this page");
+            return "ErrorView";
+        }
+    }
+
+    @PostMapping("/admin/users/{id}/block")
+    public String blockUser(@PathVariable int id, Model model, HttpSession session) {
+        try {
+            User user = authenticationHelper.tryGetUserFromSession(session);
+            if (user.getRole().getRoleId() == 3) {
+                userService.blockUser(user, id);
+                return "redirect:/ti/users/admin/users";
+            }
+            return "ErrorView";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (AuthenticationException e) {
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", "You dont have access to this page");
+            return "ErrorView";
+        }
+    }
+
+    @PostMapping("/admin/users/{id}/unblock")
+    public String unblockUser(@PathVariable int id, Model model, HttpSession session) {
+        try {
+            User user = authenticationHelper.tryGetUserFromSession(session);
+            if (user.getRole().getRoleId() == 3) {
+                userService.unblocked(user, id);
                 return "redirect:/ti/users/admin/users";
             }
             return "ErrorView";

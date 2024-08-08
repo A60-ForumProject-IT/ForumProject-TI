@@ -48,6 +48,14 @@
         <form th:action="@{/ti/users/admin/users/{id}/delete(id=${user.id})}" method="post">
             <button type="submit">Delete User</button>
         </form>
+
+        <form th:unless="*{user.isBlocked()}" th:action="@{/ti/users/admin/users/{id}/block(id=${user.id})}" method="post">
+            <button type="submit">Block User</button>
+        </form>
+
+        <form th:if="*{user.isBlocked()}" th:action="@{/ti/users/admin/users/{id}/unblock(id=${user.id})}" method="post">
+            <button type="submit">Unblock User</button>
+        </form>
     </div>
 </main>
 <footer>

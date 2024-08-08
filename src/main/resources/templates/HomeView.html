@@ -11,6 +11,7 @@
             <h3>
                 <a th:href="@{/ti}">Home</a>
                 <a  th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}">Logout</a>
+                <a  th:if="${isAuthenticated}" th:href="@{/ti/users/edit}">Edit User</a>
                 <a  th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}">Login</a>
                 <a  th:unless="${isAuthenticated}" th:href="@{/ti/auth/register}">Registration</a>
             </h3>

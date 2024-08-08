@@ -3,10 +3,9 @@ package com.project.controllers.mvc;
 import com.project.exceptions.EntityNotFoundException;
 import com.project.helpers.AuthenticationHelper;
 import com.project.helpers.MapperHelper;
-import com.project.models.FilteredPostsOptions;
-import com.project.models.Post;
-import com.project.models.User;
+import com.project.models.*;
 import com.project.models.dtos.FilterPostDto;
+import com.project.services.contracts.CommentService;
 import com.project.services.contracts.PostService;
 import com.project.services.contracts.TagService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,13 +28,15 @@ public class PostMvcController {
     private final PostService postService;
     private final AuthenticationHelper authenticationHelper;
     private final TagService tagService;
+    private final CommentService commentService;
 
     @Autowired
-    public PostMvcController(MapperHelper mapperHelper, PostService postService, AuthenticationHelper authenticationHelper, TagService tagService) {
+    public PostMvcController(MapperHelper mapperHelper, PostService postService, AuthenticationHelper authenticationHelper, TagService tagService, CommentService commentService) {
         this.mapperHelper = mapperHelper;
         this.postService = postService;
         this.authenticationHelper = authenticationHelper;
         this.tagService = tagService;
+        this.commentService = commentService;
     }
 
     @ModelAttribute("isAuthenticated")
@@ -49,7 +50,7 @@ public class PostMvcController {
     }
 
     @GetMapping("/posts")
-    public String showAllPosts(@ModelAttribute("filterOptions") FilterPostDto filterPostDto, Model model) {
+    public String showAllPosts(@ModelAttribute("filterPostOptions") FilterPostDto filterPostDto, Model model) {
         FilteredPostsOptions filteredPostsOptions = new FilteredPostsOptions( filterPostDto.getMinLikes(),
                 filterPostDto.getMaxLikes(),
                 filterPostDto.getMinDislikes(),
@@ -63,15 +64,17 @@ public class PostMvcController {
                 filterPostDto.getSortOrder()
         );
         List<Post> posts = postService.getAllPosts(filteredPostsOptions);
-        model.addAttribute("filterOptions", filterPostDto);
+        model.addAttribute("filterPostOptions", filterPostDto);
         model.addAttribute("posts", posts);
         return "AllPostsView";
     }
 
     @GetMapping("/posts/{id}")
-    public String showPost(@PathVariable int id, Model model) {
+    public String showPost(@PathVariable int id, Model model, FilteredCommentsOptions filteredCommentsOptions) {
         try {
             Post post = postService.getPostById(id);
+            List<Comment> postComments = commentService.getAllCommentsFromPost(post, filteredCommentsOptions);
+            model.addAttribute("comments", postComments);
             model.addAttribute("post", post);
             return "SinglePostView";
         } catch (EntityNotFoundException e) {
@@ -80,4 +83,6 @@ public class PostMvcController {
             return "ErrorView";
         }
     }
+
+
 }

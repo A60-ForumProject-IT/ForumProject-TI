@@ -48,7 +48,8 @@ public class CommentRestController {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             FilteredCommentsOptions filteredCommentsOptions = new FilteredCommentsOptions(keyWord);
-            return commentService.getAllCommentsFromPost(id, filteredCommentsOptions);
+            Post post = postService.getPostById(id);
+            return commentService.getAllCommentsFromPost(post, filteredCommentsOptions);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {

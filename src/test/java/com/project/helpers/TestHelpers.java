@@ -2,6 +2,7 @@ package com.project.helpers;
 
 import com.project.models.*;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.time.LocalDateTime;
 
@@ -76,7 +77,7 @@ public class TestHelpers {
         mockPost.setDislikes(1);
         mockPost.setTitle("Mock post title.");
         mockPost.setContent("Mock post random content.");
-        mockPost.setCreatedOn(LocalDateTime.of(2024, 1, 28, 0, 0, 0));
+        mockPost.setCreatedOn(LocalDate.of(2024, 1, 28));
         mockPost.setPostedBy(createMockNoAdminUser());
         mockPost.setComments(relatedComments);
         mockPost.setPostTags(relatedTags);
@@ -106,7 +107,7 @@ public class TestHelpers {
         mockPost.setDislikes(1);
         mockPost.setTitle("Mock post2 title.");
         mockPost.setContent("Mock post2 random content.");
-        mockPost.setCreatedOn(LocalDateTime.of(2024, 1, 28, 0, 0, 0));
+        mockPost.setCreatedOn(LocalDate.of(2024, 1, 28));
         mockPost.setPostedBy(createMockNoAdminUser());
         mockPost.setComments(relatedComments);
         mockPost.setPostTags(relatedTags);
@@ -136,8 +137,8 @@ public class TestHelpers {
                 0,
                 "Test title",
                 "Test content",
-                "2024-01-31 00:00:00",
-                "2024-01-31 00:00:00",
+                LocalDate.of(2024, 1, 31),
+                LocalDate.of(2024, 1, 31),
                 "Test User",
                 null,
                 null

@@ -102,10 +102,10 @@ public class CommentServiceImplTests {
 
         FilteredCommentsOptions commentFilterOptions = TestHelpers.createCommentFilterOptions();
 
-        commentService.getAllCommentsFromPost(post.getPostId(), commentFilterOptions);
+        commentService.getAllCommentsFromPost(post, commentFilterOptions);
 
         Mockito.verify(commentRepository, Mockito.times(1))
-                .getAllCommentsFromPost(post.getPostId(), commentFilterOptions);
+                .getAllCommentsFromPost(post, commentFilterOptions);
     }
 
     @Test
@@ -113,10 +113,10 @@ public class CommentServiceImplTests {
         Post post = TestHelpers.createMockPost1();
         FilteredCommentsOptions commentFilterOptions = TestHelpers.createCommentFilterOptions();
 
-        Mockito.when(commentRepository.getAllCommentsFromPost(post.getPostId(), commentFilterOptions))
+        Mockito.when(commentRepository.getAllCommentsFromPost(post, commentFilterOptions))
                 .thenThrow(new EntityNotFoundException("Comment", "postId", String.valueOf(post.getPostId())));
 
-        Assertions.assertThrows(EntityNotFoundException.class, () -> commentService.getAllCommentsFromPost(post.getPostId(), commentFilterOptions));
+        Assertions.assertThrows(EntityNotFoundException.class, () -> commentService.getAllCommentsFromPost(post, commentFilterOptions));
     }
 
     @Test

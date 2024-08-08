@@ -48,8 +48,8 @@ a {
 
 .cell {
     display: table-cell;
-    width: 20%;
-    padding: 12px;
+    width: 10%;
+    padding: 15px;
     border-bottom: 1px solid #dee2e6;
 }
 

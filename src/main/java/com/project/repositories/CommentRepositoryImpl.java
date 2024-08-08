@@ -3,6 +3,7 @@ package com.project.repositories;
 import com.project.exceptions.EntityNotFoundException;
 import com.project.models.Comment;
 import com.project.models.FilteredCommentsOptions;
+import com.project.models.Post;
 import com.project.repositories.contracts.CommentRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -24,7 +25,7 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
-    public List<Comment> getAllCommentsFromPost(int id, FilteredCommentsOptions filteredCommentsOptions) {
+    public List<Comment> getAllCommentsFromPost(Post post, FilteredCommentsOptions filteredCommentsOptions) {
         try (Session session = sessionFactory.openSession()) {
             StringBuilder hql = new StringBuilder("FROM Comment WHERE commentedPost.id = :postId");
 
@@ -41,7 +42,7 @@ public class CommentRepositoryImpl implements CommentRepository {
             }
 
             Query<Comment> query = session.createQuery(hql.toString(), Comment.class);
-            query.setParameter("postId", id);
+            query.setParameter("postId", post.getPostId());
             query.setProperties(params);
             return query.list();
         }

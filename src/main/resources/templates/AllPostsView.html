@@ -9,29 +9,27 @@
 <header>
     <div>
         <h3>
-            <a th:href="@{/}">Home</a>
+            <a th:href="@{/ti}">Home</a>
             <a th:href="@{/ti/forum/posts}">Posts</a>
-            <a th:if="${isAuthenticated}" th:href="@{/auth/logout}">Logout</a>
-            <a th:unless="${isAuthenticated}" th:href="@{/auth/login}">Login</a>
-            <a th:unless="${isAuthenticated}" th:href="@{/auth/register}">Registration</a>
+            <a th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}">Logout</a>
+            <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}">Login</a>
+            <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/register}">Registration</a>
         </h3>
     </div>
 </header>
 <div class="body-content">
-    <form action="#" th:action="@{/ti/forum/posts}" method="get" th:object="${filterOptions}">
+    <form action="#" th:action="@{/ti/forum/posts}" method="get" th:object="${filterPostOptions}">
         <label th:text="#{posts.filter.options}">Filter Options</label>
         <br/><br/>
         <input type="text" placeholder="Post Title" th:field="*{title}"/>
-        <input type="text" placeholder="Post Content" th:field="*{content}"/>
+        <input type="number" min="0" placeholder="Max Likes" th:field="*{minDislikes}"/>
         <input type="number" min="0" placeholder="Min Likes" th:field="*{minLikes}"/>
-        <input type="number" min="0" placeholder="Max Likes" th:field="*{maxLikes}"/>
-        <input type="number" min="0" placeholder="Min Dislikes" th:field="*{minDislikes}"/>
         <input type="number" min="0" placeholder="Max Dislikes" th:field="*{maxDislikes}"/>
+        <input type="number" min="0" placeholder="Min Dislikes" th:field="*{maxLikes}"/>
 
         <select th:field="*{sortBy}">
             <option value="">Sort By</option>
             <option value="title">Title</option>
-            <option value="content">Content</option>
             <option value="likes">Likes</option>
             <option value="dislikes">Dislikes</option>
             <option value="created on">Created On</option>
@@ -56,15 +54,15 @@
         <div class="table">
             <div class="header">
                 <div class="cell" th:text="#{posts.label.title}">Title</div>
-                <div class="cell" th:text="#{posts.label.content}">Content</div>
                 <div class="cell" th:text="#{posts.label.likes}">Likes</div>
                 <div class="cell" th:text="#{posts.label.dislikes}">Dislikes</div>
                 <div class="cell" th:text="#{posts.label.createdOn}">Created On</div>
                 <div class="cell" th:text="#{posts.label.createdBy}">Posted By</div>
             </div>
             <div class="row" th:each="post : ${posts}">
-                <div class="cell" th:text="${post.title}">Title</div>
-                <div class="cell" th:text="${post.content}">Content</div>
+                <div class="cell">
+                    <a href="#" th:href="@{/ti/forum/posts/__${post.postId}__}" th:text="${post.title}">Post Title</a>
+                </div>
                 <div class="cell" th:text="${post.likes}">Likes</div>
                 <div class="cell" th:text="${post.dislikes}">Dislikes</div>
                 <div class="cell" th:text="${post.createdOn}">Created On</div>

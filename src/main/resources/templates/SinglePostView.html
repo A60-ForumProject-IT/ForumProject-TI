@@ -2,23 +2,40 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Error!</title>
+    <title th:text="'Forum | ' + ${post.title}">Error!</title>
     <link rel="stylesheet" href="../static/css/styles.css" th:href="@{/css/styles.css}">
 </head>
 <body>
 <header>
     <div>
         <h3>
-            <a th:href="@{/}">Home</a>
-            <a th:if="${isAuthenticated}" th:href="@{/auth/logout}">Logout</a>
-            <a th:unless="${isAuthenticated}" th:href="@{/auth/login}">Login</a>
-            <a th:unless="${isAuthenticated}" th:href="@{/auth/register}">Registration</a>
+            <a th:href="@{/ti}">Home</a>
+            <a th:href="@{/ti/forum/posts}">Posts</a>
+            <a th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}">Logout</a>
+            <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}">Login</a>
+            <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/register}">Registration</a>
         </h3>
     </div>
 </header>
 <div>
-    <h2 th:text="${post.title}">Post Title</h2>
-    <h2 th:text="${post.content}">Post Content</h2>
+    <div class="body-content">
+        <h1 th:text="${post.title}">Post Title</h1>
+        <h2 th:text="${post.content}">Post Content</h2>
+
+        <div th:if="${comments.isEmpty()}">
+            <h2 th:text="#{comments.title.empty}">No Beers</h2>
+        </div>
+
+        <div th:unless="${comments.isEmpty()}">
+            <div th:each="comment : ${comments}" th:value="${comment.commentId}">
+                <span th:text="'Comment: ' + ${comment.content}">Content</span>
+                <br>
+                <span th:text="'Commented by: ' + ${comment.userId.username}">Username</span>
+                <br>
+                <span th:text="'Commented on: ' + ${comment.createdOn}">Created On</span>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>

@@ -41,8 +41,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> getAllPosts(User user, FilteredPostsOptions filteredPostsOptions) {
-        PermissionHelper.isAdmin(user, FILTER_AND_SORT_ERROR);
+    public List<Post> getAllPosts(FilteredPostsOptions filteredPostsOptions) {
         return postRepository.getAllPosts(filteredPostsOptions);
     }
 

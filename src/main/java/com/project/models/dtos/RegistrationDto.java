@@ -2,6 +2,7 @@ package com.project.models.dtos;
 
 import com.project.models.Role;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -11,26 +12,26 @@ import lombok.Setter;
 @Setter
 public class RegistrationDto {
 
-    @NotNull(message = "Username can't be empty")
+    @NotEmpty(message = "Username can't be empty")
     @Size(min = 4, max = 32, message = "Username should be between 4 and 32.")
     private String username;
 
-    @NotNull(message = "Password can't be empty.")
-    @Size(min = 8)
+    @NotEmpty(message = "Password can't be empty.")
+    @Size(min = 8, max = 30)
     private String password;
 
-    @NotNull(message = "Confirmation password can't be empty.")
-    @Size(min = 8)
+    @NotEmpty(message = "Confirmation password can't be empty.")
+    @Size(min = 8, max = 30)
     private String confirmPassword;
 
-    @Email(message = "Email is invalid.")
+    @NotEmpty(message = "Email can't be empty.")
     private String email;
 
-    @NotNull(message = "First name name can't be empty.")
+    @NotEmpty(message = "First name name can't be empty.")
     @Size(min = 4, max = 32, message = "First name should be between 4 and 32.")
     private String firstName;
 
-    @NotNull(message = "Last name can't be empty.")
+    @NotEmpty(message = "Last name can't be empty.")
     @Size(min = 4, max = 32, message = "Last name should be between 4 and 32.")
     private String lastName;
 

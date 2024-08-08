@@ -43,11 +43,12 @@
         </div>
     </div>
 
-    <div>
+    <div class="body-content">
         <h2>Admin Actions</h2>
         <form th:action="@{/ti/users/admin/users/{id}/delete(id=${user.id})}" method="post">
             <button type="submit">Delete User</button>
         </form>
+        <br/>
 
         <form th:unless="*{user.isBlocked()}" th:action="@{/ti/users/admin/users/{id}/block(id=${user.id})}" method="post">
             <button type="submit">Block User</button>

@@ -1,5 +1,7 @@
 package com.project.controllers.mvc;
 
+import com.project.exceptions.AuthenticationException;
+import com.project.exceptions.UnauthorizedOperationException;
 import com.project.helpers.AuthenticationHelper;
 import com.project.helpers.MapperHelper;
 import com.project.models.User;
@@ -7,6 +9,7 @@ import com.project.models.dtos.UserDto;
 import com.project.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,11 +30,29 @@ public class UserMvcController {
         this.mapperHelper = mapperHelper;
     }
 
+    @ModelAttribute("isAdminOrModerator")
+    public boolean populateIsAdmin(HttpSession session) {
+        if (session.getAttribute("currentUser") != null) {
+            User user = authenticationHelper.tryGetUserFromSession(session);
+            if (user.getRole().getRoleId() == 2 || user.getRole().getRoleId() == 3) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+
     @GetMapping("/edit")
     public String showEditUserPage(Model model, HttpSession session) {
-        User currentUser = authenticationHelper.tryGetUserFromSession(session);
-        model.addAttribute("user", currentUser);
-        return "EditUserView";
+        User currentUser;
+        try {
+            currentUser = authenticationHelper.tryGetUserFromSession(session);
+            model.addAttribute("user", currentUser);
+            return "EditUserView";
+        } catch (AuthenticationException e) {
+            return "redirect:/ti/auth/login";
+        }
     }
 
     @PostMapping("/edit")

@@ -1,6 +1,7 @@
 package com.project.controllers.mvc;
 
 import com.project.exceptions.AuthenticationException;
+import com.project.exceptions.EntityNotFoundException;
 import com.project.exceptions.UnauthorizedOperationException;
 import com.project.helpers.AuthenticationHelper;
 import com.project.helpers.MapperHelper;
@@ -95,6 +96,10 @@ public class UserMvcController {
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
             model.addAttribute("error", "You dont have access to this page");
             return "ErrorView";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
         }
     }
 
@@ -128,6 +133,10 @@ public class UserMvcController {
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
             model.addAttribute("error", "You dont have access to this page");
             return "ErrorView";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
         }
     }
 
@@ -144,6 +153,38 @@ public class UserMvcController {
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (AuthenticationException e) {
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", "You dont have access to this page");
+            return "ErrorView";
+        }
+    }
+
+    @PostMapping("/admin/users/{id}/delete")
+    public String deleteUser(@PathVariable int id, Model model, HttpSession session) {
+        try {
+            User user = authenticationHelper.tryGetUserFromSession(session);
+            if (user.getRole().getRoleId() == 3) {
+                userService.deleteUser(user, id);
+                return "redirect:/ti/users/admin/users";
+            }
+            return "ErrorView";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (AuthenticationException e) {
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", "You dont have access to this page");
             return "ErrorView";
         }
     }

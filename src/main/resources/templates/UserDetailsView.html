@@ -42,6 +42,13 @@
             <span th:text="${user.role.name}"></span>
         </div>
     </div>
+
+    <div>
+        <h2>Admin Actions</h2>
+        <form th:action="@{/ti/users/admin/users/{id}/delete(id=${user.id})}" method="post">
+            <button type="submit">Delete User</button>
+        </form>
+    </div>
 </main>
 <footer>
     <p>&copy; 2023 Your Company</p>

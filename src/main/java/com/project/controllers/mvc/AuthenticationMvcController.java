@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/auth")
+@RequestMapping("/ti/auth")
 public class AuthenticationMvcController {
 
     private final UserService userService;
@@ -54,7 +54,7 @@ public class AuthenticationMvcController {
         try {
             authenticationHelper.verifyAuthentication(login.getUsername(), login.getPassword());
             session.setAttribute("currentUser", login.getUsername());
-            return "redirect:/";
+            return "redirect:/ti";
         } catch (AuthenticationException e) {
             bindingResult.rejectValue("username", "error.login", e.getMessage());
             return "LoginView";
@@ -64,7 +64,7 @@ public class AuthenticationMvcController {
     @GetMapping("/logout")
     public String handleLogout(HttpSession session) {
         session.removeAttribute("currentUser");
-        return "redirect:/";
+        return "redirect:/ti";
     }
 
     @GetMapping("/register")
@@ -86,7 +86,7 @@ public class AuthenticationMvcController {
         try {
             User user = mapperHelper.createUserFromRegistrationDto(registrationDto);
             userService.create(user);
-            return "redirect:/auth/login";
+            return "redirect:/ti/auth/login";
         } catch (DuplicateEntityException e) {
             bindingResult.rejectValue("username", "registration_error", e.getMessage());
         }

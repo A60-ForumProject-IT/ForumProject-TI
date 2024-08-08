@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("/ti")
 public class HomeMvcController {
     private final AuthenticationHelper authenticationHelper;
     private final UserService userService;

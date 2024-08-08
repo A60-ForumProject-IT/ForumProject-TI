@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit User</title>
+</head>
+<body>
+<div class="body-content">
+    <h2>Edit User Information</h2>
+    <form th:action="@{/ti/users/edit}" th:object="${user}" method="post">
+        <div>
+            <label th:text="#{user.label.firstName}" >First Name:</label>
+            <input type="text" th:field="*{firstName}" />
+            <label class="error form-error" th:errors="*{firstName}"></label>
+        </div>
+        <div>
+            <label th:text="#{user.label.lastName}">Last Name:</label>
+            <input type="text"  th:field="*{lastName}" />
+            <label class="error form-error" th:errors="*{lastName}"></label>
+        </div>
+        <div>
+            <label th:text="#{user.label.email}">Email:</label>
+            <input type="email" th:field="*{email}" />
+            <label class="error form-error" th:errors="*{email}"></label>
+        </div>
+        <div>
+            <label th:text="#{user.label.password}">Password:</label>
+            <input type="password" th:field="*{password}" />
+            <label class="error form-error" th:errors="*{password}"></label>
+        </div>
+        <!-- Add other fields as necessary -->
+        <div>
+            <button type="submit">Save</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

@@ -22,6 +22,12 @@
         <h1 th:text="${post.title}">Post Title</h1>
         <h2 th:text="${post.content}">Post Content</h2>
 
+        <form th:if="${isAuthenticated}" th:action="@{/ti/forum/posts/{id}(id=${post.postId})}" th:object="${commentToAdd}" method="post">
+            <input type="text" th:field="*{comment}" placeholder="Write a comment..."/>
+            <button type="submit" class="btn-danger" th:text="#{post.reply-button}">Reply</button>
+        </form>
+
+
         <div th:if="${comments.isEmpty()}">
             <h2 th:text="#{comments.title.empty}">No Beers</h2>
         </div>

@@ -22,10 +22,10 @@
         <label th:text="#{posts.filter.options}">Filter Options</label>
         <br/><br/>
         <input type="text" placeholder="Post Title" th:field="*{title}"/>
-        <input type="number" min="0" placeholder="Max Likes" th:field="*{minDislikes}"/>
+        <input type="number" min="0" placeholder="Max Likes" th:field="*{maxLikes}"/>
         <input type="number" min="0" placeholder="Min Likes" th:field="*{minLikes}"/>
         <input type="number" min="0" placeholder="Max Dislikes" th:field="*{maxDislikes}"/>
-        <input type="number" min="0" placeholder="Min Dislikes" th:field="*{maxLikes}"/>
+        <input type="number" min="0" placeholder="Min Dislikes" th:field="*{minDislikes}"/>
 
         <select th:field="*{sortBy}">
             <option value="">Sort By</option>

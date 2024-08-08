@@ -1,9 +1,11 @@
 package com.project.controllers.mvc;
 
+import com.project.exceptions.AuthenticationException;
 import com.project.exceptions.EntityNotFoundException;
 import com.project.helpers.AuthenticationHelper;
 import com.project.helpers.MapperHelper;
 import com.project.models.*;
+import com.project.models.dtos.CommentDto;
 import com.project.models.dtos.FilterPostDto;
 import com.project.services.contracts.CommentService;
 import com.project.services.contracts.PostService;
@@ -14,10 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -51,10 +51,11 @@ public class PostMvcController {
 
     @GetMapping("/posts")
     public String showAllPosts(@ModelAttribute("filterPostOptions") FilterPostDto filterPostDto, Model model) {
-        FilteredPostsOptions filteredPostsOptions = new FilteredPostsOptions( filterPostDto.getMinLikes(),
+        FilteredPostsOptions filteredPostsOptions = new FilteredPostsOptions(
                 filterPostDto.getMaxLikes(),
-                filterPostDto.getMinDislikes(),
+                filterPostDto.getMinLikes(),
                 filterPostDto.getMaxDislikes(),
+                filterPostDto.getMinDislikes(),
                 filterPostDto.getTitle(),
                 filterPostDto.getContent(),
                 filterPostDto.getCreatedBefore(),
@@ -74,6 +75,7 @@ public class PostMvcController {
         try {
             Post post = postService.getPostById(id);
             List<Comment> postComments = commentService.getAllCommentsFromPost(post, filteredCommentsOptions);
+            model.addAttribute("commentToAdd", new CommentDto());
             model.addAttribute("comments", postComments);
             model.addAttribute("post", post);
             return "SinglePostView";
@@ -81,6 +83,30 @@ public class PostMvcController {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
+        }
+    }
+
+    @PostMapping("/posts/{id}")
+    public String addCommentToPost(@ModelAttribute("commentToAdd") CommentDto commentDto, @PathVariable int id,
+                                   Model model,
+                                   HttpSession session,
+                                   BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "SinglePostView";
+        }
+
+        try {
+            User user = authenticationHelper.tryGetUserFromSession(session);
+            Post post = postService.getPostById(id);
+            Comment comment = mapperHelper.createCommentForPostFromCommentDto(commentDto, user, post);
+            commentService.createComment(comment, user);
+            return "redirect:/ti/forum/posts/" + id;
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (AuthenticationException e) {
+            return "redirect:/ti/auth/login";
         }
     }
 

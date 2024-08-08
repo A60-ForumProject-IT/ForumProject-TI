@@ -8,10 +8,10 @@ import java.util.Optional;
 
 @Getter
 public class FilteredPostsOptions {
-    private Optional<Integer> minLikes;
-    private Optional<Integer> minDislikes;
     private Optional<Integer> maxLikes;
+    private Optional<Integer> minLikes;
     private Optional<Integer> maxDislikes;
+    private Optional<Integer> minDislikes;
     private Optional<String> title;
     private Optional<String> content;
     private Optional<String> postedBy;
@@ -20,10 +20,10 @@ public class FilteredPostsOptions {
     private Optional<LocalDate> createdBefore;
     private Optional<LocalDate> createdAfter;
 
-    public FilteredPostsOptions(Integer minLikes,
-                                Integer minDislikes,
-                                Integer maxLikes,
+    public FilteredPostsOptions(Integer maxLikes,
+                                Integer minLikes,
                                 Integer maxDislikes,
+                                Integer minDislikes,
                                 String title,
                                 String content,
                                 LocalDate createdBefore,

@@ -28,6 +28,7 @@
 
             <button type="submit" class="btn-danger" th:text="#{post.reply-button}">Reply</button>
         </form>
+        <br/><br/>
 
 
 
@@ -38,16 +39,24 @@
         <div th:unless="${comments.isEmpty()}">
             <div th:each="comment : ${comments}" th:value="${comment.commentId}">
                 <span th:text="'Comment: ' + ${comment.content}">Content</span>
-                <br>
+                <br/>
                 <span th:text="'Commented by: ' + ${comment.userId.username}">Username</span>
-                <br>
+                <br/>
                 <span th:text="'Commented on: ' + ${comment.createdOn}">Created On</span>
+                <br/>
 
-                <form th:if="${isAuthenticated}"
+                <form th:if="${isAuthenticated && editPermissions[comment.commentId]}"
                       th:action="@{/ti/forum/posts/{postId}/comments/{commentId}(postId=${post.postId}, commentId=${comment.commentId})}"
-                      th:object="${commentToAdd}" method="post">
+                      th:object="${commentToUpdate}" method="post">
+                    <input type="text" th:field="*{content}" th:value="${comment.content}" placeholder="Edit your comment..."/>
                     <button type="submit" class="btn-danger" th:text="#{comment.edit-button}">Edit Comment</button>
                 </form>
+                <form th:if="${isAuthenticated && (isAdmin || isModerator || editPermissions[comment.commentId])}"
+                      th:action="@{/ti/forum/posts/__${post.postId}__/comments/__${comment.commentId}__/delete}"
+                      method="post" onsubmit="return confirm('Are you sure you want to delete this comment?');" style="display:inline;">
+                    <button type="submit" class="btn-danger" th:text="#{comment.delete-button}">Delete</button>
+                </form>
+                <br/><br/>
             </div>
         </div>
     </div>

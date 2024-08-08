@@ -22,7 +22,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/ti/forum")
@@ -98,13 +101,19 @@ public class PostMvcController {
     }
 
     @GetMapping("/posts/{id}")
-    public String showPost(@PathVariable int id, Model model, FilteredCommentsOptions filteredCommentsOptions) {
+    public String showPost(@PathVariable int id, Model model, FilteredCommentsOptions filteredCommentsOptions, HttpSession session) {
         try {
             Post post = postService.getPostById(id);
             List<Comment> postComments = commentService.getAllCommentsFromPost(post, filteredCommentsOptions);
+
             model.addAttribute("commentToAdd", new CommentDto());
             model.addAttribute("comments", postComments);
             model.addAttribute("post", post);
+            model.addAttribute("commentToUpdate", new CommentDto());
+            if (session.getAttribute("currentUser") != null) {
+                User user = authenticationHelper.tryGetUserFromSession(session);
+                model.addAttribute("editPermissions", getEditPermissionsMap(user, postComments));
+            }
             return "SinglePostView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
@@ -126,9 +135,6 @@ public class PostMvcController {
             User user = authenticationHelper.tryGetUserFromSession(session);
             Post post = postService.getPostById(id);
             Comment comment = mapperHelper.createCommentForPostFromCommentDto(commentDto, user, post);
-            if (user.equals(post.getPostedBy())) {
-                model.addAttribute("isCreator", true);
-            }
             commentService.createComment(comment, user);
             return "redirect:/ti/forum/posts/" + id;
         } catch (EntityNotFoundException e) {
@@ -147,19 +153,15 @@ public class PostMvcController {
     @GetMapping("/posts/{postId}/comments/{commentId}")
     public String editCommentPage(@PathVariable int postId, @PathVariable int commentId, Model model, HttpSession session) {
         try {
-            User user = authenticationHelper.tryGetUserFromSession(session);
-            Comment comment = commentService.getCommentById(commentId);
-            Post post = postService.getPostById(postId);
-            model.addAttribute("postToUpdate", post);
-            model.addAttribute("commentToUpdate", comment);
-            return "SinglePostView";
-        } catch (EntityNotFoundException e) {
-            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
-            model.addAttribute("error", e.getMessage());
-            return "ErrorView";
+            authenticationHelper.tryGetUserFromSession(session);
         } catch (AuthenticationException e) {
-            return "redirect:/ti/auth/login";
+            return "redirect:/auth/login";
         }
+
+        Comment comment = commentService.getCommentById(commentId);
+        CommentDto newComment = mapperHelper.toCommentDto(comment);
+        model.addAttribute("comment", newComment);
+        return "SinglePostView";
     }
 
     @PostMapping("/posts/{postId}/comments/{commentId}")
@@ -169,31 +171,68 @@ public class PostMvcController {
                               HttpSession session,
                               BindingResult bindingResult,
                               Model model) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetUserFromSession(session);
+        } catch (AuthenticationException e) {
+            return "redirect:/auth/login";
+        }
+
         if (bindingResult.hasErrors()) {
             return "SinglePostView";
         }
 
         try {
-            User user = authenticationHelper.tryGetUserFromSession(session);
-            Comment existingComment = commentService.getCommentById(commentId);
-            Post post = postService.getPostById(postId);
-            if (user.equals(post.getPostedBy())) {
-                model.addAttribute("isCreator", true);
-            }
-            existingComment.setContent(commentDto.getContent());
-            model.addAttribute("commentToUpdate", existingComment);
-            commentService.updateComment(existingComment, user);
+            Comment comment = mapperHelper.fromCommentDtoToUpdate(commentDto, commentId);
+            commentService.updateComment(comment, user);
             return "redirect:/ti/forum/posts/" + postId;
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
-        } catch (AuthenticationException e) {
-            return "redirect:/ti/auth/login";
         } catch (DuplicateEntityException e) {
             model.addAttribute("statusCode", HttpStatus.CONFLICT.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         }
     }
+
+    @PostMapping("/posts/{postId}/comments/{commentId}/delete")
+    public String deleteComment(@PathVariable int postId, @PathVariable int commentId, HttpSession session, Model model) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetUserFromSession(session);
+        } catch (AuthenticationException e) {
+            return "redirect:/auth/login";
+        }
+
+        try {
+            Comment comment = commentService.getCommentById(commentId);
+            commentService.deleteComment(comment, user);
+            return "redirect:/ti/forum/posts/" + postId;
+        } catch (AuthenticationException e) {
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        }
+
+    }
+
+    private Map<Integer, Boolean> getEditPermissionsMap(User user, List<Comment> comments) {
+        Map<Integer, Boolean> editPermissions = new HashMap<>();
+        for (Comment comment : comments) {
+            boolean canEdit = comment.getUserId().equals(user);
+            editPermissions.put(comment.getCommentId(), canEdit);
+        }
+        return editPermissions;
+    }
+//
+//    private boolean isUserAdminOrModerator(User user) {
+//        return user.getRole().equals(roleService.getRoleById(3)) ||
+//                user.getRole().equals(roleService.getRoleById(2));
+//    }
 }

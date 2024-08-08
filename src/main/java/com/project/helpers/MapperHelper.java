@@ -117,4 +117,10 @@ public class MapperHelper {
         phoneNumber.setPhoneNumber(phoneNumberDto.getPhoneNumber());
         return phoneNumber;
     }
+
+    public CommentDto toCommentDto(Comment comment) {
+        CommentDto commentDto = new CommentDto();
+        commentDto.setContent(comment.getContent());
+        return commentDto;
+    }
 }

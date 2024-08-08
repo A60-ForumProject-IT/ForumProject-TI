@@ -81,7 +81,7 @@ class PostServiceImplTests {
         Mockito.when(postRepository.getAllPosts(Mockito.any()))
                 .thenReturn(posts);
 
-        postService.getAllPosts(userExecutingTheRequest, filterOptions);
+        postService.getAllPosts(filterOptions);
 
         Mockito.verify(postRepository, Mockito.times(1))
                 .getAllPosts(filterOptions);

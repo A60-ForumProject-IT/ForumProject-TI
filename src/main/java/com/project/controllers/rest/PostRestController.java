@@ -55,7 +55,7 @@ public class PostRestController {
             User user = authenticationHelper.tryGetUser(headers);
             FilteredPostsOptions postFilterOptions =
                     new FilteredPostsOptions(minLikes, minDislikes,maxLikes, maxDislikes, title, content, createdBefore, createdAfter, postedBy, sortBy, sortOrder);
-            return postService.getAllPosts(user, postFilterOptions);
+            return postService.getAllPosts(postFilterOptions);
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (UnauthorizedOperationException e) {

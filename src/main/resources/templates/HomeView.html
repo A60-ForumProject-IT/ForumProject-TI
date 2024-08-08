@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
+    <link rel="stylesheet" href="../static/css/styles.css" th:href="@{/css/styles.css}">
 </head>
 <body>
 <header>
@@ -20,7 +21,7 @@
         </div>
     </div>
 </header>
-<main>
+<main class="body-content">
     <h1>Game Forum</h1>
     <h2 th:text="#{home.label.welcome}">Welcome (design)!</h2>
     <p>This is a place where gamers can discuss their favorite games, share tips, and connect with others.</p>

@@ -1,5 +1,5 @@
 header {
-    text-align: right;
+    text-align: center;
     padding: 10px 50px 10px 44px;
     border-bottom: 1px solid #dee2e6;
 }
@@ -12,11 +12,16 @@ footer {
 
 a {
     color: #007bff;
+    margin-right: 10px;
 }
 
 .body-content {
     text-align: center;
     padding: 10px 50px 50px 50px;
+}
+
+.user-info {
+    margin-bottom: 15px;
 }
 
 .table {

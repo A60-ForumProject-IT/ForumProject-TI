@@ -3,27 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <title>Edit User</title>
+    <link rel="stylesheet" href="../static/css/styles.css" th:href="@{/css/styles.css}">
 </head>
 <body>
+<header>
+    <div>
+        <div>
+            <h3>
+                <a th:href="@{/ti}">Home</a>
+                <a th:href="@{/ti/forum/posts}">Posts</a>
+                <a  th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}">Logout</a>
+                <a  th:if="${isAuthenticated}" th:href="@{/ti/users/edit}">Edit User</a>
+                <a  th:if="${isAuthenticated && isAdminOrModerator}" th:href="@{/ti/users/admin}">Admin Panel</a>
+                <a  th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}">Login</a>
+                <a  th:unless="${isAuthenticated}" th:href="@{/ti/auth/register}">Registration</a>
+            </h3>
+        </div>
+    </div>
+</header>
 <div class="body-content">
     <h2>Edit User Information</h2>
     <form th:action="@{/ti/users/edit}" th:object="${user}" method="post">
-        <div>
+        <div class="user-info">
             <label th:text="#{user.label.firstName}" >First Name:</label>
             <input type="text" th:field="*{firstName}" />
             <label class="error form-error" th:errors="*{firstName}"></label>
         </div>
-        <div>
+        <div class="user-info">
             <label th:text="#{user.label.lastName}">Last Name:</label>
             <input type="text"  th:field="*{lastName}" />
             <label class="error form-error" th:errors="*{lastName}"></label>
         </div>
-        <div>
+        <div class="user-info">
             <label th:text="#{user.label.email}">Email:</label>
             <input type="email" th:field="*{email}" />
             <label class="error form-error" th:errors="*{email}"></label>
         </div>
-        <div>
+        <div class="user-info">
             <label th:text="#{user.label.password}">Password:</label>
             <input type="password" th:field="*{password}" />
             <label class="error form-error" th:errors="*{password}"></label>

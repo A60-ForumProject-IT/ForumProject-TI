@@ -1,7 +1,9 @@
 package com.project.models;
 
 import lombok.Getter;
+import org.springframework.cglib.core.Local;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Getter
@@ -15,8 +17,8 @@ public class FilteredPostsOptions {
     private Optional<String> postedBy;
     private Optional<String> sortBy;
     private Optional<String> sortOrder;
-    private Optional<String> createdBefore;
-    private Optional<String> createdAfter;
+    private Optional<LocalDate> createdBefore;
+    private Optional<LocalDate> createdAfter;
 
     public FilteredPostsOptions(Integer minLikes,
                                 Integer minDislikes,
@@ -24,8 +26,8 @@ public class FilteredPostsOptions {
                                 Integer maxDislikes,
                                 String title,
                                 String content,
-                                String createdBefore,
-                                String createdAfter,
+                                LocalDate createdBefore,
+                                LocalDate createdAfter,
                                 String postedBy,
                                 String sortBy,
                                 String sortOrder) {

@@ -230,19 +230,13 @@ public class PostRepositoryImpl implements PostRepository {
         });
 
         filteredPostsOptions.getCreatedBefore().ifPresent(value -> {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            LocalDateTime date = LocalDateTime.parse(value, formatter);
-
             filters.add(" post.createdOn < :createdBefore ");
-            parameters.put("createdBefore", date);
+            parameters.put("createdBefore", value.atStartOfDay());
         });
 
         filteredPostsOptions.getCreatedAfter().ifPresent(value -> {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            LocalDateTime date = LocalDateTime.parse(value, formatter);
-
             filters.add(" post.createdOn > :createdAfter ");
-            parameters.put("createdAfter", date);
+            parameters.put("createdAfter", value.atStartOfDay());
         });
 
         filteredPostsOptions.getPostedBy().ifPresent(value -> {
@@ -299,19 +293,13 @@ public class PostRepositoryImpl implements PostRepository {
         });
 
         postFilterOptions.getCreatedBefore().ifPresent(value -> {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            LocalDateTime date = LocalDateTime.parse(value, formatter);
-
             filters.add(" post.createdOn < :createdBefore ");
-            parameters.put("createdBefore", date);
+            parameters.put("createdBefore", value.atStartOfDay());
         });
 
         postFilterOptions.getCreatedAfter().ifPresent(value -> {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            LocalDateTime date = LocalDateTime.parse(value, formatter);
-
             filters.add(" post.createdOn > :createdAfter ");
-            parameters.put("createdAfter", date);
+            parameters.put("createdAfter", value.atStartOfDay());
         });
 
         if (!filters.isEmpty()) {

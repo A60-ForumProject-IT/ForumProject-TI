@@ -1,5 +1,6 @@
 package com.project.controllers.mvc;
 
+import com.project.exceptions.EntityNotFoundException;
 import com.project.helpers.AuthenticationHelper;
 import com.project.helpers.MapperHelper;
 import com.project.models.FilteredPostsOptions;
@@ -11,10 +12,12 @@ import com.project.services.contracts.TagService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -47,18 +50,17 @@ public class PostMvcController {
 
     @GetMapping("/posts")
     public String showAllPosts(@ModelAttribute("filterOptions") FilterPostDto filterPostDto, Model model) {
-        FilteredPostsOptions filteredPostsOptions = new FilteredPostsOptions(
-                filterPostDto.getMinLikes(),
-                filterPostDto.getMinDislikes(),
+        FilteredPostsOptions filteredPostsOptions = new FilteredPostsOptions( filterPostDto.getMinLikes(),
                 filterPostDto.getMaxLikes(),
+                filterPostDto.getMinDislikes(),
                 filterPostDto.getMaxDislikes(),
                 filterPostDto.getTitle(),
                 filterPostDto.getContent(),
+                filterPostDto.getCreatedBefore(),
+                filterPostDto.getCreatedAfter(),
                 filterPostDto.getPostedBy(),
                 filterPostDto.getSortBy(),
-                filterPostDto.getSortOrder(),
-                filterPostDto.getCreatedBefore(),
-                filterPostDto.getCreatedAfter()
+                filterPostDto.getSortOrder()
         );
         List<Post> posts = postService.getAllPosts(filteredPostsOptions);
         model.addAttribute("filterOptions", filterPostDto);
@@ -66,4 +68,16 @@ public class PostMvcController {
         return "AllPostsView";
     }
 
+    @GetMapping("/posts/{id}")
+    public String showPost(@PathVariable int id, Model model) {
+        try {
+            Post post = postService.getPostById(id);
+            model.addAttribute("post", post);
+            return "SinglePostView";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        }
+    }
 }

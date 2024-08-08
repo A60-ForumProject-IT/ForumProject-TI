@@ -14,12 +14,14 @@ import com.project.services.contracts.PostService;
 import com.project.services.contracts.TagService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -46,8 +48,8 @@ public class PostRestController {
                                   @RequestParam(required = false) Integer maxDislikes,
                                   @RequestParam(required = false) String title,
                                   @RequestParam(required = false) String content,
-                                  @RequestParam(required = false) String createdBefore,
-                                  @RequestParam(required = false) String createdAfter,
+                                  @RequestParam(required = false) LocalDate createdBefore,
+                                  @RequestParam(required = false) LocalDate createdAfter,
                                   @RequestParam(required = false) String postedBy,
                                   @RequestParam(required = false) String sortBy,
                                   @RequestParam(required = false) String sortOrder) {
@@ -137,8 +139,8 @@ public class PostRestController {
                                        @RequestParam(required = false) Integer maxDislikes,
                                        @RequestParam(required = false) String title,
                                        @RequestParam(required = false) String content,
-                                       @RequestParam(required = false) String createdBefore,
-                                       @RequestParam(required = false) String createdAfter,
+                                       @RequestParam(required = false) LocalDate createdBefore,
+                                       @RequestParam(required = false) LocalDate createdAfter,
                                        @RequestParam(required = false) String postedBy,
                                        @RequestParam(required = false) String sortBy,
                                        @RequestParam(required = false) String sortOrder) {

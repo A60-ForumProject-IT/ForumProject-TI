@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Error!</title>
+    <link rel="stylesheet" href="../static/css/styles.css" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header>
+    <div>
+        <h3>
+            <a th:href="@{/}">Home</a>
+            <a th:if="${isAuthenticated}" th:href="@{/auth/logout}">Logout</a>
+            <a th:unless="${isAuthenticated}" th:href="@{/auth/login}">Login</a>
+            <a th:unless="${isAuthenticated}" th:href="@{/auth/register}">Registration</a>
+        </h3>
+    </div>
+</header>
+<div>
+    <h2 th:text="${post.title}">Post Title</h2>
+    <h2 th:text="${post.content}">Post Content</h2>
+</div>
+</body>
+</html>

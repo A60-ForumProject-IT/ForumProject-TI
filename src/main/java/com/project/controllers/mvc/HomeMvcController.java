@@ -2,8 +2,10 @@ package com.project.controllers.mvc;
 
 import com.project.helpers.AuthenticationHelper;
 import com.project.models.User;
+import com.project.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/")
 public class HomeMvcController {
     private final AuthenticationHelper authenticationHelper;
+    private final UserService userService;
 
-    public HomeMvcController(AuthenticationHelper authenticationHelper) {
+    public HomeMvcController(AuthenticationHelper authenticationHelper, UserService userService) {
         this.authenticationHelper = authenticationHelper;
+        this.userService = userService;
     }
 
     @ModelAttribute("isAuthenticated")
@@ -32,7 +36,9 @@ public class HomeMvcController {
     }
 
     @GetMapping
-    public String showHomePage() {
+    public String showHomePage(Model model) {
+        long userCount = userService.countAllUsers();
+        model.addAttribute("userCount", userCount);
         return "HomeView";
     }
 }

@@ -23,13 +23,16 @@
         <h2 th:text="${post.content}">Post Content</h2>
 
         <form th:if="${isAuthenticated}" th:action="@{/ti/forum/posts/{id}(id=${post.postId})}" th:object="${commentToAdd}" method="post">
-            <input type="text" th:field="*{comment}" placeholder="Write a comment..."/>
+            <input type="text" th:field="*{content}" placeholder="Write a comment..."/>
+            <label class="error" th:errors="*{content}">Name error placeholder</label>
+
             <button type="submit" class="btn-danger" th:text="#{post.reply-button}">Reply</button>
         </form>
 
 
+
         <div th:if="${comments.isEmpty()}">
-            <h2 th:text="#{comments.title.empty}">No Beers</h2>
+            <h2 th:text="#{comments.title.empty}">No Comments</h2>
         </div>
 
         <div th:unless="${comments.isEmpty()}">
@@ -39,6 +42,12 @@
                 <span th:text="'Commented by: ' + ${comment.userId.username}">Username</span>
                 <br>
                 <span th:text="'Commented on: ' + ${comment.createdOn}">Created On</span>
+
+                <form th:if="${isAuthenticated}"
+                      th:action="@{/ti/forum/posts/{postId}/comments/{commentId}(postId=${post.postId}, commentId=${comment.commentId})}"
+                      th:object="${commentToAdd}" method="post">
+                    <button type="submit" class="btn-danger" th:text="#{comment.edit-button}">Edit Comment</button>
+                </form>
             </div>
         </div>
     </div>

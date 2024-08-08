@@ -86,7 +86,7 @@ public class MapperHelper {
 
     public Comment createCommentForPostFromCommentDto(CommentDto commentDto, User user, Post post) {
         Comment comment = new Comment();
-        comment.setContent(commentDto.getComment());
+        comment.setContent(commentDto.getContent());
         comment.setUserId(user);
         comment.setCommentedPost(post);
         comment.setCreatedOn(LocalDateTime.now());
@@ -95,7 +95,7 @@ public class MapperHelper {
 
     public Comment fromCommentDtoToUpdate(CommentDto commentDto, int id) {
         Comment comment = commentRepository.getCommentById(id);
-        comment.setContent(commentDto.getComment());
+        comment.setContent(commentDto.getContent());
         comment.setCreatedOn(LocalDateTime.now());
         return comment;
     }

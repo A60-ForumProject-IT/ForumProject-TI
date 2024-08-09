@@ -3,12 +3,14 @@ package com.project.controllers.rest;
 import com.project.exceptions.*;
 import com.project.helpers.AuthenticationHelper;
 import com.project.helpers.MapperHelper;
+import com.project.models.Avatar;
 import com.project.models.FilteredUsersOptions;
 import com.project.models.PhoneNumber;
 import com.project.models.User;
 import com.project.models.dtos.PhoneNumberDto;
 import com.project.models.dtos.RegistrationDto;
 import com.project.models.dtos.UserDto;
+import com.project.services.contracts.AvatarService;
 import com.project.services.contracts.PhoneService;
 import com.project.services.contracts.UserService;
 import jakarta.validation.Valid;
@@ -18,8 +20,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -36,17 +40,18 @@ public class UserRestController {
     private final MapperHelper mapperHelper;
     private final AuthenticationHelper authenticationHelper;
     private final PhoneService phoneService;
+    private final AvatarService avatarService;
 
     @Autowired
     public UserRestController(UserService userService, MapperHelper mapperHelper,
-                              AuthenticationHelper authenticationHelper, PhoneService phoneService) {
+                              AuthenticationHelper authenticationHelper, PhoneService phoneService, AvatarService avatarService) {
         this.userService = userService;
         this.mapperHelper = mapperHelper;
         this.authenticationHelper = authenticationHelper;
         this.phoneService = phoneService;
+        this.avatarService = avatarService;
     }
 
-    //филтрация по username, email, firstName
     @GetMapping("/users")
     public List<User> getAllUsers(@RequestHeader HttpHeaders headers,
                                   @RequestParam(required = false) String username,
@@ -199,6 +204,51 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        }
+    }
+
+    @PostMapping("/users/{userId}/uploadAvatar")
+    public ResponseEntity<String> uploadAvatar(@PathVariable int userId,
+                                               @RequestParam("file") MultipartFile file,
+                                               @RequestHeader HttpHeaders headers) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            String avatarUrl = avatarService.uploadAvatar(user, file);
+            return new ResponseEntity<>(avatarUrl, HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<>("Failed to upload avatar", HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
+    @GetMapping("users/{userId}/avatar")
+    public ResponseEntity<Avatar> getAvatarByUserId(@PathVariable int userId, @RequestHeader HttpHeaders headers) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            Avatar avatar = avatarService.getAvatarByUser(user);
+            if (avatar != null) {
+                return new ResponseEntity<>(avatar, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/users/{userId}/avatar")
+    public ResponseEntity<String> deleteAvatar(@PathVariable int userId, @RequestHeader HttpHeaders headers) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            avatarService.deleteAvatarFromUser(user);
+            return new ResponseEntity<>("Avatar deleted successfully", HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<>("Failed to delete avatar", HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>("Avatar not found", HttpStatus.NOT_FOUND);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 }

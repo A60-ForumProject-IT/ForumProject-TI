@@ -209,7 +209,7 @@ public class UserMvcController {
             User user = authenticationHelper.tryGetUserFromSession(session);
             if (user.getRole().getRoleId() == 3) {
                 userService.blockUser(user, id);
-                return "redirect:/ti/users/admin/users";
+                return "redirect:/ti/users/admin/users/" + id;
             }
             return "ErrorView";
         } catch (UnauthorizedOperationException e) {
@@ -233,7 +233,7 @@ public class UserMvcController {
             User user = authenticationHelper.tryGetUserFromSession(session);
             if (user.getRole().getRoleId() == 3) {
                 userService.unblocked(user, id);
-                return "redirect:/ti/users/admin/users";
+                return "redirect:/ti/users/admin/users/" + id;
             }
             return "ErrorView";
         } catch (UnauthorizedOperationException e) {

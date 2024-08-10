@@ -29,5 +29,7 @@ public interface UserService {
 
     void userToBeAdmin(User userToBeAdmin);
 
+    void userToBeDemoted(User userToBeDemoted);
+
 
 }

@@ -30,4 +30,5 @@ public interface UserRepository {
     void userToBeModerator(User userToBeAdmin);
 
 
+    void userToBeDemoted(User userToBeDemoted);
 }

@@ -24,6 +24,7 @@ import java.util.List;
 @RequestMapping("/ti/users")
 public class UserMvcController {
 
+    public static final String YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE = "You dont have access to this page";
     private final UserService userService;
     private final AuthenticationHelper authenticationHelper;
     private final MapperHelper mapperHelper;
@@ -104,11 +105,11 @@ public class UserMvcController {
                 return "AdminPanelView";
             }
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
-            model.addAttribute("error", "You dont have access to this page");
+            model.addAttribute("error", YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE);
             return "ErrorView";
         } catch (AuthenticationException e) {
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
-            model.addAttribute("error", "You dont have access to this page");
+            model.addAttribute("error", YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE);
             return "ErrorView";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
@@ -125,7 +126,7 @@ public class UserMvcController {
 
             if (user.getRole().getRoleId() == 1){
                 model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
-                model.addAttribute("error", "You dont have access to this page");
+                model.addAttribute("error", YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE);
                 return "ErrorView";
             }
 
@@ -145,7 +146,7 @@ public class UserMvcController {
             return "ErrorView";
         } catch (AuthenticationException e) {
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
-            model.addAttribute("error", "You dont have access to this page");
+            model.addAttribute("error", YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE);
             return "ErrorView";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
@@ -163,6 +164,8 @@ public class UserMvcController {
                 model.addAttribute("user", userToDisplay);
                 return "UserDetailsView";
             }
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE);
             return "ErrorView";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
@@ -174,7 +177,7 @@ public class UserMvcController {
             return "ErrorView";
         } catch (AuthenticationException e) {
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
-            model.addAttribute("error", "You dont have access to this page");
+            model.addAttribute("error", YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE);
             return "ErrorView";
         }
     }
@@ -187,6 +190,8 @@ public class UserMvcController {
                 userService.deleteUser(user, id);
                 return "redirect:/ti/users/admin/users";
             }
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE);
             return "ErrorView";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
@@ -198,7 +203,7 @@ public class UserMvcController {
             return "ErrorView";
         } catch (AuthenticationException e) {
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
-            model.addAttribute("error", "You dont have access to this page");
+            model.addAttribute("error", YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE);
             return "ErrorView";
         }
     }
@@ -211,6 +216,8 @@ public class UserMvcController {
                 userService.blockUser(user, id);
                 return "redirect:/ti/users/admin/users/" + id;
             }
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE);
             return "ErrorView";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
@@ -222,7 +229,7 @@ public class UserMvcController {
             return "ErrorView";
         } catch (AuthenticationException e) {
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
-            model.addAttribute("error", "You dont have access to this page");
+            model.addAttribute("error", YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE);
             return "ErrorView";
         }
     }
@@ -235,6 +242,8 @@ public class UserMvcController {
                 userService.unblocked(user, id);
                 return "redirect:/ti/users/admin/users/" + id;
             }
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE);
             return "ErrorView";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
@@ -246,7 +255,7 @@ public class UserMvcController {
             return "ErrorView";
         } catch (AuthenticationException e) {
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
-            model.addAttribute("error", "You dont have access to this page");
+            model.addAttribute("error", YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE);
             return "ErrorView";
         }
     }
@@ -260,6 +269,8 @@ public class UserMvcController {
                 userService.userToBeAdmin(userToBePromoted);
                 return "redirect:/ti/users/admin/users/" + id;
             }
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE);
             return "ErrorView";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
@@ -271,7 +282,34 @@ public class UserMvcController {
             return "ErrorView";
         } catch (AuthenticationException e) {
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
-            model.addAttribute("error", "You dont have access to this page");
+            model.addAttribute("error", YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE);
+            return "ErrorView";
+        }
+    }
+
+    @PostMapping("/admin/users/{id}/demote")
+    public String demoteUser(@PathVariable int id, Model model, HttpSession session) {
+        try {
+            User user = authenticationHelper.tryGetUserFromSession(session);
+            User userToBeDemoted = userService.getUserById(user, id);
+            if (user.getRole().getRoleId() == 3) {
+                userService.userToBeDemoted(userToBeDemoted);
+                return "redirect:/ti/users/admin/users/" + id;
+            }
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE);
+            return "ErrorView";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (AuthenticationException e) {
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE);
             return "ErrorView";
         }
     }

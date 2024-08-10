@@ -197,5 +197,14 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    @Override
+    public void userToBeDemoted(User userToBeDemoted) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.merge(userToBeDemoted);
+            session.getTransaction().commit();
+        }
+    }
+
 
 }

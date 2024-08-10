@@ -171,4 +171,28 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.userToBeModerator(userToBeAdmin);
     }
+
+    @Override
+    public void userToBeDemoted(User userToBeDemoted) {
+        boolean isBlocked = false;
+        boolean isAdminOrModerator = true;
+        try {
+            PermissionHelper.isBlocked(userToBeDemoted, INVALID_PERMISSION);
+        } catch (BlockedException e) {
+            isBlocked = true;
+        }
+        try {
+            PermissionHelper.isAdminOrModerator(userToBeDemoted, INVALID_PERMISSION);
+        } catch (UnauthorizedOperationException e) {
+            isAdminOrModerator = false;
+        }
+        if (isBlocked) {
+            userToBeDemoted.setBlocked(false);
+        }
+
+        if (isAdminOrModerator) {
+            userToBeDemoted.setRole(roleRepository.getRoleById(1));
+        }
+        userRepository.userToBeDemoted(userToBeDemoted);
+    }
 }

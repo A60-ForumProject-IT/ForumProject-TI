@@ -57,12 +57,18 @@
 
         <form th:if="*{user.isBlocked()}" th:action="@{/ti/users/admin/users/{id}/unblock(id=${user.id})}" method="post">
             <button type="submit">Unblock User</button>
+            <br/>
         </form>
-        <br/>
 
         <form th:if="*{user.getRole().roleId == 1}" th:action="@{/ti/users/admin/users/{id}/promote(id=${user.id})}" method="post">
             <button type="submit">Make moderator</button>
+            <br/>
         </form>
+
+        <form th:if="*{user.getRole().roleId == 2}" th:action="@{/ti/users/admin/users/{id}/demote(id=${user.id})}" method="post">
+            <button type="submit">Demote moderator</button>
+        </form>
+        <br/>
     </div>
 </main>
 <footer>

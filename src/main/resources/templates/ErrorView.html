@@ -9,10 +9,10 @@
 <header>
     <div>
         <h3>
-            <a th:href="@{/}">Home</a>
-            <a th:if="${isAuthenticated}" th:href="@{/auth/logout}">Logout</a>
-            <a th:unless="${isAuthenticated}" th:href="@{/auth/login}">Login</a>
-            <a th:unless="${isAuthenticated}" th:href="@{/auth/register}">Registration</a>
+            <a th:href="@{/ti}">Home</a>
+            <a th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}">Logout</a>
+            <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}">Login</a>
+            <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/register}">Registration</a>
         </h3>
     </div>
 </header>

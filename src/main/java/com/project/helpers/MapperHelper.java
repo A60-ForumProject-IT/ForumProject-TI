@@ -70,7 +70,6 @@ public class MapperHelper {
         user.setUsername(registrationDto.getUsername());
         user.setRole(roleService.getRoleById(USER));
         user.setBlocked(false);
-       // user.setAvatar(avatarService.getUserAvatar(user));
         return user;
     }
 

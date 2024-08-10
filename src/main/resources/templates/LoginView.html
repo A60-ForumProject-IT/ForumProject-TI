@@ -22,7 +22,7 @@
     </div>
 </header>
 <h2>Login</h2>
-<form action="#" th:action="@{/ti/auth/login}" th:object="${login}" method="post">
+<form class="body-content" action="#" th:action="@{/ti/auth/login}" th:object="${login}" method="post">
     <label th:text="#{user.label.username}">Username</label>
     <br/>
     <input type="text" th:field="*{username}"/>

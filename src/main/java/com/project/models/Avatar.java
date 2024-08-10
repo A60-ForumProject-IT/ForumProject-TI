@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Objects;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -20,9 +19,6 @@ public class Avatar {
 
     @Column(name = "avatar_url", nullable = false)
     private String avatar;
-
-    @OneToMany(mappedBy = "avatar", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private Set<User> users;
 
     public Avatar() {
     }

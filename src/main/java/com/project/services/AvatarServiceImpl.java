@@ -7,6 +7,7 @@ import com.project.models.User;
 import com.project.repositories.contracts.AvatarRepository;
 import com.project.repositories.contracts.UserRepository;
 import com.project.services.contracts.AvatarService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,6 +21,7 @@ public class AvatarServiceImpl implements AvatarService {
     private final AvatarRepository avatarRepository;
     private final UserRepository userRepository;
 
+    @Autowired
     public AvatarServiceImpl(Cloudinary cloudinary, AvatarRepository avatarRepository, UserRepository userRepository) {
         this.cloudinary = cloudinary;
         this.avatarRepository = avatarRepository;
@@ -27,7 +29,7 @@ public class AvatarServiceImpl implements AvatarService {
     }
 
     @Override
-    public String uploadAvatar(User user, MultipartFile avatarFile) throws IOException {
+    public Avatar uploadAvatar(User user, MultipartFile avatarFile) throws IOException {
         Map<String, Object> uploadResult = cloudinary.uploader().upload(avatarFile.getBytes(), ObjectUtils.emptyMap());
         String avatarUrl = uploadResult.get("secure_url").toString();
 
@@ -38,7 +40,7 @@ public class AvatarServiceImpl implements AvatarService {
         user.setAvatar(avatar);
         userRepository.update(user);
 
-        return avatarUrl;
+        return avatar;
     }
 
     @Override
@@ -52,8 +54,18 @@ public class AvatarServiceImpl implements AvatarService {
 
     @Override
     public Avatar initializeDefaultAvatar(User user) {
-        Avatar defaultAvatar = avatarRepository.getAvatarById(DEFAULT_AVATAR);
+        Avatar defaultAvatar = avatarRepository.getAvatarById(1);
+        user.setAvatar(defaultAvatar);
         userRepository.update(user);
+        return defaultAvatar;
+    }
+
+    @Override
+    public Avatar initializeDefaultAvatar() {
+        Avatar defaultAvatar = avatarRepository.getAvatarById(1);
+        if (!"/images/DefaultUserAvatar.jpg".equals(defaultAvatar.getAvatar())) {
+            throw new IllegalStateException("Avatar with ID 1 is not the default avatar");
+        }
         return defaultAvatar;
     }
 

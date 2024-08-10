@@ -63,7 +63,7 @@ public class User implements Comparable<User> {
     private Set<Post> dislikedPosts;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinTable(name = "users_avatars",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "avatar_id"))

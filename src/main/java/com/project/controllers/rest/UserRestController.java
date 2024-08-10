@@ -213,8 +213,11 @@ public class UserRestController {
                                                @RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            String avatarUrl = avatarService.uploadAvatar(user, file);
-            return new ResponseEntity<>(avatarUrl, HttpStatus.OK);
+            if (user.getId() != userId) {
+                throw new UnauthorizedOperationException("You are not authorized to modify this user's avatar.");
+            }
+            Avatar avatar = avatarService.uploadAvatar(user, file);
+            return new ResponseEntity<>(avatar.getAvatar(), HttpStatus.OK);
         } catch (IOException e) {
             return new ResponseEntity<>("Failed to upload avatar", HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (UnauthorizedOperationException e) {

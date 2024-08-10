@@ -67,11 +67,10 @@ public class MapperHelper {
         user.setLastName(registrationDto.getLastName());
         user.setEmail(registrationDto.getEmail());
         user.setPassword(registrationDto.getPassword());
-
         user.setUsername(registrationDto.getUsername());
         user.setRole(roleService.getRoleById(USER));
         user.setBlocked(false);
-        user.setAvatar(avatarService.getUserAvatar(user));
+       // user.setAvatar(avatarService.getUserAvatar(user));
         return user;
     }
 

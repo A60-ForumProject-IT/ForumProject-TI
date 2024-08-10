@@ -22,6 +22,10 @@
     <div class="body-content">
         <h1>User Details</h1>
         <div>
+            <label>Profile picture</label>
+            <span th:text="${user.avatar}"></span>
+        </div>
+        <div>
             <label>Username:</label>
             <span th:text="${user.username}"></span>
         </div>

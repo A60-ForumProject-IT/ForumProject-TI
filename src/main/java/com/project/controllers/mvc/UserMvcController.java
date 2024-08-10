@@ -250,4 +250,29 @@ public class UserMvcController {
             return "ErrorView";
         }
     }
+
+    @PostMapping("/admin/users/{id}/promote")
+    public String promoteUser(@PathVariable int id, Model model, HttpSession session) {
+        try {
+            User user = authenticationHelper.tryGetUserFromSession(session);
+            User userToBePromoted = userService.getUserById(user, id);
+            if (user.getRole().getRoleId() == 3) {
+                userService.userToBeAdmin(userToBePromoted);
+                return "redirect:/ti/users/admin/users/" + id;
+            }
+            return "ErrorView";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (AuthenticationException e) {
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", "You dont have access to this page");
+            return "ErrorView";
+        }
+    }
 }

@@ -4,9 +4,9 @@ import com.project.models.Avatar;
 
 public interface AvatarRepository {
 
-    public Avatar saveAvatar(Avatar avatar);
+    Avatar saveAvatar(Avatar avatar);
 
-    public Avatar getAvatarById(int id);
+    Avatar getAvatarById(int id);
 
-    public void deleteAvatar(Avatar avatar);
+    void deleteAvatar(Avatar avatar);
 }

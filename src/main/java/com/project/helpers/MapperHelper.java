@@ -5,10 +5,7 @@ import com.project.models.dtos.*;
 import com.project.repositories.contracts.CommentRepository;
 import com.project.repositories.contracts.UserRepository;
 import com.project.services.TagServiceImpl;
-import com.project.services.contracts.PostService;
-import com.project.services.contracts.RoleService;
-import com.project.services.contracts.TagService;
-import com.project.services.contracts.UserService;
+import com.project.services.contracts.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,23 +14,26 @@ import java.time.LocalDateTime;
 
 @Component
 public class MapperHelper {
+    public static final int USER = 1;
     private final TagService tagService;
     private UserService userService;
     private RoleService roleService;
     private PostService postService;
     private UserRepository userRepository;
     private CommentRepository commentRepository;
+    private AvatarService avatarService;
 
     @Autowired
     public MapperHelper(UserService userService, RoleService roleService,
                         PostService postService, UserRepository userRepository,
-                        CommentRepository commentRepository, TagService tagService) {
+                        CommentRepository commentRepository, TagService tagService, AvatarService avatarService) {
         this.userService = userService;
         this.roleService = roleService;
         this.postService = postService;
         this.userRepository = userRepository;
         this.commentRepository = commentRepository;
         this.tagService = tagService;
+        this.avatarService = avatarService;
     }
 
     public User updateUserFromDto(UserDto userDto, int id) {
@@ -67,9 +67,11 @@ public class MapperHelper {
         user.setLastName(registrationDto.getLastName());
         user.setEmail(registrationDto.getEmail());
         user.setPassword(registrationDto.getPassword());
+
         user.setUsername(registrationDto.getUsername());
-        user.setRole(roleService.getRoleById(1));
+        user.setRole(roleService.getRoleById(USER));
         user.setBlocked(false);
+        user.setAvatar(avatarService.getUserAvatar(user));
         return user;
     }
 

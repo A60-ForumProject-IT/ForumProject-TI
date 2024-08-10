@@ -155,7 +155,7 @@ public class PostMvcController {
         try {
             authenticationHelper.tryGetUserFromSession(session);
         } catch (AuthenticationException e) {
-            return "redirect:/auth/login";
+            return "redirect:/ti/auth/login";
         }
 
         Comment comment = commentService.getCommentById(commentId);
@@ -175,7 +175,7 @@ public class PostMvcController {
         try {
             user = authenticationHelper.tryGetUserFromSession(session);
         } catch (AuthenticationException e) {
-            return "redirect:/auth/login";
+            return "redirect:/ti/auth/login";
         }
 
         if (bindingResult.hasErrors()) {
@@ -203,7 +203,7 @@ public class PostMvcController {
         try {
             user = authenticationHelper.tryGetUserFromSession(session);
         } catch (AuthenticationException e) {
-            return "redirect:/auth/login";
+            return "redirect:/ti/auth/login";
         }
 
         try {

@@ -15,6 +15,7 @@ import java.util.Map;
 
 @Service
 public class AvatarServiceImpl implements AvatarService {
+    public static final int DEFAULT_AVATAR = 1;
     private final Cloudinary cloudinary;
     private final AvatarRepository avatarRepository;
     private final UserRepository userRepository;
@@ -41,8 +42,19 @@ public class AvatarServiceImpl implements AvatarService {
     }
 
     @Override
-    public Avatar getAvatarByUser(User user) {
-        return user.getAvatar();
+    public Avatar getUserAvatar(User user) {
+        if (user.getAvatar() != null) {
+            return user.getAvatar();
+        } else {
+            return initializeDefaultAvatar(user);
+        }
+    }
+
+    @Override
+    public Avatar initializeDefaultAvatar(User user) {
+        Avatar defaultAvatar = avatarRepository.getAvatarById(DEFAULT_AVATAR);
+        userRepository.update(user);
+        return defaultAvatar;
     }
 
     @Override

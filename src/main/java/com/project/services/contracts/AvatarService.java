@@ -7,9 +7,11 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 public interface AvatarService {
-    public Avatar getAvatarByUser(User user);
+    Avatar getUserAvatar(User user);
 
-    public String uploadAvatar(User user, MultipartFile avatarFile) throws IOException;
+    String uploadAvatar(User user, MultipartFile avatarFile) throws IOException;
 
-    public void deleteAvatarFromUser(User user) throws IOException;
+    void deleteAvatarFromUser(User user) throws IOException;
+
+    Avatar initializeDefaultAvatar(User user);
 }

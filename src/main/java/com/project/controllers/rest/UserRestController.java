@@ -226,7 +226,7 @@ public class UserRestController {
     public ResponseEntity<Avatar> getAvatarByUserId(@PathVariable int userId, @RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            Avatar avatar = avatarService.getAvatarByUser(user);
+            Avatar avatar = avatarService.getUserAvatar(user);
             if (avatar != null) {
                 return new ResponseEntity<>(avatar, HttpStatus.OK);
             } else {

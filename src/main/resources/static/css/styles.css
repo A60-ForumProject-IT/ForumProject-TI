@@ -92,6 +92,10 @@ a {
     height: 30px;
 }
 
+.button-create {
+    text-align: center;
+}
+
 a.nav {
     margin: 6px 6px 6px 6px;
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -29,6 +30,7 @@ public class Comment implements Comparable<Comment>{
     private String content;
 
     @Column(name = "comment_time_created")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdOn;
 
     @JsonIgnore

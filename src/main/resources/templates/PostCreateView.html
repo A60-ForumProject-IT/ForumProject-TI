@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Create Post</title>
     <link rel="stylesheet" href="../static/css/styles.css" th:href="@{/css/styles.css}">
 </head>
 <body>
@@ -14,28 +14,28 @@
                 <a th:href="@{/ti/forum/posts}">Posts</a>
                 <a  th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}">Logout</a>
                 <a  th:if="${isAuthenticated}" th:href="@{/ti/users/edit}">Edit User</a>
-                <a  th:if="${isAuthenticated && isAdminOrModerator}" th:href="@{/ti/users/admin}">Admin Panel</a>
+                <a  th:if="${isAuthenticated && (isAdmin || isModerator)}" th:href="@{/ti/users/admin}">Admin Panel</a>
                 <a  th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}">Login</a>
                 <a  th:unless="${isAuthenticated}" th:href="@{/ti/auth/register}">Registration</a>
             </h3>
         </div>
     </div>
 </header>
-<h2>Login</h2>
-<form action="#" th:action="@{/ti/auth/login}" th:object="${login}" method="post">
-    <label th:text="#{user.label.username}">Username</label>
+<h2>Create Post</h2>
+<form action="#" th:action="@{__${requestURI}__}" th:object="${newPost}" method="post">
+    <label th:text="#{posts.label.title}">Title</label>
     <br/>
-    <input type="text" th:field="*{username}"/>
-    <label class="error" th:errors="*{username}">Username error placeholder</label>
+    <input type="text" th:field="*{title}"/>
+    <label class="error" th:errors="*{title}">Title error placeholder</label>
     <br/><br/>
 
-    <label th:text="#{user.label.password}">Password</label>
+    <label th:text="#{post.label.content}">Content</label>
     <br/>
-    <input type="password" th:field="*{password}"/>
-    <label class="error" th:errors="*{password}">Password error placeholder</label>
+    <input type="text" th:field="*{content}"/>
+    <label class="error" th:errors="*{content}">Content error placeholder</label>
     <br/><br/>
 
-    <input type="submit" value="Login"/>
+    <input type="submit" value="Create Post"/>
 </form>
 </body>
 </html>

@@ -8,6 +8,7 @@ import com.project.helpers.MapperHelper;
 import com.project.models.*;
 import com.project.models.dtos.CommentDto;
 import com.project.models.dtos.FilterPostDto;
+import com.project.models.dtos.PostDto;
 import com.project.services.RoleServiceImpl;
 import com.project.services.contracts.CommentService;
 import com.project.services.contracts.PostService;
@@ -15,6 +16,7 @@ import com.project.services.contracts.RoleService;
 import com.project.services.contracts.TagService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -101,7 +104,9 @@ public class PostMvcController {
     }
 
     @GetMapping("/posts/{id}")
-    public String showPost(@PathVariable int id, Model model, FilteredCommentsOptions filteredCommentsOptions, HttpSession session) {
+    public String showPost(@PathVariable int id, Model model,
+                           @RequestParam(value = "editCommentId", required = false) Integer editCommentId,
+                           FilteredCommentsOptions filteredCommentsOptions, HttpSession session) {
         try {
             Post post = postService.getPostById(id);
             List<Comment> postComments = commentService.getAllCommentsFromPost(post, filteredCommentsOptions);
@@ -109,7 +114,17 @@ public class PostMvcController {
             model.addAttribute("commentToAdd", new CommentDto());
             model.addAttribute("comments", postComments);
             model.addAttribute("post", post);
-            model.addAttribute("commentToUpdate", new CommentDto());
+
+            if (editCommentId != null) {
+                Comment commentToEdit = commentService.getCommentById(editCommentId);
+                CommentDto commentToUpdate = mapperHelper.toCommentDto(commentToEdit);
+                model.addAttribute("commentToUpdate", commentToUpdate);
+            } else {
+                model.addAttribute("commentToUpdate", new CommentDto());
+            }
+
+            model.addAttribute("editCommentId", editCommentId);
+
             if (session.getAttribute("currentUser") != null) {
                 User user = authenticationHelper.tryGetUserFromSession(session);
                 model.addAttribute("editPermissions", getEditPermissionsMap(user, postComments));
@@ -229,6 +244,46 @@ public class PostMvcController {
             editPermissions.put(comment.getCommentId(), canEdit);
         }
         return editPermissions;
+    }
+
+    @GetMapping("/posts/new")
+    public String newPost(Model model, HttpSession session) {
+
+        try {
+            authenticationHelper.tryGetUserFromSession(session);
+        } catch (AuthenticationException e) {
+            return "redirect:/ti/auth/login";
+        }
+        model.addAttribute("newPost", new PostDto());
+        return "PostCreateView";
+    }
+
+    @PostMapping("/posts/new")
+    public String newPost(@Valid @ModelAttribute("newPost") PostDto postDto, BindingResult bindingResult, Model model, HttpSession session) {
+        if (bindingResult.hasErrors()) {
+            return "PostCreateView";
+        }
+
+        User user;
+        try {
+            user = authenticationHelper.tryGetUserFromSession(session);
+        } catch (AuthenticationException e) {
+            return "redirect:/ti/auth/login";
+        }
+
+
+        try {
+            Post post = mapperHelper.fromPostDto(postDto, user);
+            postService.createPost(post);
+            return "redirect:/ti/forum/posts";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (DuplicateEntityException e) {
+            bindingResult.rejectValue("title", "duplicateTitle", e.getMessage());
+            return "PostCreateView";
+        }
     }
 //
 //    private boolean isUserAdminOrModerator(User user) {

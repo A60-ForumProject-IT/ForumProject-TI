@@ -12,11 +12,11 @@
             <h3>
                 <a th:href="@{/ti}">Home</a>
                 <a th:href="@{/ti/forum/posts}">Posts</a>
-                <a  th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}">Logout</a>
-                <a  th:if="${isAuthenticated}" th:href="@{/ti/users/edit}">Edit User</a>
-                <a  th:if="${isAuthenticated && (isAdmin || isModerator)}" th:href="@{/ti/users/admin}">Admin Panel</a>
-                <a  th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}">Login</a>
-                <a  th:unless="${isAuthenticated}" th:href="@{/ti/auth/register}">Registration</a>
+                <a th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}">Logout</a>
+                <a th:if="${isAuthenticated}" th:href="@{/ti/users/edit}">Edit User</a>
+                <a th:if="${isAuthenticated && (isAdmin || isModerator)}" th:href="@{/ti/users/admin}">Admin Panel</a>
+                <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}">Login</a>
+                <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/register}">Registration</a>
             </h3>
         </div>
     </div>
@@ -75,5 +75,9 @@
         </div>
     </div>
 </div>
+<form class="button-create">
+    <a th:if="${isAuthenticated}" href="#" th:href="@{/ti/forum/posts/new}" th:text="#{post.create.button}"
+       class="btn-danger">Create New Post</a>
+</form>
 </body>
 </html>

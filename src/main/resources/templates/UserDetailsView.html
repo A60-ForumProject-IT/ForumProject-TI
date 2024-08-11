@@ -23,7 +23,7 @@
         <h1>User Details</h1>
         <div class="user-details-container">
             <div class="profile-picture">
-                <img th:src="${user.avatar.avatar}" alt="Profile Picture" width="250" height="200"/>
+                <img th:src="@{/images/{avatar}(avatar=${user.avatar.avatar})}" alt="Profile Picture" width="100" height="100"/>
             </div>
             <div class="user-info">
                 <div>

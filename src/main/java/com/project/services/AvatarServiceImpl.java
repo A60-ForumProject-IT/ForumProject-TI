@@ -21,6 +21,7 @@ import java.util.Map;
 
 @Service
 public class AvatarServiceImpl implements AvatarService {
+    private static final String UPLOAD_DIR = "Desktop/";
     public static final int DEFAULT_AVATAR = 1;
     private final Cloudinary cloudinary;
     private final AvatarRepository avatarRepository;
@@ -33,33 +34,44 @@ public class AvatarServiceImpl implements AvatarService {
         this.userRepository = userRepository;
     }
 
-    @Override
+//    @Override
+//    public Avatar uploadAvatar(User user, MultipartFile avatarFile) throws IOException {
+//        if (avatarFile.isEmpty()) {
+//            throw new IllegalArgumentException("File is empty");
+//        }
+//
+//        byte[] bytes = avatarFile.getBytes();
+//        Path path = Paths.get("" + user.getId() + "_" + avatarFile.getOriginalFilename());
+//        Files.write(path, bytes);
+//
+//        // Create and return the Avatar object
+//        Avatar avatar = new Avatar();
+//        avatar.setAvatar(path.toString());
+//        avatarRepository.saveAvatar(avatar);
+//
+//        // Update user's avatar in the database
+//        user.setAvatar(avatar);
+//         userRepository.update(user);
+//
+//        return avatar;
+//    }
+
     public Avatar uploadAvatar(User user, MultipartFile avatarFile) throws IOException {
-        Avatar defaultAvatar = avatarRepository.getAvatarById(DEFAULT_AVATAR);
-        Avatar avatar;
-        if (user.getAvatar().equals(defaultAvatar)) {
-            Map<String, Object> uploadResult = cloudinary.uploader().upload(avatarFile.getBytes(), ObjectUtils.emptyMap());
-            String avatarUrl = uploadResult.get("secure_url").toString();
-
-            avatar = new Avatar();
-            avatar.setAvatar(avatarUrl);
-            avatarRepository.saveAvatar(avatar);
-
-            user.setAvatar(avatar);
-            userRepository.update(user);
-        } else {
-            Avatar avatarToBeDeleted = user.getAvatar();
-            Map<String, Object> uploadResult = cloudinary.uploader().upload(avatarFile.getBytes(), ObjectUtils.emptyMap());
-            String avatarUrl = uploadResult.get("secure_url").toString();
-
-            avatar = new Avatar();
-            avatar.setAvatar(avatarUrl);
-            avatarRepository.saveAvatar(avatar);
-
-            user.setAvatar(avatar);
-            avatarRepository.deleteAvatar(avatarToBeDeleted);
-            userRepository.update(user);
+        if (avatarFile.isEmpty()) {
+            throw new IllegalArgumentException("File is empty");
         }
+
+        byte[] bytes = avatarFile.getBytes();
+        Path path = Paths.get("src/main/resources/static/images/" + user.getId() + "_" + avatarFile.getOriginalFilename());
+        Files.write(path, bytes);
+
+        Avatar avatar = new Avatar();
+        avatar.setAvatar(path.getFileName().toString());
+        avatarRepository.saveAvatar(avatar);
+
+        user.setAvatar(avatar);
+        userRepository.update(user);
+
         return avatar;
     }
 

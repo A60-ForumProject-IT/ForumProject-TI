@@ -5,6 +5,7 @@ import com.project.exceptions.EntityNotFoundException;
 import com.project.exceptions.UnauthorizedOperationException;
 import com.project.helpers.AuthenticationHelper;
 import com.project.helpers.MapperHelper;
+import com.project.models.Avatar;
 import com.project.models.FilteredUsersOptions;
 import com.project.models.User;
 import com.project.models.dtos.FilterUserDto;
@@ -13,6 +14,7 @@ import com.project.services.contracts.AvatarService;
 import com.project.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.hibernate.Session;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +22,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -84,7 +87,7 @@ public class UserMvcController {
     }
 
     @PostMapping("/edit")
-    public String handleEditUser(@RequestParam("avatar") MultipartFile avatarFile,
+    public String handleEditUser(
                                  @Valid @ModelAttribute("user") UserDto userToBeEdited,
                                  BindingResult bindingResult, HttpSession session) {
         if (bindingResult.hasErrors()) {
@@ -94,7 +97,6 @@ public class UserMvcController {
         try {
             User currentUser = authenticationHelper.tryGetUserFromSession(session);
             User updatedUser = mapperHelper.updateUserFromDto(userToBeEdited, currentUser.getId());
-            avatarService.uploadAvatar(currentUser, avatarFile);
             userService.update(currentUser, updatedUser);
             return "redirect:/ti";
         } catch (Exception e) {
@@ -104,13 +106,14 @@ public class UserMvcController {
     }
 
     @PostMapping("/edit/avatar")
-    public String handleEditAvatar(@RequestParam("avatar") MultipartFile avatarFile, HttpSession session) {
+    public String uploadAvatar(@RequestParam("avatarFile") MultipartFile avatarFile, HttpSession session, Model model) {
         try {
             User user = authenticationHelper.tryGetUserFromSession(session);
-            avatarService.uploadAvatar(user, avatarFile);
+            Avatar avatar = avatarService.uploadAvatar(user, avatarFile);
+            model.addAttribute("avatarUrl", "/images/" + avatar.getAvatar());
             return "redirect:/ti/users/edit";
         } catch (Exception e) {
-            return "redirect:/ti/users/edit";
+            return "ErrorView";
         }
     }
 

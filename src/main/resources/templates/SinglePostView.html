@@ -23,8 +23,24 @@
 </header>
 <div>
     <div class="body-content">
-        <h1 th:text="${post.title}">Post Title</h1>
-        <h2 th:text="${post.content}">Post Content</h2>
+        <h1 th:text="${post != null ? post.title : 'Post Title'}">Post Title</h1>
+        <h2 th:text="${post != null ? post.content : 'Post Content'}">Post Content</h2>
+
+        <form th:if="${isAuthenticated && (editPostId != post.postId)}"
+              th:action="@{/ti/forum/posts/__${post.postId}__/edit}" method="get">
+            <input type="hidden" name="editPostId" th:value="${post.postId}"/>
+            <button type="submit" class="btn-danger">Edit</button>
+        </form>
+
+        <form th:if="${isAuthenticated && editPostId == post.postId}"
+              th:action="@{/ti/forum/posts/__${post.postId}__/edit}"
+              th:object="${postToBeUpdated}" method="post">
+            <input type="text" th:field="*{title}" th:value="${postToBeUpdated.title}"
+                   placeholder="Edit your title..."/>
+            <input type="text" th:field="*{content}" th:value="${postToBeUpdated.content}"
+                   placeholder="Edit your content..."/>
+            <button type="submit" class="btn-danger">Save Changes</button>
+        </form>
 
         <form th:if="${isAuthenticated}" th:action="@{/ti/forum/posts/{id}(id=${post.postId})}"
               th:object="${commentToAdd}" method="post">
@@ -41,7 +57,6 @@
               th:action="@{/ti/forum/posts/{postId}/dislike(postId=${postToBeLiked.postId})}" method="post">
             <button type="submit" class="btn-danger" th:text="#{post.dislike.button}">Dislike</button>
         </form>
-
 
         <div th:if="${comments.isEmpty()}">
             <h2 th:text="#{comments.title.empty}">No Comments</h2>

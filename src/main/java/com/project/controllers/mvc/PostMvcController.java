@@ -121,15 +121,14 @@ public class PostMvcController {
                 currentUser = authenticationHelper.tryGetUserFromSession(session);
             }
 
-            if (post.getPostedBy().equals(currentUser)) {
-                model.addAttribute("isCreator", true);
-            }
-
             boolean hasLiked = currentUser != null && postService.hasUserLikedPost(post, currentUser);
             boolean hasDisliked = currentUser != null && postService.hasUserDislikedPost(post, currentUser);
 
             model.addAttribute("hasLiked", hasLiked);
             model.addAttribute("hasDisliked", hasDisliked);
+
+            PostDto postToBeUpdated = mapperHelper.toPostDto(post);
+            model.addAttribute("postToBeUpdated", postToBeUpdated);
 
             if (editCommentId != null) {
                 Comment commentToEdit = commentService.getCommentById(editCommentId);
@@ -140,6 +139,7 @@ public class PostMvcController {
             }
 
             model.addAttribute("editCommentId", editCommentId);
+            model.addAttribute("editPostId", id);
 
             if (currentUser != null) {
                 model.addAttribute("editPermissions", getEditPermissionsMap(currentUser, postComments));
@@ -153,10 +153,11 @@ public class PostMvcController {
     }
 
     @PostMapping("/posts/{id}")
-    public String addCommentToPost(@ModelAttribute("commentToAdd") CommentDto commentDto, @PathVariable int id,
+    public String addCommentToPost(@Valid @ModelAttribute("commentToAdd") CommentDto commentDto,
+                                   BindingResult bindingResult,
+                                   @PathVariable int id,
                                    Model model,
-                                   HttpSession session,
-                                   BindingResult bindingResult) {
+                                   HttpSession session) {
         if (bindingResult.hasErrors()) {
             return "SinglePostView";
         }
@@ -197,7 +198,7 @@ public class PostMvcController {
     @PostMapping("/posts/{postId}/comments/{commentId}")
     public String editComment(@PathVariable int postId,
                               @PathVariable int commentId,
-                              @ModelAttribute("commentToUpdate") CommentDto commentDto,
+                              @Valid @ModelAttribute("commentToUpdate") CommentDto commentDto,
                               HttpSession session,
                               BindingResult bindingResult,
                               Model model) {
@@ -344,24 +345,37 @@ public class PostMvcController {
 
     @GetMapping("/posts/{postId}/edit")
     public String editPost(@PathVariable int postId, Model model, HttpSession session) {
+
         try {
             authenticationHelper.tryGetUserFromSession(session);
         } catch (AuthenticationException e) {
             return "redirect:/ti/auth/login";
         }
 
-        Post post = postService.getPostById(postId);
+        Post post;
+        try {
+            post = postService.getPostById(postId);
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        }
+
         PostDto newPost = mapperHelper.toPostDto(post);
-        model.addAttribute("postToBeUpdated", newPost);
+        model.addAttribute("post", newPost);
         return "SinglePostView";
     }
 
     @PostMapping("/posts/{postId}/edit")
     public String editPost(@PathVariable int postId,
-                           @ModelAttribute("postToBeUpdated") PostDto postDto,
-                           HttpSession session,
+                           @Valid @ModelAttribute("postToBeUpdated") PostDto postDto,
                            BindingResult bindingResult,
+                           HttpSession session,
                            Model model) {
+        if (bindingResult.hasErrors()) {
+            return "SinglePostView";
+        }
+
         User user;
         try {
             user = authenticationHelper.tryGetUserFromSession(session);
@@ -369,12 +383,9 @@ public class PostMvcController {
             return "redirect:/ti/auth/login";
         }
 
-        if (bindingResult.hasErrors()) {
-            return "SinglePostView";
-        }
 
         try {
-            Post post = mapperHelper.fromPostDto(postDto, user);
+            Post post = mapperHelper.fromPostDtoToUpdate(postDto, postId);
             postService.updatePost(user, post);
             return "redirect:/ti/forum/posts/" + postId;
         } catch (EntityNotFoundException e) {
@@ -386,6 +397,7 @@ public class PostMvcController {
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         }
+
     }
 
     private Map<Integer, Boolean> getEditPermissionsMap(User user, List<Comment> comments) {

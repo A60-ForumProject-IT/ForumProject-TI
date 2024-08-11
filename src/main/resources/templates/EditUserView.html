@@ -12,26 +12,36 @@
             <h3>
                 <a th:href="@{/ti}">Home</a>
                 <a th:href="@{/ti/forum/posts}">Posts</a>
-                <a  th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}">Logout</a>
-                <a  th:if="${isAuthenticated}" th:href="@{/ti/users/edit}">Edit User</a>
-                <a  th:if="${isAuthenticated && isAdminOrModerator}" th:href="@{/ti/users/admin}">Admin Panel</a>
-                <a  th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}">Login</a>
-                <a  th:unless="${isAuthenticated}" th:href="@{/ti/auth/register}">Registration</a>
+                <a th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}">Logout</a>
+                <a th:if="${isAuthenticated}" th:href="@{/ti/users/edit}">Edit User</a>
+                <a th:if="${isAuthenticated && isAdminOrModerator}" th:href="@{/ti/users/admin}">Admin Panel</a>
+                <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}">Login</a>
+                <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/register}">Registration</a>
             </h3>
         </div>
     </div>
 </header>
 <div class="body-content">
     <h2>Edit User Information</h2>
-    <form th:action="@{/ti/users/edit}" th:object="${user}" method="post">
+    <form th:action="@{/ti/users/edit}" th:object="${user}" method="post" enctype="multipart/form-data">
         <div class="user-info">
-            <label th:text="#{user.label.firstName}" >First Name:</label>
+            <div class="profile-picture">
+                <img th:src="${user.avatar != null ? user.avatar.avatar : '/default-avatar.png'}" alt="Profile Picture" width="250" height="200"/>
+            </div>
+            <label>Upload New Profile Picture:</label>
+            <input type="file" name="avatar" />
+        </div>
+        <div>
+            <button type="submit">Upload</button>
+        </div>
+        <div class="user-info">
+            <label th:text="#{user.label.firstName}">First Name:</label>
             <input type="text" th:field="*{firstName}" />
             <label class="error form-error" th:errors="*{firstName}"></label>
         </div>
         <div class="user-info">
             <label th:text="#{user.label.lastName}">Last Name:</label>
-            <input type="text"  th:field="*{lastName}" />
+            <input type="text" th:field="*{lastName}" />
             <label class="error form-error" th:errors="*{lastName}"></label>
         </div>
         <div class="user-info">
@@ -44,7 +54,6 @@
             <input type="password" th:field="*{password}" />
             <label class="error form-error" th:errors="*{password}"></label>
         </div>
-        <!-- Add other fields as necessary -->
         <div>
             <button type="submit">Save</button>
         </div>

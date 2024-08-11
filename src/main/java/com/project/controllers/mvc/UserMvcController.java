@@ -9,6 +9,7 @@ import com.project.models.FilteredUsersOptions;
 import com.project.models.User;
 import com.project.models.dtos.FilterUserDto;
 import com.project.models.dtos.UserDto;
+import com.project.services.contracts.AvatarService;
 import com.project.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -28,12 +30,14 @@ public class UserMvcController {
     private final UserService userService;
     private final AuthenticationHelper authenticationHelper;
     private final MapperHelper mapperHelper;
+    private final AvatarService avatarService;
 
 
-    public UserMvcController(UserService userService, AuthenticationHelper authenticationHelper, MapperHelper mapperHelper) {
+    public UserMvcController(UserService userService, AuthenticationHelper authenticationHelper, MapperHelper mapperHelper, AvatarService avatarService) {
         this.userService = userService;
         this.authenticationHelper = authenticationHelper;
         this.mapperHelper = mapperHelper;
+        this.avatarService = avatarService;
     }
 
 
@@ -70,9 +74,8 @@ public class UserMvcController {
 
     @GetMapping("/edit")
     public String showEditUserPage(Model model, HttpSession session) {
-        User currentUser;
         try {
-            currentUser = authenticationHelper.tryGetUserFromSession(session);
+            User currentUser = authenticationHelper.tryGetUserFromSession(session);
             model.addAttribute("user", currentUser);
             return "EditUserView";
         } catch (AuthenticationException e) {
@@ -81,19 +84,33 @@ public class UserMvcController {
     }
 
     @PostMapping("/edit")
-    public String handleEditUser(@Valid @ModelAttribute("user") UserDto userToBeEdited,
+    public String handleEditUser(@RequestParam("avatar") MultipartFile avatarFile,
+                                 @Valid @ModelAttribute("user") UserDto userToBeEdited,
                                  BindingResult bindingResult, HttpSession session) {
         if (bindingResult.hasErrors()) {
             return "EditUserView";
         }
+
         try {
             User currentUser = authenticationHelper.tryGetUserFromSession(session);
             User updatedUser = mapperHelper.updateUserFromDto(userToBeEdited, currentUser.getId());
+            avatarService.uploadAvatar(currentUser, avatarFile);
             userService.update(currentUser, updatedUser);
             return "redirect:/ti";
         } catch (Exception e) {
             bindingResult.rejectValue("username", "error.user", e.getMessage());
             return "EditUserView";
+        }
+    }
+
+    @PostMapping("/edit/avatar")
+    public String handleEditAvatar(@RequestParam("avatar") MultipartFile avatarFile, HttpSession session) {
+        try {
+            User user = authenticationHelper.tryGetUserFromSession(session);
+            avatarService.uploadAvatar(user, avatarFile);
+            return "redirect:/ti/users/edit";
+        } catch (Exception e) {
+            return "redirect:/ti/users/edit";
         }
     }
 

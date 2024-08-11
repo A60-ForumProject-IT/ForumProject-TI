@@ -123,4 +123,11 @@ public class MapperHelper {
         commentDto.setContent(comment.getContent());
         return commentDto;
     }
+
+    public PostDto toPostDto(Post post) {
+        PostDto postDto = new PostDto();
+        postDto.setTitle(post.getTitle());
+        postDto.setContent(post.getContent());
+        return postDto;
+    }
 }

@@ -24,6 +24,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -120,6 +121,10 @@ public class PostMvcController {
                 currentUser = authenticationHelper.tryGetUserFromSession(session);
             }
 
+            if (post.getPostedBy().equals(currentUser)) {
+                model.addAttribute("isCreator", true);
+            }
+
             boolean hasLiked = currentUser != null && postService.hasUserLikedPost(post, currentUser);
             boolean hasDisliked = currentUser != null && postService.hasUserDislikedPost(post, currentUser);
 
@@ -168,7 +173,7 @@ public class PostMvcController {
             return "ErrorView";
         } catch (AuthenticationException e) {
             return "redirect:/ti/auth/login";
-        }  catch (DuplicateEntityException e) {
+        } catch (DuplicateEntityException e) {
             model.addAttribute("statusCode", HttpStatus.CONFLICT.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
@@ -288,7 +293,7 @@ public class PostMvcController {
     }
 
     @PostMapping("/posts/{postId}/like")
-    public String likePost(@PathVariable int postId,  Model model, HttpSession session) {
+    public String likePost(@PathVariable int postId, Model model, HttpSession session) {
         User user;
         try {
             user = authenticationHelper.tryGetUserFromSession(session);
@@ -313,7 +318,7 @@ public class PostMvcController {
     }
 
     @PostMapping("/posts/{postId}/dislike")
-    public String dislikePost(@PathVariable int postId,  Model model, HttpSession session) {
+    public String dislikePost(@PathVariable int postId, Model model, HttpSession session) {
         User user;
         try {
             user = authenticationHelper.tryGetUserFromSession(session);
@@ -339,7 +344,48 @@ public class PostMvcController {
 
     @GetMapping("/posts/{postId}/edit")
     public String editPost(@PathVariable int postId, Model model, HttpSession session) {
+        try {
+            authenticationHelper.tryGetUserFromSession(session);
+        } catch (AuthenticationException e) {
+            return "redirect:/ti/auth/login";
+        }
 
+        Post post = postService.getPostById(postId);
+        PostDto newPost = mapperHelper.toPostDto(post);
+        model.addAttribute("postToBeUpdated", newPost);
+        return "SinglePostView";
+    }
+
+    @PostMapping("/posts/{postId}/edit")
+    public String editPost(@PathVariable int postId,
+                           @ModelAttribute("postToBeUpdated") PostDto postDto,
+                           HttpSession session,
+                           BindingResult bindingResult,
+                           Model model) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetUserFromSession(session);
+        } catch (AuthenticationException e) {
+            return "redirect:/ti/auth/login";
+        }
+
+        if (bindingResult.hasErrors()) {
+            return "SinglePostView";
+        }
+
+        try {
+            Post post = mapperHelper.fromPostDto(postDto, user);
+            postService.updatePost(user, post);
+            return "redirect:/ti/forum/posts/" + postId;
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (DuplicateEntityException e) {
+            model.addAttribute("statusCode", HttpStatus.CONFLICT.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        }
     }
 
     private Map<Integer, Boolean> getEditPermissionsMap(User user, List<Comment> comments) {

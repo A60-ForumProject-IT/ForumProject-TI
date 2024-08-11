@@ -12,11 +12,11 @@
             <h3>
                 <a th:href="@{/ti}">Home</a>
                 <a th:href="@{/ti/forum/posts}">Posts</a>
-                <a  th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}">Logout</a>
-                <a  th:if="${isAuthenticated}" th:href="@{/ti/users/edit}">Edit User</a>
-                <a  th:if="${isAuthenticated && (isAdmin || isModerator)}" th:href="@{/ti/users/admin}">Admin Panel</a>
-                <a  th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}">Login</a>
-                <a  th:unless="${isAuthenticated}" th:href="@{/ti/auth/register}">Registration</a>
+                <a th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}">Logout</a>
+                <a th:if="${isAuthenticated}" th:href="@{/ti/users/edit}">Edit User</a>
+                <a th:if="${isAuthenticated && (isAdmin || isModerator)}" th:href="@{/ti/users/admin}">Admin Panel</a>
+                <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}">Login</a>
+                <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/register}">Registration</a>
             </h3>
         </div>
     </div>
@@ -26,14 +26,21 @@
         <h1 th:text="${post.title}">Post Title</h1>
         <h2 th:text="${post.content}">Post Content</h2>
 
-        <form th:if="${isAuthenticated}" th:action="@{/ti/forum/posts/{id}(id=${post.postId})}" th:object="${commentToAdd}" method="post">
+        <form th:if="${isAuthenticated}" th:action="@{/ti/forum/posts/{id}(id=${post.postId})}"
+              th:object="${commentToAdd}" method="post">
             <input type="text" th:field="*{content}" placeholder="Write a comment..."/>
             <label class="error" th:errors="*{content}">Name error placeholder</label>
 
             <button type="submit" class="btn-danger" th:text="#{post.reply-button}">Reply</button>
         </form>
-        <br/><br/>
-
+        <form th:if="${isAuthenticated} and !${hasLiked}"
+              th:action="@{/ti/forum/posts/{postId}/like(postId=${postToBeLiked.postId})}" method="post">
+            <button type="submit" class="btn-danger" th:text="#{post.like.button}">Like</button>
+        </form>
+        <form th:if="${isAuthenticated} and !${hasDisliked}"
+              th:action="@{/ti/forum/posts/{postId}/dislike(postId=${postToBeLiked.postId})}" method="post">
+            <button type="submit" class="btn-danger" th:text="#{post.dislike.button}">Dislike</button>
+        </form>
 
 
         <div th:if="${comments.isEmpty()}">
@@ -52,7 +59,8 @@
                 <form th:if="${editCommentId == comment.commentId}"
                       th:action="@{/ti/forum/posts/{postId}/comments/{commentId}(postId=${post.postId}, commentId=${comment.commentId})}"
                       th:object="${commentToUpdate}" method="post">
-                    <input type="text" th:field="*{content}" th:value="${commentToUpdate.content}" placeholder="Edit your comment..."/>
+                    <input type="text" th:field="*{content}" th:value="${commentToUpdate.content}"
+                           placeholder="Edit your comment..."/>
                     <button type="submit" class="btn-danger" th:text="#{comment.edit-button}">Edit Comment</button>
                 </form>
 
@@ -64,7 +72,8 @@
 
                 <form th:if="${isAuthenticated && (isAdmin || isModerator || editPermissions[comment.commentId])}"
                       th:action="@{/ti/forum/posts/__${post.postId}__/comments/__${comment.commentId}__/delete}"
-                      method="post" onsubmit="return confirm('Are you sure you want to delete this comment?');" style="display:inline;">
+                      method="post" onsubmit="return confirm('Are you sure you want to delete this comment?');"
+                      style="display:inline;">
                     <button type="submit" class="btn-danger" th:text="#{comment.delete-button}">Delete</button>
                 </form>
                 <br/><br/>

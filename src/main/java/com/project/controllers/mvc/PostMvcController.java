@@ -3,6 +3,7 @@ package com.project.controllers.mvc;
 import com.project.exceptions.AuthenticationException;
 import com.project.exceptions.DuplicateEntityException;
 import com.project.exceptions.EntityNotFoundException;
+import com.project.exceptions.UnauthorizedOperationException;
 import com.project.helpers.AuthenticationHelper;
 import com.project.helpers.MapperHelper;
 import com.project.models.*;
@@ -23,12 +24,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/ti/forum")
@@ -114,6 +112,19 @@ public class PostMvcController {
             model.addAttribute("commentToAdd", new CommentDto());
             model.addAttribute("comments", postComments);
             model.addAttribute("post", post);
+            model.addAttribute("postToBeLiked", post);
+            model.addAttribute("postToBeDisliked", post);
+
+            User currentUser = null;
+            if (session.getAttribute("currentUser") != null) {
+                currentUser = authenticationHelper.tryGetUserFromSession(session);
+            }
+
+            boolean hasLiked = currentUser != null && postService.hasUserLikedPost(post, currentUser);
+            boolean hasDisliked = currentUser != null && postService.hasUserDislikedPost(post, currentUser);
+
+            model.addAttribute("hasLiked", hasLiked);
+            model.addAttribute("hasDisliked", hasDisliked);
 
             if (editCommentId != null) {
                 Comment commentToEdit = commentService.getCommentById(editCommentId);
@@ -125,9 +136,8 @@ public class PostMvcController {
 
             model.addAttribute("editCommentId", editCommentId);
 
-            if (session.getAttribute("currentUser") != null) {
-                User user = authenticationHelper.tryGetUserFromSession(session);
-                model.addAttribute("editPermissions", getEditPermissionsMap(user, postComments));
+            if (currentUser != null) {
+                model.addAttribute("editPermissions", getEditPermissionsMap(currentUser, postComments));
             }
             return "SinglePostView";
         } catch (EntityNotFoundException e) {
@@ -237,15 +247,6 @@ public class PostMvcController {
 
     }
 
-    private Map<Integer, Boolean> getEditPermissionsMap(User user, List<Comment> comments) {
-        Map<Integer, Boolean> editPermissions = new HashMap<>();
-        for (Comment comment : comments) {
-            boolean canEdit = comment.getUserId().equals(user);
-            editPermissions.put(comment.getCommentId(), canEdit);
-        }
-        return editPermissions;
-    }
-
     @GetMapping("/posts/new")
     public String newPost(Model model, HttpSession session) {
 
@@ -285,9 +286,63 @@ public class PostMvcController {
             return "PostCreateView";
         }
     }
-//
-//    private boolean isUserAdminOrModerator(User user) {
-//        return user.getRole().equals(roleService.getRoleById(3)) ||
-//                user.getRole().equals(roleService.getRoleById(2));
-//    }
+
+    @PostMapping("/posts/{postId}/like")
+    public String likePost(@PathVariable int postId,  Model model, HttpSession session) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetUserFromSession(session);
+        } catch (AuthenticationException e) {
+            return "redirect:/ti/auth/login";
+        }
+
+        try {
+            Post post = postService.getPostById(postId);
+            model.addAttribute("postToBeLiked", post);
+            postService.likePost(post, user);
+            return "redirect:/ti/forum/posts/" + postId;
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        }
+    }
+
+    @PostMapping("/posts/{postId}/dislike")
+    public String dislikePost(@PathVariable int postId,  Model model, HttpSession session) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetUserFromSession(session);
+        } catch (AuthenticationException e) {
+            return "redirect:/ti/auth/login";
+        }
+
+        try {
+            Post post = postService.getPostById(postId);
+            model.addAttribute("postToBeDisliked", post);
+            postService.dislikePost(post, user);
+            return "redirect:/ti/forum/posts/" + postId;
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        }
+    }
+
+    private Map<Integer, Boolean> getEditPermissionsMap(User user, List<Comment> comments) {
+        Map<Integer, Boolean> editPermissions = new HashMap<>();
+        for (Comment comment : comments) {
+            boolean canEdit = comment.getUserId().equals(user);
+            editPermissions.put(comment.getCommentId(), canEdit);
+        }
+        return editPermissions;
+    }
 }

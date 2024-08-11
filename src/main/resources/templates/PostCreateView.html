@@ -22,7 +22,7 @@
     </div>
 </header>
 <h2>Create Post</h2>
-<form action="#" th:action="@{__${requestURI}__}" th:object="${newPost}" method="post">
+<form class="body-content" action="#" th:action="@{__${requestURI}__}" th:object="${newPost}" method="post">
     <label th:text="#{posts.label.title}">Title</label>
     <br/>
     <input type="text" th:field="*{title}"/>

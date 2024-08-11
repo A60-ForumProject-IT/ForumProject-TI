@@ -194,4 +194,12 @@ public class PostServiceImpl implements PostService {
     public List<Post> getAllUsersPosts(int userId, FilteredPostsOptions postFilterOptions) {
         return postRepository.getAllUsersPosts(userId, postFilterOptions);
     }
+
+    public boolean hasUserLikedPost(Post post, User user) {
+        return post.getUsersWhoLikedPost().contains(user); // Example logic
+    }
+
+    public boolean hasUserDislikedPost(Post post, User user) {
+        return post.getUsersWhoDislikedPost().contains(user); // Example logic
+    }
 }

@@ -38,4 +38,8 @@ public interface PostService {
     void deleteTagFromPost(User user, Post post, Tag tag);
 
     Post getPostByTitle(String title);
+
+    boolean hasUserLikedPost(Post post, User user);
+
+    boolean hasUserDislikedPost(Post post, User user);
 }

@@ -4,6 +4,7 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.project.models.Avatar;
 import com.project.models.User;
+import com.project.repositories.AvatarRepositoryImpl;
 import com.project.repositories.contracts.AvatarRepository;
 import com.project.repositories.contracts.UserRepository;
 import com.project.services.contracts.AvatarService;
@@ -30,16 +31,31 @@ public class AvatarServiceImpl implements AvatarService {
 
     @Override
     public Avatar uploadAvatar(User user, MultipartFile avatarFile) throws IOException {
-        Map<String, Object> uploadResult = cloudinary.uploader().upload(avatarFile.getBytes(), ObjectUtils.emptyMap());
-        String avatarUrl = uploadResult.get("secure_url").toString();
+        Avatar defaultAvatar = avatarRepository.getAvatarById(DEFAULT_AVATAR);
+        Avatar avatar;
+        if (user.getAvatar().equals(defaultAvatar)) {
+            Map<String, Object> uploadResult = cloudinary.uploader().upload(avatarFile.getBytes(), ObjectUtils.emptyMap());
+            String avatarUrl = uploadResult.get("secure_url").toString();
 
-        Avatar avatar = new Avatar();
-        avatar.setAvatar(avatarUrl);
-        avatarRepository.saveAvatar(avatar);
+            avatar = new Avatar();
+            avatar.setAvatar(avatarUrl);
+            avatarRepository.saveAvatar(avatar);
 
-        user.setAvatar(avatar);
-        userRepository.update(user);
+            user.setAvatar(avatar);
+            userRepository.update(user);
+        } else {
+            Avatar avatarToBeDeleted = user.getAvatar();
+            Map<String, Object> uploadResult = cloudinary.uploader().upload(avatarFile.getBytes(), ObjectUtils.emptyMap());
+            String avatarUrl = uploadResult.get("secure_url").toString();
 
+            avatar = new Avatar();
+            avatar.setAvatar(avatarUrl);
+            avatarRepository.saveAvatar(avatar);
+
+            user.setAvatar(avatar);
+            avatarRepository.deleteAvatar(avatarToBeDeleted);
+            userRepository.update(user);
+        }
         return avatar;
     }
 
@@ -54,7 +70,7 @@ public class AvatarServiceImpl implements AvatarService {
 
     @Override
     public Avatar initializeDefaultAvatar(User user) {
-        Avatar defaultAvatar = avatarRepository.getAvatarById(1);
+        Avatar defaultAvatar = avatarRepository.getAvatarById(DEFAULT_AVATAR);
         user.setAvatar(defaultAvatar);
         userRepository.update(user);
         return defaultAvatar;

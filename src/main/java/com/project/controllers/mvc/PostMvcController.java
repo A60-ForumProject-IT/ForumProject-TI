@@ -337,6 +337,11 @@ public class PostMvcController {
         }
     }
 
+    @GetMapping("/posts/{postId}/edit")
+    public String editPost(@PathVariable int postId, Model model, HttpSession session) {
+
+    }
+
     private Map<Integer, Boolean> getEditPermissionsMap(User user, List<Comment> comments) {
         Map<Integer, Boolean> editPermissions = new HashMap<>();
         for (Comment comment : comments) {

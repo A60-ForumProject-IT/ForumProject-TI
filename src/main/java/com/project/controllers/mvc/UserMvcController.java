@@ -110,7 +110,7 @@ public class UserMvcController {
         try {
             User user = authenticationHelper.tryGetUserFromSession(session);
             Avatar avatar = avatarService.uploadAvatar(user, avatarFile);
-            model.addAttribute("avatarUrl", "/images/" + avatar.getAvatar());
+            model.addAttribute("avatarUrl", avatar.getAvatar());
             return "redirect:/ti/users/edit";
         } catch (Exception e) {
             return "ErrorView";

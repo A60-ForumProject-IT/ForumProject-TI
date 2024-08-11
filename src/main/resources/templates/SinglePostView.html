@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="'Forum | ' + ${post.title}">Error!</title>
+    <title th:text="'Forum | ' + (${post?.title} ?: 'Error')">Error!</title>
     <link rel="stylesheet" href="../static/css/styles.css" th:href="@{/css/styles.css}">
 </head>
 <body>
@@ -26,19 +26,16 @@
         <h1 th:text="${post != null ? post.title : 'Post Title'}">Post Title</h1>
         <h2 th:text="${post != null ? post.content : 'Post Content'}">Post Content</h2>
 
-        <form th:if="${isAuthenticated && (editPostId != post.postId)}"
-              th:action="@{/ti/forum/posts/__${post.postId}__/edit}" method="get">
-            <input type="hidden" name="editPostId" th:value="${post.postId}"/>
-            <button type="submit" class="btn-danger">Edit</button>
+        <form th:if="${isAuthenticated} and ${isPostCreator} and ${editPostId != post.postId}"
+              th:action="@{/ti/forum/posts/{postId}/edit(postId=${post.postId})}" method="get">
+            <button type="submit" class="btn-danger">Edit Post</button>
         </form>
 
-        <form th:if="${isAuthenticated && editPostId == post.postId}"
-              th:action="@{/ti/forum/posts/__${post.postId}__/edit}"
+        <form th:if="${isAuthenticated} and ${isPostCreator} and ${editPostId == post.postId}"
+              th:action="@{/ti/forum/posts/{postId}/edit(postId=${post.postId})}"
               th:object="${postToBeUpdated}" method="post">
-            <input type="text" th:field="*{title}" th:value="${postToBeUpdated.title}"
-                   placeholder="Edit your title..."/>
-            <input type="text" th:field="*{content}" th:value="${postToBeUpdated.content}"
-                   placeholder="Edit your content..."/>
+            <input type="text" th:field="*{title}" placeholder="Edit your title..."/>
+            <input type="text" th:field="*{content}" placeholder="Edit your content..."/>
             <button type="submit" class="btn-danger">Save Changes</button>
         </form>
 

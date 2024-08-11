@@ -115,10 +115,14 @@ public class PostMvcController {
             model.addAttribute("post", post);
             model.addAttribute("postToBeLiked", post);
             model.addAttribute("postToBeDisliked", post);
+            model.addAttribute("editPostId", id);
 
             User currentUser = null;
+            boolean isPostCreator = false;
+
             if (session.getAttribute("currentUser") != null) {
                 currentUser = authenticationHelper.tryGetUserFromSession(session);
+                isPostCreator = isUserPostCreator(currentUser, post);
             }
 
             boolean hasLiked = currentUser != null && postService.hasUserLikedPost(post, currentUser);
@@ -126,6 +130,8 @@ public class PostMvcController {
 
             model.addAttribute("hasLiked", hasLiked);
             model.addAttribute("hasDisliked", hasDisliked);
+            model.addAttribute("isPostCreator", isPostCreator);
+
 
             PostDto postToBeUpdated = mapperHelper.toPostDto(post);
             model.addAttribute("postToBeUpdated", postToBeUpdated);
@@ -139,7 +145,7 @@ public class PostMvcController {
             }
 
             model.addAttribute("editCommentId", editCommentId);
-            model.addAttribute("editPostId", id);
+
 
             if (currentUser != null) {
                 model.addAttribute("editPermissions", getEditPermissionsMap(currentUser, postComments));
@@ -345,25 +351,24 @@ public class PostMvcController {
 
     @GetMapping("/posts/{postId}/edit")
     public String editPost(@PathVariable int postId, Model model, HttpSession session) {
-
         try {
             authenticationHelper.tryGetUserFromSession(session);
         } catch (AuthenticationException e) {
             return "redirect:/ti/auth/login";
         }
 
-        Post post;
         try {
-            post = postService.getPostById(postId);
+            Post post = postService.getPostById(postId);
+            model.addAttribute("post", post);
+            model.addAttribute("editPostId", postId);  // Set the editPostId to control the visibility
+            PostDto postDto = mapperHelper.toPostDto(post);
+            model.addAttribute("postToBeUpdated", postDto);
+            return "SinglePostView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         }
-
-        PostDto newPost = mapperHelper.toPostDto(post);
-        model.addAttribute("post", newPost);
-        return "SinglePostView";
     }
 
     @PostMapping("/posts/{postId}/edit")
@@ -373,6 +378,7 @@ public class PostMvcController {
                            HttpSession session,
                            Model model) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("commentToAdd", new CommentDto());
             return "SinglePostView";
         }
 
@@ -407,5 +413,9 @@ public class PostMvcController {
             editPermissions.put(comment.getCommentId(), canEdit);
         }
         return editPermissions;
+    }
+
+    private boolean isUserPostCreator(User user, Post post) {
+        return user.equals(post.getPostedBy());
     }
 }

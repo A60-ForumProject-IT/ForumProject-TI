@@ -6,21 +6,7 @@
     <link rel="stylesheet" href="../static/css/styles.css" th:href="@{/css/styles.css}">
 </head>
 <body>
-<header>
-    <div>
-        <div>
-            <h3>
-                <a th:href="@{/ti}">Home</a>
-                <a th:href="@{/ti/forum/posts}">Posts</a>
-                <a  th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}">Logout</a>
-                <a  th:if="${isAuthenticated}" th:href="@{/ti/users/edit}">Edit User</a>
-                <a  th:if="${isAuthenticated && isAdminOrModerator}" th:href="@{/ti/users/admin}">Admin Panel</a>
-                <a  th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}">Login</a>
-                <a  th:unless="${isAuthenticated}" th:href="@{/ti/auth/register}">Registration</a>
-            </h3>
-        </div>
-    </div>
-</header>
+<form th:replace="~{ForumFormFragment.html :: header}"></form>
 <h2>Login</h2>
 <form class="body-content" action="#" th:action="@{/ti/auth/login}" th:object="${login}" method="post">
     <label th:text="#{user.label.username}">Username</label>

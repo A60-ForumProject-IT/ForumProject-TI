@@ -6,6 +6,9 @@ body {
     color: #c5c8c6;
     margin: 0;
     padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 header {
@@ -36,12 +39,14 @@ header h3 a:hover {
 }
 
 .body-content {
+    flex: 1; /* Разтяга съдържанието, за да заема цялата налична височина */
     padding: 20px;
     max-width: 1200px;
     margin: 20px auto;
     background-color: #282b30;
     border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    width: 100%;
 }
 
 h1, h2, h3, h4 {
@@ -73,6 +78,9 @@ button:hover, input[type="submit"]:hover {
 }
 
 footer {
+    width: 100%;
+    max-width: 1200px; /* Същата ширина като на основния контейнер */
+    margin: 0 auto;
     background-color: #2c2f33;
     text-align: center;
     padding: 20px;
@@ -80,6 +88,10 @@ footer {
     border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
     border-top: 2px solid #50fa7b;
+    position: relative;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
 footer p {
@@ -169,6 +181,22 @@ input[type="text"]:focus, input[type="number"]:focus, select:focus {
     background-color: #ff79c6;
     color: #1d1f21;
     border-radius: 5px;
+}
+
+.button-create {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px/* Отстояние от последния пост */
+}
+
+.button-create a {
+    background-color: #50fa7b;
+    color: #1d1f21;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
 }
 
 /* Post styling */

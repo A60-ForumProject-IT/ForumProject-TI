@@ -9,28 +9,30 @@
 <form th:object="${postDto}" th:action="@{__${requestURI}__}" method="post">
 
     <textarea id="edit-post-title" th:field="*{title}"></textarea>
+    <label class="error form-error" th:errors="*{title}"></label>
     <textarea id="edit-post-content" th:field="*{content}"></textarea>
+    <label class="error form-error" th:errors="*{content}"></label>
 
     <input type="submit" value="Submit">
 </form>
 
 
-<!--<div th:each="tag : ${tagsInPost}"-->
-<!--     th:unless="${tagsInPost.isEmpty()}">-->
-<!--    <div>-->
-<!--        <p class="tagName"-->
-<!--           th:text="${'#'+ tag}">#SomeVeryLongWord</p>-->
-<!--    </div>-->
-<!--    <a href="#" th:href="@{__${requestURI}__/remove-tag/__${tag.getId()()}__}">Remove</a>-->
-<!--</div>-->
+<div th:each="tag : ${tagsInPost}"
+     th:unless="${tagsInPost.isEmpty()}">
+    <div>
+        <p class="tagName"
+           th:text="${'#'+ tag}">#SomeVeryLongWord</p>
+    </div>
+    <a href="#" th:href="@{__${requestURI}__/remove-tag/__${tag.getId()}__}">Remove</a>
+</div>
 
 
-<!--<form action="#" th:action="@{__${requestURI}__/add-tag}" th:object="${tagDto}"-->
-<!--      method="post">-->
-<!--    <input type="text" th:field="*{tagName}"-->
-<!--           placeholder="place your tag here">-->
-<!--    <input type="submit" value="Add Tag">-->
-<!--</form>-->
+<form action="#" th:action="@{__${requestURI}__/add-tag}" th:object="${tagDto}"
+      method="post">
+    <input type="text" th:field="*{tagName}" placeholder="place your tag here">
+    <label class="error form-error" th:errors="*{tagName}"></label>
+    <input type="submit" value="Add Tag">
+</form>
 
 
 </body>

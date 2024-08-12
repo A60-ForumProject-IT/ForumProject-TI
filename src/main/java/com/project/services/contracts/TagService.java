@@ -20,4 +20,6 @@ public interface TagService {
     void deleteTag(Tag tag, User user);
 
     Tag getTagByName(String name);
+
+    List<Tag> getAllTags();
 }

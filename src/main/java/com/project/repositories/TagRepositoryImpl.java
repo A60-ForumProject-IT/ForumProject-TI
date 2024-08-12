@@ -61,6 +61,14 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
+    public List<Tag> getAllTags() {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Tag> query = session.createQuery("FROM Tag", Tag.class);
+            return query.getResultList();
+        }
+    }
+
+    @Override
     public void createTag(Tag tag) {
         try(Session session = sessionFactory.openSession()){
             session.beginTransaction();

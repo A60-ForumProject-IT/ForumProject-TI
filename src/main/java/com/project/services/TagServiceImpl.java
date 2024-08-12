@@ -36,6 +36,11 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    public List<Tag> getAllTags() {
+        return tagRepository.getAllTags();
+    }
+
+    @Override
     public void createTag(Tag tag, User user) {
         PermissionHelper.isBlocked(user, USER_BLOCKED_ERROR);
         boolean duplicateExist = true;

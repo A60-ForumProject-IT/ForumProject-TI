@@ -157,9 +157,9 @@ public class PostServiceImpl implements PostService {
 
         Set<Tag> tagSet = post.getPostTags();
 
-        if (!tag.getTag().startsWith("#")) {
-            throw new ForbiddenTagException("Tag should start with #");
-        }
+//        if (!tag.getTag().startsWith("#")) {
+//            throw new ForbiddenTagException("Tag should start with #");
+//        }
 
         if (tagSet.contains(tag)) {
             throw new DuplicateEntityException("Tag", "name", tag.getTag());

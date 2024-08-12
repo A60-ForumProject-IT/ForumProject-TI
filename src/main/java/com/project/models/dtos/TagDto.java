@@ -12,7 +12,6 @@ import lombok.Setter;
 public class TagDto {
     @NotEmpty(message = "Tag name cannot be null!")
     @Size(min = 3, max = 20, message = "Tag name should be between 3 and 20 characters!")
-    @Pattern(regexp = "^#.*", message = "Tag name must start with '#'")
     private String tagName;
 
     public TagDto() {

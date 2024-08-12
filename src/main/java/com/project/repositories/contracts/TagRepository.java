@@ -12,6 +12,8 @@ public interface TagRepository {
 
     List<Post> getAllPostsWithSpecificTag(FilteredCommentsOptions filteredCommentsOptions);
 
+    List<Tag> getAllTags();
+
     void createTag(Tag tag);
 
     void updateTag(Tag tag);

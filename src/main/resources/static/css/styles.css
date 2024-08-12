@@ -97,6 +97,24 @@ h2 {
     height: 30px;
 }
 
+#like-dislike-button {
+    margin: 12px 6px 12px 0px;
+    padding-bottom: 0px;
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+    height: 30px;
+}
+
+#like-dislike-button1 {
+    margin: 12px 6px 12px 0px;
+    padding-bottom: 0px;
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+    height: 30px;
+}
+
 .button-create {
     text-align: center;
 }

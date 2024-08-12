@@ -1,9 +1,6 @@
 package com.project.controllers.mvc;
 
-import com.project.exceptions.AuthenticationException;
-import com.project.exceptions.DuplicateEntityException;
-import com.project.exceptions.EntityNotFoundException;
-import com.project.exceptions.UnauthorizedOperationException;
+import com.project.exceptions.*;
 import com.project.helpers.AuthenticationHelper;
 import com.project.helpers.MapperHelper;
 import com.project.models.*;
@@ -14,6 +11,7 @@ import com.project.models.dtos.TagDto;
 import com.project.services.contracts.CommentService;
 import com.project.services.contracts.PostService;
 import com.project.services.contracts.RoleService;
+import com.project.services.contracts.TagService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -34,14 +32,16 @@ public class PostMvcController {
     private final AuthenticationHelper authenticationHelper;
     private final CommentService commentService;
     private final RoleService roleService;
+    private final TagService tagService;
 
     @Autowired
-    public PostMvcController(MapperHelper mapperHelper, PostService postService, AuthenticationHelper authenticationHelper, CommentService commentService, RoleService roleService) {
+    public PostMvcController(MapperHelper mapperHelper, PostService postService, AuthenticationHelper authenticationHelper, CommentService commentService, RoleService roleService, TagService tagService) {
         this.mapperHelper = mapperHelper;
         this.postService = postService;
         this.authenticationHelper = authenticationHelper;
         this.commentService = commentService;
         this.roleService = roleService;
+        this.tagService = tagService;
     }
 
     @ModelAttribute("isAdmin")
@@ -53,6 +53,11 @@ public class PostMvcController {
             }
         }
         return false;
+    }
+
+    @ModelAttribute("tags")
+    public List<Tag> populateTags() {
+        return tagService.getAllTags();
     }
 
     @ModelAttribute("loggedUser")
@@ -407,4 +412,60 @@ public class PostMvcController {
         }
     }
 
+    @PostMapping("/posts/{postId}/edit/add-tag")
+    public String handleAddTagToPost(@PathVariable int postId,
+                                     @Valid @ModelAttribute("tagDto") TagDto tagDto,
+                                     BindingResult errors,
+                                     Model model,
+                                     HttpSession session) {
+        Post post = postService.getPostById(postId);
+        model.addAttribute("postDto", mapperHelper.toPostDto(post));
+        model.addAttribute("tagDto", tagDto);
+        model.addAttribute("postId", postId);
+        if (errors.hasErrors()) {
+            return "PostEditView";
+        }
+
+        try {
+            User loggedInUser = authenticationHelper.tryGetUserFromSession(session);
+            Tag tag = mapperHelper.fromTagDto(tagDto);
+            postService.addTagToPost(loggedInUser, post, tag);
+            return "redirect:/ti/forum/posts/" + postId + "/edit";
+        } catch (AuthenticationException e) {
+            return "redirect:/ti/auth/login";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (ForbiddenTagException e) {
+            errors.rejectValue("tagName", "invalid_tag_name", e.getMessage());
+            return "PostEditView";
+        }
+    }
+
+    @GetMapping("/posts/{postId}/edit/remove-tag/{tagId}")
+    public String handleRemoveTagFromPost(@PathVariable int postId,
+                                          @PathVariable int tagId,
+                                          Model model,
+                                          HttpSession httpSession) {
+        try {
+            User loggedUser = authenticationHelper.tryGetUserFromSession(httpSession);
+            Post postToBeEdited = postService.getPostById(postId);
+            Tag tagToBeRemoved = tagService.getTagById(tagId);
+            postService.deleteTagFromPost(loggedUser, postToBeEdited, tagToBeRemoved);
+            return "redirect:/ti/forum/posts/" + postId + "/edit";
+        } catch (AuthenticationException e) {
+            return "redirect:/ti/auth/login";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        }
+    }
 }

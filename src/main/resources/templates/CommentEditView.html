@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Forum | Add comment to post'">Add comment to post</title>
+    <link rel="stylesheet" href="../static/css/styles.css" th:href="@{/css/styles.css}">
+</head>
+<body>
+<form th:object="${commentDto}" th:action="@{__${requestURI}__}" method="post">
+
+    <textarea th:field="*{content}"></textarea>
+
+    <input type="submit" value="Submit">
+</form>
+</body>
+</html>

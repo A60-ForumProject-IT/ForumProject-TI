@@ -120,3 +120,15 @@ a.nav {
     font-size: 16px;
     padding: 5px 0;
 }
+
+.buttons-for-post-edit-delete-reply {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.buttons-for-post-edit-delete-reply form {
+    margin: 0;
+    display: inline-block;
+}

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Forum | ' + (${post?.title} ?: 'Error')">Error!</title>
+    <link rel="stylesheet" href="../static/css/styles.css" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header>
+    <div>
+        <div>
+            <h3>
+                <a th:href="@{/ti}">Home</a>
+                <a th:href="@{/ti/forum/posts}">Posts</a>
+                <a th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}">Logout</a>
+                <a th:if="${isAuthenticated}" th:href="@{/ti/users/edit}">Edit User</a>
+                <a th:if="${isAuthenticated && (isAdmin || isModerator)}" th:href="@{/ti/users/admin}">Admin Panel</a>
+                <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}">Login</a>
+                <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/register}">Registration</a>
+            </h3>
+        </div>
+    </div>
+</header>
+<div>
+    <div class="body-content">
+        <h1 th:text="${post != null ? post.title : 'Post Title'}">Post Title</h1>
+        <h2 th:text="${post != null ? post.content : 'Post Content'}">Post Content</h2>
+
+        <form th:if="${isAuthenticated} and ${isPostCreator} and ${editPostId != post.postId}"
+              th:action="@{/ti/forum/posts/{postId}/edit(postId=${post.postId})}" method="get">
+            <button type="submit" class="btn-danger">Edit Post</button>
+        </form>
+
+        <form th:if="${isAuthenticated} and ${isPostCreator} and ${editPostId == post.postId}"
+              th:action="@{/ti/forum/posts/{postId}/edit(postId=${post.postId})}"
+              th:object="${postToBeUpdated}" method="post">
+            <input type="text" th:field="*{title}" placeholder="Edit your title..."/>
+            <input type="text" th:field="*{content}" placeholder="Edit your content..."/>
+            <button type="submit" class="btn-danger">Save Changes</button>
+        </form>
+
+
+        <form th:if="${isAuthenticated} and !${showReplyField}" th:action="@{/ti/forum/posts/{id}(id=${post.postId})}" method="get">
+            <input type="hidden" name="reply" value="true"/>
+            <button type="submit" class="btn-danger" th:text="#{post.reply-button}">Reply</button>
+        </form>
+
+        <form th:if="${isAuthenticated} and ${showReplyField}" th:action="@{/ti/forum/posts/{id}(id=${post.postId})}"
+              th:object="${commentToAdd}" method="post">
+            <input type="text" th:field="*{content}" placeholder="Write a comment..."/>
+            <label class="error" th:errors="*{content}">Name error placeholder</label>
+            <button type="submit" class="btn-danger" th:text="#{post.reply-button}">Reply</button>
+        </form>
+
+        <form th:if="${isAuthenticated && isPostCreator}" th:action="@{/ti/forum/posts/{id}/tags(id=${post.postId})}"
+              th:object="${tagToAdd}" method="post">
+            <input type="text" th:field="*{tagName}" placeholder="Add a tag..."/>
+            <label class="error" th:errors="*{tagName}">Name error placeholder</label>
+
+            <button type="submit" class="btn-danger" th:text="#{tag.add-button}">Add Tag</button>
+        </form>
+
+        <form th:if="${isAuthenticated} and !${hasLiked}"
+              th:action="@{/ti/forum/posts/{postId}/like(postId=${postToBeLiked.postId})}" method="post">
+            <button type="submit" class="btn-danger" th:text="#{post.like.button}">Like</button>
+        </form>
+        <form th:if="${isAuthenticated} and !${hasDisliked}"
+              th:action="@{/ti/forum/posts/{postId}/dislike(postId=${postToBeLiked.postId})}" method="post">
+            <button type="submit" class="btn-danger" th:text="#{post.dislike.button}">Dislike</button>
+        </form>
+
+        <div th:if="${comments.isEmpty()}">
+            <h2 th:text="#{comments.title.empty}">No Comments</h2>
+        </div>
+
+        <div th:unless="${comments.isEmpty()}">
+            <div th:each="comment : ${comments}" th:value="${comment.commentId}">
+                <span th:text="'Comment: ' + ${comment.content}">Content</span>
+                <br/>
+                <span th:text="'Commented by: ' + ${comment.userId.username}">Username</span>
+                <br/>
+                <span th:text="'Commented on: ' + ${#temporals.format(comment.createdOn, 'dd-MMM-yyyy HH:mm')}">Created On</span>
+                <br/>
+
+                <form th:if="${editCommentId == comment.commentId}"
+                      th:action="@{/ti/forum/posts/{postId}/comments/{commentId}(postId=${post.postId}, commentId=${comment.commentId})}"
+                      th:object="${commentToUpdate}" method="post">
+                    <input type="text" th:field="*{content}" th:value="${commentToUpdate.content}"
+                           placeholder="Edit your comment..."/>
+                    <button type="submit" class="btn-danger" th:text="#{comment.edit-button}">Edit Comment</button>
+                </form>
+
+                <form th:if="${isAuthenticated && (editCommentId != comment.commentId) && editPermissions[comment.commentId]}"
+                      th:action="@{/ti/forum/posts/{postId}(postId=${post.postId})}" method="get">
+                    <input type="hidden" name="editCommentId" th:value="${comment.commentId}"/>
+                    <button type="submit" class="btn-danger" th:text="#{comment.edit-button}">Edit Comment</button>
+                </form>
+
+                <form th:if="${isAuthenticated && (isAdmin || isModerator || editPermissions[comment.commentId])}"
+                      th:action="@{/ti/forum/posts/__${post.postId}__/comments/__${comment.commentId}__/delete}"
+                      method="post" onsubmit="return confirm('Are you sure you want to delete this comment?');"
+                      style="display:inline;">
+                    <button type="submit" class="btn-danger" th:text="#{comment.delete-button}">Delete</button>
+                </form>
+                <br/><br/>
+            </div>
+        </div>
+
+        <form th:if="${isAuthenticated && (isAdmin || isModerator || isPostCreator )}" th:action="@{/ti/forum/posts/{id}/delete(id=${post.postId})}" method="post" onsubmit="return confirm('Are you sure you want to delete this beer?');" style="display:inline;">
+            <button type="submit" class="btn-danger" th:text="#{post.delete-button}">Delete</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

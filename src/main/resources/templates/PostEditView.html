@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Forum | Edit'">Edit Post</title>
+    <link rel="stylesheet" href="../static/css/styles.css" th:href="@{/css/styles.css}">
+</head>
+<body>
+<form th:object="${postDto}" th:action="@{__${requestURI}__}" method="post">
+
+    <textarea id="edit-post-title" th:field="*{title}"></textarea>
+    <textarea id="edit-post-content" th:field="*{content}"></textarea>
+
+    <input type="submit" value="Submit">
+</form>
+
+
+<!--<div th:each="tag : ${tagsInPost}"-->
+<!--     th:unless="${tagsInPost.isEmpty()}">-->
+<!--    <div>-->
+<!--        <p class="tagName"-->
+<!--           th:text="${'#'+ tag}">#SomeVeryLongWord</p>-->
+<!--    </div>-->
+<!--    <a href="#" th:href="@{__${requestURI}__/remove-tag/__${tag.getId()()}__}">Remove</a>-->
+<!--</div>-->
+
+
+<!--<form action="#" th:action="@{__${requestURI}__/add-tag}" th:object="${tagDto}"-->
+<!--      method="post">-->
+<!--    <input type="text" th:field="*{tagName}"-->
+<!--           placeholder="place your tag here">-->
+<!--    <input type="submit" value="Add Tag">-->
+<!--</form>-->
+
+
+</body>
+</html>

@@ -14,7 +14,7 @@
                 <a th:href="@{/ti/forum/posts}">Posts</a>
                 <a th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}">Logout</a>
                 <a th:if="${isAuthenticated}" th:href="@{/ti/users/edit}">Edit User</a>
-                <a th:if="${isAuthenticated && isAdminOrModerator}" th:href="@{/ti/users/admin}">Admin Panel</a>
+                <a th:if="${isAuthenticated && isAdmin}" th:href="@{/ti/users/admin}">Admin Panel</a>
                 <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}">Login</a>
                 <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/register}">Registration</a>
             </h3>
@@ -57,6 +57,19 @@
             <button type="submit">Save</button>
         </div>
     </form>
+
+    <div th:if="${isAdmin}">
+        <h3>Add Phone Number</h3>
+        <form th:action="@{/ti/users/admin/{id}/phone(id=${userId})}" method="post">
+            <div>
+                <label for="phoneNumber">Phone Number:</label>
+                <input type="text" id="phoneNumber" name="phoneNumber" required/>
+            </div>
+            <div>
+                <button type="submit">Add Phone</button>
+            </div>
+        </form>
+    </div>
 </div>
 </body>
 </html>

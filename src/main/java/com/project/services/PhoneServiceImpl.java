@@ -33,7 +33,7 @@ public class PhoneServiceImpl implements PhoneService {
         if (duplicateExist) {
             throw new DuplicateEntityException("Phone", "number", phoneNumber.getPhoneNumber());
         }
-        phoneNumber.setUserId(userToAddPhone);
+        phoneNumber.setUser(userToAddPhone);
         phoneRepository.addPhoneToAdmin(phoneNumber);
     }
 }

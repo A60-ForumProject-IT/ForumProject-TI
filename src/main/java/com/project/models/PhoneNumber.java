@@ -23,9 +23,10 @@ public class PhoneNumber {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
 
     public PhoneNumber() {}
 

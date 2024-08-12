@@ -46,8 +46,16 @@
                     <label>Role:</label>
                     <span th:text="${user.role.name}"></span>
                 </div>
+                <div th:if="${user.role.roleId == 3}">
+                    <label>Phones:</label>
+                    <div class="phone-numbers-container">
+                        <div th:each="phone : ${user.phoneNumbers}" class="phone-number">
+                            <span th:text="${phone.phoneNumber}"></span>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-        </div>
     </div>
 
     <div class="body-content">
@@ -57,22 +65,26 @@
         </form>
         <br/>
 
-        <form th:unless="*{user.isBlocked()}" th:action="@{/ti/users/admin/users/{id}/block(id=${user.id})}" method="post">
+        <form th:unless="*{user.isBlocked()}" th:action="@{/ti/users/admin/users/{id}/block(id=${user.id})}"
+              method="post">
             <button type="submit">Block User</button>
         </form>
         <br/>
 
-        <form th:if="*{user.isBlocked()}" th:action="@{/ti/users/admin/users/{id}/unblock(id=${user.id})}" method="post">
+        <form th:if="*{user.isBlocked()}" th:action="@{/ti/users/admin/users/{id}/unblock(id=${user.id})}"
+              method="post">
             <button type="submit">Unblock User</button>
             <br/>
         </form>
 
-        <form th:if="*{user.getRole().roleId == 1}" th:action="@{/ti/users/admin/users/{id}/promote(id=${user.id})}" method="post">
+        <form th:if="*{user.getRole().roleId == 1}" th:action="@{/ti/users/admin/users/{id}/promote(id=${user.id})}"
+              method="post">
             <button type="submit">Make moderator</button>
             <br/>
         </form>
 
-        <form th:if="*{user.getRole().roleId == 2}" th:action="@{/ti/users/admin/users/{id}/demote(id=${user.id})}" method="post">
+        <form th:if="*{user.getRole().roleId == 2}" th:action="@{/ti/users/admin/users/{id}/demote(id=${user.id})}"
+              method="post">
             <button type="submit">Demote moderator</button>
         </form>
         <br/>

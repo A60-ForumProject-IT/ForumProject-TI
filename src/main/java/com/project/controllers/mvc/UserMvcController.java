@@ -1,16 +1,20 @@
 package com.project.controllers.mvc;
 
 import com.project.exceptions.AuthenticationException;
+import com.project.exceptions.DuplicateEntityException;
 import com.project.exceptions.EntityNotFoundException;
 import com.project.exceptions.UnauthorizedOperationException;
 import com.project.helpers.AuthenticationHelper;
 import com.project.helpers.MapperHelper;
 import com.project.models.Avatar;
 import com.project.models.FilteredUsersOptions;
+import com.project.models.PhoneNumber;
 import com.project.models.User;
 import com.project.models.dtos.FilterUserDto;
+import com.project.models.dtos.PhoneNumberDto;
 import com.project.models.dtos.UserDto;
 import com.project.services.contracts.AvatarService;
+import com.project.services.contracts.PhoneService;
 import com.project.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -34,21 +38,23 @@ public class UserMvcController {
     private final AuthenticationHelper authenticationHelper;
     private final MapperHelper mapperHelper;
     private final AvatarService avatarService;
+    private final PhoneService phoneService;
 
 
-    public UserMvcController(UserService userService, AuthenticationHelper authenticationHelper, MapperHelper mapperHelper, AvatarService avatarService) {
+    public UserMvcController(UserService userService, AuthenticationHelper authenticationHelper, MapperHelper mapperHelper, AvatarService avatarService, PhoneService phoneService) {
         this.userService = userService;
         this.authenticationHelper = authenticationHelper;
         this.mapperHelper = mapperHelper;
         this.avatarService = avatarService;
+        this.phoneService = phoneService;
     }
 
 
-    @ModelAttribute("isAdminOrModerator")
+    @ModelAttribute("isAdmin")
     public boolean populateIsAdmin(HttpSession session) {
         if (session.getAttribute("currentUser") != null) {
             User user = authenticationHelper.tryGetUserFromSession(session);
-            if (user.getRole().getRoleId() == 2 || user.getRole().getRoleId() == 3) {
+            if ( user.getRole().getRoleId() == 3) {
                 return true;
             } else {
                 return false;
@@ -56,6 +62,7 @@ public class UserMvcController {
         }
         return false;
     }
+
 
     @ModelAttribute("isBlocked")
     public boolean populateIsBlocked(HttpSession session) {
@@ -70,6 +77,8 @@ public class UserMvcController {
         return false;
     }
 
+
+
     @ModelAttribute("isAuthenticated")
     public boolean populateIsAuthenticated(HttpSession session) {
         return session.getAttribute("currentUser") != null;
@@ -80,6 +89,8 @@ public class UserMvcController {
         try {
             User currentUser = authenticationHelper.tryGetUserFromSession(session);
             model.addAttribute("user", currentUser);
+            model.addAttribute("userId", currentUser.getId());
+            model.addAttribute("isAdmin", currentUser.getRole().getRoleId() == 3);
             return "EditUserView";
         } catch (AuthenticationException e) {
             return "redirect:/ti/auth/login";
@@ -88,8 +99,8 @@ public class UserMvcController {
 
     @PostMapping("/edit")
     public String handleEditUser(
-                                 @Valid @ModelAttribute("user") UserDto userToBeEdited,
-                                 BindingResult bindingResult, HttpSession session) {
+            @Valid @ModelAttribute("user") UserDto userToBeEdited,
+            BindingResult bindingResult, HttpSession session) {
         if (bindingResult.hasErrors()) {
             return "EditUserView";
         }
@@ -144,7 +155,7 @@ public class UserMvcController {
         try {
             User user = authenticationHelper.tryGetUserFromSession(session);
 
-            if (user.getRole().getRoleId() == 1){
+            if (user.getRole().getRoleId() == 1) {
                 model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
                 model.addAttribute("error", YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE);
                 return "ErrorView";
@@ -181,6 +192,8 @@ public class UserMvcController {
             User user = authenticationHelper.tryGetUserFromSession(session);
             if (user.getRole().getRoleId() == 3) {
                 User userToDisplay = userService.getUserById(user, id);
+                System.out.println("User ID: " + userToDisplay.getId());
+                System.out.println("Phone Numbers: " + userToDisplay.getPhoneNumbers());
                 model.addAttribute("user", userToDisplay);
                 return "UserDetailsView";
             }
@@ -330,6 +343,37 @@ public class UserMvcController {
         } catch (AuthenticationException e) {
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
             model.addAttribute("error", YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE);
+            return "ErrorView";
+        }
+    }
+
+    @PostMapping("/admin/{id}/phone")
+    public String addPhone(@PathVariable int id, @ModelAttribute @Valid  PhoneNumberDto phoneNumberDto, Model model, HttpSession session) {
+        try {
+            User user = authenticationHelper.tryGetUserFromSession(session);
+            PhoneNumber phoneNumber = mapperHelper.getFromPhoneDto(phoneNumberDto);
+            if (user.getRole().getRoleId() == 3) {
+                phoneService.addPhoneToAnAdmin(user, phoneNumber);
+                return "redirect:/ti/users/admin/users/" + id;
+            }
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE);
+            return "ErrorView";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (AuthenticationException e) {
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE);
+            return "ErrorView";
+        } catch (DuplicateEntityException e) {
+            model.addAttribute("statusCode", HttpStatus.CONFLICT.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
             return "ErrorView";
         }
     }

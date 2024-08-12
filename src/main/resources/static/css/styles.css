@@ -108,3 +108,15 @@ a.nav {
 .label-error {
     color: red
 }
+
+.phone-numbers-container {
+    text-align: center; /* Center the text */
+    margin-top: 10px;
+}
+
+.phone-number {
+    display: block;
+    margin: 0 auto;
+    font-size: 16px;
+    padding: 5px 0;
+}

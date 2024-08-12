@@ -377,4 +377,31 @@ public class UserMvcController {
             return "ErrorView";
         }
     }
+
+    @PostMapping("/admin/{id}/phone/{phoneId}/remove")
+    public String removePhone(@PathVariable int id, @PathVariable int phoneId,
+                              Model model, HttpSession session) {
+        try {
+            User user = authenticationHelper.tryGetUserFromSession(session);
+            if (user.getRole().getRoleId() == 3) {
+                phoneService.removePhoneFromAdmin(user, phoneId);
+                return "redirect:/ti/users/admin/users/" + id;
+            }
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE);
+            return "ErrorView";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (AuthenticationException e) {
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE);
+            return "ErrorView";
+        }
+    }
 }

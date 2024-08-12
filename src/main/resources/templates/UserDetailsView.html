@@ -51,6 +51,9 @@
                     <div class="phone-numbers-container">
                         <div th:each="phone : ${user.phoneNumbers}" class="phone-number">
                             <span th:text="${phone.phoneNumber}"></span>
+                            <form th:action="@{/ti/users/admin/{id}/phone/{phoneId}/remove(id=${user.id}, phoneId=${phone.id})}" method="post" style="display:inline;">
+                                <button type="submit">Delete</button>
+                            </form>
                         </div>
                     </div>
                 </div>

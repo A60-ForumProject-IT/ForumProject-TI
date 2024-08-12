@@ -2,6 +2,7 @@ package com.project.services;
 
 import com.project.exceptions.DuplicateEntityException;
 import com.project.exceptions.EntityNotFoundException;
+import com.project.exceptions.ForbiddenTagException;
 import com.project.exceptions.UnauthorizedOperationException;
 import com.project.helpers.PermissionHelper;
 import com.project.models.FilteredPostsOptions;
@@ -156,6 +157,10 @@ public class PostServiceImpl implements PostService {
 
         Set<Tag> tagSet = post.getPostTags();
 
+        if (!tag.getTag().startsWith("#")) {
+            throw new ForbiddenTagException("Tag should start with #");
+        }
+
         if (tagSet.contains(tag)) {
             throw new DuplicateEntityException("Tag", "name", tag.getTag());
         }
@@ -167,6 +172,7 @@ public class PostServiceImpl implements PostService {
             tagRepository.createTag(tag);
             existingTag = tag;
         }
+
         tagSet.add(existingTag);
         postRepository.addTagToPost(post);
     }

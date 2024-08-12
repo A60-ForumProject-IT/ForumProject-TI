@@ -1,15 +1,13 @@
 package com.project.controllers.mvc;
 
-import com.project.exceptions.AuthenticationException;
-import com.project.exceptions.DuplicateEntityException;
-import com.project.exceptions.EntityNotFoundException;
-import com.project.exceptions.UnauthorizedOperationException;
+import com.project.exceptions.*;
 import com.project.helpers.AuthenticationHelper;
 import com.project.helpers.MapperHelper;
 import com.project.models.*;
 import com.project.models.dtos.CommentDto;
 import com.project.models.dtos.FilterPostDto;
 import com.project.models.dtos.PostDto;
+import com.project.models.dtos.TagDto;
 import com.project.services.RoleServiceImpl;
 import com.project.services.contracts.CommentService;
 import com.project.services.contracts.PostService;
@@ -105,17 +103,20 @@ public class PostMvcController {
     @GetMapping("/posts/{id}")
     public String showPost(@PathVariable int id, Model model,
                            @RequestParam(value = "editCommentId", required = false) Integer editCommentId,
+                           @RequestParam(value = "reply", required = false) boolean showReplyField,
                            FilteredCommentsOptions filteredCommentsOptions, HttpSession session) {
         try {
             Post post = postService.getPostById(id);
             List<Comment> postComments = commentService.getAllCommentsFromPost(post, filteredCommentsOptions);
 
             model.addAttribute("commentToAdd", new CommentDto());
+            model.addAttribute("tagToAdd", new TagDto());
             model.addAttribute("comments", postComments);
             model.addAttribute("post", post);
             model.addAttribute("postToBeLiked", post);
             model.addAttribute("postToBeDisliked", post);
             model.addAttribute("editPostId", id);
+            model.addAttribute("showReplyField", showReplyField);
 
             User currentUser = null;
             boolean isPostCreator = false;
@@ -195,6 +196,9 @@ public class PostMvcController {
             return "redirect:/ti/auth/login";
         }
 
+        Post post = postService.getPostById(postId);
+        model.addAttribute("post", post);
+
         Comment comment = commentService.getCommentById(commentId);
         CommentDto newComment = mapperHelper.toCommentDto(comment);
         model.addAttribute("comment", newComment);
@@ -205,9 +209,12 @@ public class PostMvcController {
     public String editComment(@PathVariable int postId,
                               @PathVariable int commentId,
                               @Valid @ModelAttribute("commentToUpdate") CommentDto commentDto,
-                              HttpSession session,
                               BindingResult bindingResult,
+                              HttpSession session,
                               Model model) {
+        if (bindingResult.hasErrors()) {
+            return "SinglePostView";
+        }
         User user;
         try {
             user = authenticationHelper.tryGetUserFromSession(session);
@@ -215,9 +222,6 @@ public class PostMvcController {
             return "redirect:/ti/auth/login";
         }
 
-        if (bindingResult.hasErrors()) {
-            return "SinglePostView";
-        }
 
         try {
             Comment comment = mapperHelper.fromCommentDtoToUpdate(commentDto, commentId);
@@ -360,7 +364,7 @@ public class PostMvcController {
         try {
             Post post = postService.getPostById(postId);
             model.addAttribute("post", post);
-            model.addAttribute("editPostId", postId);  // Set the editPostId to control the visibility
+            model.addAttribute("editPostId", postId);
             PostDto postDto = mapperHelper.toPostDto(post);
             model.addAttribute("postToBeUpdated", postDto);
             return "SinglePostView";
@@ -426,6 +430,40 @@ public class PostMvcController {
         }
     }
 
+    @PostMapping("/posts/{id}/tags")
+    public String addTag(@Valid @ModelAttribute("tagToAdd") TagDto tagDto,
+                         BindingResult bindingResult,
+                         @PathVariable int id,
+                         Model model,
+                         HttpSession session) {
+        if (bindingResult.hasErrors()) {
+            Post post = postService.getPostById(id);
+            model.addAttribute("post", post);
+            return "SinglePostView";
+        }
+
+        try {
+            User user = authenticationHelper.tryGetUserFromSession(session);
+            Post post = postService.getPostById(id);
+            Tag tag = mapperHelper.fromTagDto(tagDto);
+            postService.addTagToPost(user, post, tag);
+            return "redirect:/ti/forum/posts";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (AuthenticationException e) {
+            return "redirect:/ti/auth/login";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (ForbiddenTagException e) {
+            bindingResult.rejectValue("tagName", "ForbiddenTagException", e.getMessage());
+            return "SinglePostView";
+        }
+    }
+
     private Map<Integer, Boolean> getEditPermissionsMap(User user, List<Comment> comments) {
         Map<Integer, Boolean> editPermissions = new HashMap<>();
         for (Comment comment : comments) {
@@ -438,5 +476,4 @@ public class PostMvcController {
     private boolean isUserPostCreator(User user, Post post) {
         return user.equals(post.getPostedBy());
     }
-
 }

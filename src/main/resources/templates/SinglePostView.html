@@ -39,13 +39,34 @@
             <button type="submit" class="btn-danger">Save Changes</button>
         </form>
 
-        <form th:if="${isAuthenticated}" th:action="@{/ti/forum/posts/{id}(id=${post.postId})}"
+<!--        <form th:if="${isAuthenticated}" th:action="@{/ti/forum/posts/{id}(id=${post.postId})}"-->
+<!--              th:object="${commentToAdd}" method="post">-->
+<!--            <input type="text" th:field="*{content}" placeholder="Write a comment..."/>-->
+<!--            <label class="error" th:errors="*{content}">Name error placeholder</label>-->
+
+<!--            <button type="submit" class="btn-danger" th:text="#{post.reply-button}">Reply</button>-->
+<!--        </form>-->
+        <form th:if="${isAuthenticated} and !${showReplyField}" th:action="@{/ti/forum/posts/{id}(id=${post.postId})}" method="get">
+            <input type="hidden" name="reply" value="true"/>
+            <button type="submit" class="btn-danger" th:text="#{post.reply-button}">Reply</button>
+        </form>
+
+        <!-- Form to add a new comment, shown only when showReplyField is true -->
+        <form th:if="${isAuthenticated} and ${showReplyField}" th:action="@{/ti/forum/posts/{id}(id=${post.postId})}"
               th:object="${commentToAdd}" method="post">
             <input type="text" th:field="*{content}" placeholder="Write a comment..."/>
             <label class="error" th:errors="*{content}">Name error placeholder</label>
-
             <button type="submit" class="btn-danger" th:text="#{post.reply-button}">Reply</button>
         </form>
+
+        <form th:if="${isAuthenticated && isPostCreator}" th:action="@{/ti/forum/posts/{id}/tags(id=${post.postId})}"
+              th:object="${tagToAdd}" method="post">
+            <input type="text" th:field="*{tagName}" placeholder="Add a tag..."/>
+            <label class="error" th:errors="*{tagName}">Name error placeholder</label>
+
+            <button type="submit" class="btn-danger" th:text="#{tag.add-button}">Add Tag</button>
+        </form>
+
         <form th:if="${isAuthenticated} and !${hasLiked}"
               th:action="@{/ti/forum/posts/{postId}/like(postId=${postToBeLiked.postId})}" method="post">
             <button type="submit" class="btn-danger" th:text="#{post.like.button}">Like</button>

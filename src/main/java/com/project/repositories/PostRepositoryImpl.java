@@ -49,9 +49,9 @@ public class PostRepositoryImpl implements PostRepository {
     public List<PostDtoTop> getMostLikedPosts() {
         try(Session session = sessionFactory.openSession()) {
             String hql = """
-                    SELECT NEW com.project.models.dtos.PostDtoTop(p.title, p.content, p.createdOn, p.likes, p.dislikes, COUNT(c)) \
-                    FROM Post p JOIN p.comments c GROUP BY p.title, p.content, p.createdOn, p.likes, p.dislikes \
-                    ORDER BY p.likes DESC LIMIT 10""";
+            SELECT NEW com.project.models.dtos.PostDtoTop(p.title, p.content, p.createdOn, p.likes, p.dislikes, CAST(COUNT(c) AS Long)) \
+            FROM Post p JOIN p.comments c GROUP BY p.title, p.content, p.createdOn, p.likes, p.dislikes \
+            ORDER BY p.likes DESC LIMIT 10""";
             Query<PostDtoTop> query = session.createQuery(hql, PostDtoTop.class);
 
             return query.list();
@@ -62,7 +62,7 @@ public class PostRepositoryImpl implements PostRepository {
     public List<PostDtoTop> getMostCommentedPosts() {
         try(Session session = sessionFactory.openSession()) {
             String hql = """
-                    SELECT NEW com.project.models.dtos.PostDtoTop(p.title, p.content, p.createdOn, p.likes, p.dislikes, COUNT(c)) \
+                    SELECT NEW com.project.models.dtos.PostDtoTop(p.title, p.content, p.createdOn, p.likes, p.dislikes, CAST(COUNT(c) AS Long)) \
                     FROM Post p JOIN p.comments c GROUP BY p.title, p.content, p.createdOn, p.likes, p.dislikes \
                     ORDER BY COUNT(c) DESC LIMIT 10""";
             Query<PostDtoTop> query = session.createQuery(hql, PostDtoTop.class);
@@ -75,7 +75,7 @@ public class PostRepositoryImpl implements PostRepository {
     public List<PostDtoTop> getMostRecentPosts() {
         try (Session session = sessionFactory.openSession()) {
             String hql = """
-                    SELECT NEW com.project.models.dtos.PostDtoTop(p.title, p.content, p.createdOn, p.likes, p.dislikes, COUNT(c)) \
+                    SELECT NEW com.project.models.dtos.PostDtoTop(p.title, p.content, p.createdOn, p.likes, p.dislikes, CAST(COUNT(c) AS Long)) \
                     FROM Post p JOIN p.comments c GROUP BY p.title, p.content, p.createdOn, p.likes, p.dislikes \
                     ORDER BY p.createdOn DESC LIMIT 10""";
             Query<PostDtoTop> query = session.createQuery(hql, PostDtoTop.class);

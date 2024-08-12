@@ -55,11 +55,11 @@ public class User implements Comparable<User> {
     private List<Comment> comments;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "usersWhoLikedPost", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "usersWhoLikedPost", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Post> likedPosts;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "usersWhoDislikedPost", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "usersWhoDislikedPost", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Post> dislikedPosts;
 
     @JsonIgnore

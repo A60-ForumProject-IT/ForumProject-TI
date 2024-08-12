@@ -406,6 +406,26 @@ public class PostMvcController {
 
     }
 
+    @PostMapping("/posts/{postId}/delete")
+    public String deletePost(@PathVariable int postId, Model model, HttpSession session) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetUserFromSession(session);
+        } catch (AuthenticationException e) {
+            return "redirect:/ti/auth/login";
+        }
+
+        try {
+            Post post = postService.getPostById(postId);
+            postService.deletePost(user, post);
+            return "redirect:/ti/forum/posts";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        }
+    }
+
     private Map<Integer, Boolean> getEditPermissionsMap(User user, List<Comment> comments) {
         Map<Integer, Boolean> editPermissions = new HashMap<>();
         for (Comment comment : comments) {
@@ -418,4 +438,5 @@ public class PostMvcController {
     private boolean isUserPostCreator(User user, Post post) {
         return user.equals(post.getPostedBy());
     }
+
 }

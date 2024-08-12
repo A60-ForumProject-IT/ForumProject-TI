@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -69,6 +70,12 @@ public class Post implements Comparable<Post> {
     private Set<Tag> postTags;
 
     public Post() {
+    }
+
+    public String getFormattedTags() {
+        return postTags.stream()
+                .map(Tag::toString)
+                .collect(Collectors.joining("<br>"));
     }
 
     @Override

@@ -39,19 +39,12 @@
             <button type="submit" class="btn-danger">Save Changes</button>
         </form>
 
-<!--        <form th:if="${isAuthenticated}" th:action="@{/ti/forum/posts/{id}(id=${post.postId})}"-->
-<!--              th:object="${commentToAdd}" method="post">-->
-<!--            <input type="text" th:field="*{content}" placeholder="Write a comment..."/>-->
-<!--            <label class="error" th:errors="*{content}">Name error placeholder</label>-->
 
-<!--            <button type="submit" class="btn-danger" th:text="#{post.reply-button}">Reply</button>-->
-<!--        </form>-->
         <form th:if="${isAuthenticated} and !${showReplyField}" th:action="@{/ti/forum/posts/{id}(id=${post.postId})}" method="get">
             <input type="hidden" name="reply" value="true"/>
             <button type="submit" class="btn-danger" th:text="#{post.reply-button}">Reply</button>
         </form>
 
-        <!-- Form to add a new comment, shown only when showReplyField is true -->
         <form th:if="${isAuthenticated} and ${showReplyField}" th:action="@{/ti/forum/posts/{id}(id=${post.postId})}"
               th:object="${commentToAdd}" method="post">
             <input type="text" th:field="*{content}" placeholder="Write a comment..."/>

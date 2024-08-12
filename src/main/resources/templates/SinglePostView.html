@@ -4,94 +4,120 @@
     <meta charset="UTF-8">
     <title th:text="'Forum | ' + (${post?.title} ?: 'Error')">Error!</title>
     <link rel="stylesheet" href="../static/css/styles.css" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
 <header>
-    <div>
-        <div>
-            <h3>
-                <a th:href="@{/ti}">Home</a>
-                <a th:href="@{/ti/forum/posts}">Posts</a>
-                <a th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}">Logout</a>
-                <a th:if="${isAuthenticated}" th:href="@{/ti/users/edit}">Edit User</a>
-                <a th:if="${isAuthenticated && (isAdmin || isModerator)}" th:href="@{/ti/users/admin}">Admin Panel</a>
-                <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}">Login</a>
-                <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/register}">Registration</a>
-            </h3>
+    <div class="header-container">
+        <div class="logo-container">
+            <h1>TI Logo</h1>
         </div>
+        <nav class="navigation">
+            <div class="nav-links-center">
+                <a th:href="@{/ti}">Home</a>
+                <a th:href="@{/ti/about}">About</a>
+                <a th:href="@{/ti/forum/posts}">Forum Posts</a>
+                <a th:href="@{/ti/users/edit}">Edit User</a>
+                <a th:href="@{/ti/users/admin}">Admin Panel</a>
+            </div>
+            <div class="nav-links-right">
+                <a th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+                <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+                <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/register}">
+                    <i class="fas fa-user-plus"></i> Registration
+                </a>
+            </div>
+        </nav>
     </div>
 </header>
 
-<div>
-    <div class="body-content">
-        <h1 th:text="${post != null ? post.title : 'Post Title'}">Post Title</h1>
-        <h2 th:text="${post != null ? post.content : 'Post Content'}">Post Content</h2>
+<div class="body-content">
+    <div class="single-post-container">
+        <h1 class="post-title" th:text="${post != null ? post.title : 'Post Title'}">Post Title</h1>
+        <h2 class="post-content" th:text="${post != null ? post.content : 'Post Content'}">Post Content</h2>
+
+        <div class="post-actions">
+            <div class="post-left-actions">
+                <form action="#" th:unless="${isBlocked}"
+                      th:action="@{/ti/forum/posts/__${post.getPostId()}__/comment}"
+                      method="get">
+                    <input class="btn-danger" type="submit" value="Reply">
+                </form>
+            </div>
+
+            <div class="post-right-actions">
+                <div class="like-dislike-buttons">
+                    <a id="like-button"
+                       th:if="${loggedInUser.getId() != post.getPostedBy().getId()}"
+                       th:href="@{__${requestURI}__/like}">
+                        <i class="fa fa-thumbs-up"></i>
+                    </a>
+                    <span th:text="${post.getLikes()}">4</span>
+
+                    <a id="dislike-button"
+                       th:if="${loggedInUser.getId() != post.getPostedBy().getId()}"
+                       th:href="@{__${requestURI}__/dislike}">
+                        <i class="fa fa-thumbs-down"></i>
+                    </a>
+                    <span th:text="${post.getDislikes()}">3</span>
+                </div>
+
+                <div class="edit-delete-buttons">
+                    <form th:if="${loggedInUser.getId() == post.getPostedBy().getId()} OR ${isAdmin}" th:unless="${isBlocked}"
+                          action="#"
+                          th:action="@{__${requestURI}__/edit}" method="get">
+                        <input class="btn-danger" type="submit" value="Edit Post">
+                    </form>
+
+                    <form th:if="${loggedInUser.getId() == post.getPostedBy().getId()} OR ${isAdmin}" action="#"
+                          th:action="@{__${requestURI}__/delete}" method="get">
+                        <input class="btn-danger" type="submit" value="Delete Post">
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div>
+    <div class="comments-section">
         <div th:if="${relatedComments.isEmpty()}">
             <h2 th:text="#{comments.title.empty}">No Comments</h2>
         </div>
 
-        <div class="body-content" th:unless="${relatedComments.isEmpty()}">
-            <div th:each="comment : ${relatedComments}" th:value="${comment.commentId}">
-                <span th:text="'Comment: ' + ${comment.content}">Content</span>
-                <br/>
-                <span th:text="'Commented by: ' + ${comment.userId.username}">Username</span>
-                <br/>
-                <span th:text="'Commented on: ' + ${#temporals.format(comment.createdOn, 'dd-MMM-yyyy HH:mm')}">Created On</span>
-                <br/>
-                <div class="buttons-for-post-edit-delete-reply">
-                    <form th:if="${loggedInUser.getId() == comment.getUserId().getId()}"
-                          th:unless="${isBlocked}"
-                          action="#"
-                          th:action="@{/ti/forum/posts/__${comment.getCommentedPost().getPostId()}__/comments/__${comment.getCommentId()}__/edit}"
-                          method="get">
-                        <input class="btn-danger" type="submit" value="Edit">
-                    </form>
+        <div th:unless="${relatedComments.isEmpty()}">
+            <div th:each="comment : ${relatedComments}" class="comment-item-container">
+                <p class="comment-content" th:text="${comment.content}">Content</p>
 
-                    <form th:if="${loggedInUser.getId() == comment.getUserId().getId()} OR ${isAdmin}"
-                          action="#"
-                          th:action="@{/ti/forum/posts/__${comment.getCommentedPost().getPostId()}__/comments/__${comment.getCommentId()}__/delete}"
-                          method="get">
-                        <input class="btn-danger" type="submit" value="Delete">
-                    </form>
+                <div class="comment-meta">
+                    <div class="comment-meta-info">
+        <span class="comment-author">
+            <i class="fa fa-user"></i> Author: <span th:text="${comment.userId.username}">Username</span>
+        </span>
+                        <span class="comment-time">
+            <i class="fa fa-calendar-alt"></i> <span th:text="${#temporals.format(comment.createdOn, 'dd-MMM-yyyy HH:mm')}">Created On</span>
+        </span>
+                    </div>
+                    <div class="comment-actions">
+                        <form th:if="${loggedInUser.getId() == comment.getUserId().getId()}"
+                              th:unless="${isBlocked}"
+                              action="#"
+                              th:action="@{/ti/forum/posts/__${comment.getCommentedPost().getPostId()}__/comments/__${comment.getCommentId()}__/edit}"
+                              method="get">
+                            <input class="btn-danger" type="submit" value="Edit">
+                        </form>
+
+                        <form th:if="${loggedInUser.getId() == comment.getUserId().getId()} OR ${isAdmin}"
+                              action="#"
+                              th:action="@{/ti/forum/posts/__${comment.getCommentedPost().getPostId()}__/comments/__${comment.getCommentId()}__/delete}"
+                              method="get">
+                            <input class="btn-danger" type="submit" value="Delete">
+                        </form>
+                    </div>
                 </div>
-                <br/><br/>
             </div>
-        </div>
-
-        <div class="buttons-for-post-edit-delete-reply">
-            <form th:if="${loggedInUser.getId() == post.getPostedBy().getId()} OR ${isAdmin}" th:unless="${isBlocked}"
-                  action="#"
-                  th:action="@{__${requestURI}__/edit}" method="get">
-                <input class="btn-danger" type="submit" value="Edit Post">
-            </form>
-
-            <form th:if="${loggedInUser.getId() == post.getPostedBy().getId()} OR ${isAdmin}" action="#"
-                  th:action="@{__${requestURI}__/delete}" method="get">
-                <input class="btn-danger" type="submit" value="Delete Post">
-            </form>
-
-            <form action="#" th:unless="${isBlocked}"
-                  th:action="@{/ti/forum/posts/__${post.getPostId()}__/comment}"
-                  method="get">
-                <input class="btn-danger" type="submit" value="Reply">
-            </form>
-
-            <a id="like-dislike-button1"
-               th:if="${loggedInUser.getId() != post.getPostedBy().getId()}"
-               th:href="@{__${requestURI}__/like}">Like
-            </a>
-            <span th:unless="${loggedInUser.getId() != post.getPostedBy().getId()}">Likes</span>
-            <p th:text="${post.getLikes()}">123</p>
-
-            <a id="like-dislike-button"
-               th:if="${loggedInUser.getId() != post.getPostedBy().getId()}"
-               th:href="@{__${requestURI}__/dislike}">Dislike
-            </a>
-            <span th:unless="${loggedInUser.getId() != post.getPostedBy().getId()}">Dislikes</span>
-            <p th:text="${post.getDislikes()}">123</p>
         </div>
     </div>
 </div>

@@ -3,50 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <title>Forum</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="../static/css/styles.css" th:href="@{/css/styles.css}">
 </head>
 <body>
 <header>
-    <div>
-        <div>
-            <h3>
-                <a th:href="@{/ti}">Home</a>
-                <a th:href="@{/ti/forum/posts}">Posts</a>
-                <a th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}">Logout</a>
-                <a th:if="${isAuthenticated}" th:href="@{/ti/users/edit}">Edit User</a>
-                <a th:if="${isAuthenticated && (isAdmin || isModerator)}" th:href="@{/ti/users/admin}">Admin Panel</a>
-                <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}">Login</a>
-                <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/register}">Registration</a>
-            </h3>
+    <div class="header-container">
+        <div class="logo-container">
+            <h1>TI Logo</h1>
         </div>
+        <nav class="navigation">
+            <div class="nav-links-center">
+                <a th:href="@{/ti}">Home</a>
+                <a th:href="@{/ti/about}">About</a>
+                <a th:href="@{/ti/forum/posts}">Forum Posts</a>
+                <a th:href="@{/ti/users/edit}">Edit User</a>
+                <a th:href="@{/ti/users/admin}">Admin Panel</a>
+            </div>
+            <div class="nav-links-right">
+                <a th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+                <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+                <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/register}">
+                    <i class="fas fa-user-plus"></i> Registration
+                </a>
+            </div>
+        </nav>
     </div>
 </header>
 <div class="body-content">
-    <form action="#" th:action="@{/ti/forum/posts}" method="get" th:object="${filterPostOptions}">
-        <label th:text="#{posts.filter.options}">Filter Options</label>
-        <br/><br/>
-        <input type="text" placeholder="Post Title" th:field="*{title}"/>
-        <input type="number" min="0" placeholder="Max Likes" th:field="*{maxLikes}"/>
-        <input type="number" min="0" placeholder="Min Likes" th:field="*{minLikes}"/>
-        <input type="number" min="0" placeholder="Max Dislikes" th:field="*{maxDislikes}"/>
-        <input type="number" min="0" placeholder="Min Dislikes" th:field="*{minDislikes}"/>
+    <form action="#" th:action="@{/ti/forum/posts}" method="get" th:object="${filterPostOptions}" class="filter-form">
+        <label th:text="#{posts.filter.options}" class="filter-label">Filter Options</label>
+        <div class="filter-inputs">
+            <input type="text" placeholder="Post Title" th:field="*{title}" class="filter-input"/>
+            <input type="number" min="0" placeholder="Max Likes" th:field="*{maxLikes}" class="filter-input"/>
+            <input type="number" min="0" placeholder="Min Likes" th:field="*{minLikes}" class="filter-input"/>
+            <input type="number" min="0" placeholder="Max Dislikes" th:field="*{maxDislikes}" class="filter-input"/>
+            <input type="number" min="0" placeholder="Min Dislikes" th:field="*{minDislikes}" class="filter-input"/>
 
-        <select th:field="*{sortBy}">
-            <option value="">Sort By</option>
-            <option value="title">Title</option>
-            <option value="likes">Likes</option>
-            <option value="dislikes">Dislikes</option>
-            <option value="created on">Created On</option>
-            <option value="posted by">Posted By</option>
-        </select>
+            <select th:field="*{sortBy}" class="filter-select">
+                <option value="">Sort By</option>
+                <option value="title">Title</option>
+                <option value="likes">Likes</option>
+                <option value="dislikes">Dislikes</option>
+                <option value="created on">Created On</option>
+                <option value="posted by">Posted By</option>
+            </select>
 
-        <select th:field="*{sortOrder}">
-            <option value="">Sort Order</option>
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
-        </select>
+            <select th:field="*{sortOrder}" class="filter-select">
+                <option value="">Sort Order</option>
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+            </select>
 
-        <input type="submit" value="Search"/>
+            <input type="submit" value="Search" class="filter-button"/>
+        </div>
     </form>
 
     <div th:if="${posts.isEmpty()}">
@@ -55,26 +69,54 @@
     <div th:unless="${posts.isEmpty()}">
         <h2 th:text="#{posts.title}">All Beers</h2>
 
-        <div class="table">
-            <div class="header">
-                <div class="cell" th:text="#{posts.label.title}">Title</div>
-                <div class="cell" th:text="#{posts.label.likes}">Likes</div>
-                <div class="cell" th:text="#{posts.label.dislikes}">Dislikes</div>
-                <div class="cell" th:text="#{posts.label.createdOn}">Created On</div>
-                <div class="cell" th:text="#{posts.label.createdBy}">Posted By</div>
-                <div class="cell" th:text="#{posts.label.tags}">Tags</div>
-            </div>
-            <div class="row" th:each="post : ${posts}">
-                <div class="cell">
-                    <a href="#" th:href="@{/ti/forum/posts/__${post.postId}__}" th:text="${post.title}">Post Title</a>
+        <div class="posts-container">
+            <div th:each="post : ${posts}" class="post-item box-shadow">
+                <div class="post-content">
+                    <!-- Лявата част: Заглавие, създател, дата -->
+                    <div class="post-left">
+                        <h3 class="post-title">
+                            <a th:href="@{/ti/forum/posts/__${post.postId}__}" th:text="${post.title}">Post Title</a>
+                        </h3>
+                        <div class="post-meta">
+                    <span class="post-creator">
+                        <i class="fa fa-user"></i>
+                        <span th:text="${post.postedBy.username}">Username</span>
+                    </span>
+                            <span class="post-time">
+                        <i class="fa fa-calendar-alt"></i>
+                        <span th:text="${post.createdOn}">Time of creation</span>
+                    </span>
+                        </div>
+                    </div>
+                    <!-- Дясната част: Likes, Dislikes, Тагове -->
+                    <div class="post-right">
+                        <div class="post-stats-container">
+                            <div class="post-stats">
+                                <div class="post-likes">
+                                    <i class="fa fa-thumbs-up"></i>
+                                    <span th:text="${post.likes}">Likes Count</span>
+                                </div>
+                                <div class="post-dislikes">
+                                    <i class="fa fa-thumbs-down"></i>
+                                    <span th:text="${post.dislikes}">Dislikes Count</span>
+                                </div>
+                            </div>
+                            <div class="post-tags-container">
+                                <div class="post-tags">
+                                    <span th:each="tag : ${post.getFormattedTags()}" th:text="'#' + ${tag}">#Tag</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="cell" th:text="${post.likes}">Likes</div>
-                <div class="cell" th:text="${post.dislikes}">Dislikes</div>
-                <div class="cell" th:text="${post.createdOn}">Created On</div>
-                <div class="cell" th:text="${post.postedBy.username}">Posted By</div>
-                <div class="cell" th:utext="${post.getFormattedTags()}">Tags</div>
             </div>
         </div>
+
+
+
+
+
+
     </div>
 </div>
 <form class="button-create">

@@ -4,21 +4,34 @@
     <meta charset="UTF-8">
     <title>Home</title>
     <link rel="stylesheet" href="../static/css/styles.css" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
 <header>
-    <div>
-        <div>
-            <h3>
-                <a th:href="@{/ti}">Home</a>
-                <a th:href="@{/ti/forum/posts}">Posts</a>
-                <a  th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}">Logout</a>
-                <a  th:if="${isAuthenticated}" th:href="@{/ti/users/edit}">Edit User</a>
-                <a  th:if="${isAuthenticated && isAdminOrModerator}" th:href="@{/ti/users/admin}">Admin Panel</a>
-                <a  th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}">Login</a>
-                <a  th:unless="${isAuthenticated}" th:href="@{/ti/auth/register}">Registration</a>
-            </h3>
+    <div class="header-container">
+        <div class="logo-container">
+            <h1>TI Logo</h1>
         </div>
+        <nav class="navigation">
+            <div class="nav-links-center">
+                <a th:href="@{/ti}">Home</a>
+                <a th:href="@{/ti/about}">About</a>
+                <a th:href="@{/ti/forum/posts}">Forum Posts</a>
+                <a th:href="@{/ti/users/edit}">Edit User</a>
+                <a th:if="${isAuthenticated && isAdminOrModerator}" th:href="@{/ti/users/admin}">Admin Panel</a>
+            </div>
+            <div class="nav-links-right">
+                <a th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+                <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+                <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/register}">
+                    <i class="fas fa-user-plus"></i> Registration
+                </a>
+            </div>
+        </nav>
     </div>
 </header>
 <main class="body-content">

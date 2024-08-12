@@ -75,6 +75,22 @@
                   method="get">
                 <input class="btn-danger" type="submit" value="Reply">
             </form>
+
+            <a class="btn-danger"
+               th:if="${loggedInUser.getId() != post.getPostedBy().getId()}"
+               th:href="@{__${requestURI}__/like}">Like
+            </a>
+            <span th:unless="${loggedInUser.getId() != post.getPostedBy().getId()}"
+                  class="material-symbols-outlined">thumb_up</span>
+            <p class="likesCount" th:text="${post.getLikes()}">123</p>
+
+            <a class="btn-danger"
+               th:if="${loggedInUser.getId() != post.getPostedBy().getId()}"
+               th:href="@{__${requestURI}__/dislike}">Dislike
+            </a>
+            <span th:unless="${loggedInUser.getId() != post.getPostedBy().getId()}"
+                  class="material-symbols-outlined">thumb_down</span>
+            <p class="likesCount" th:text="${post.getDislikes()}">123</p>
         </div>
     </div>
 </div>

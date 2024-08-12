@@ -344,4 +344,67 @@ public class PostMvcController {
             return "ErrorView";
         }
     }
+
+    @GetMapping("/posts/{postId}/delete")
+    public String deletePost(@PathVariable int postId, Model model, HttpSession session) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetUserFromSession(session);
+        } catch (AuthenticationException e) {
+            return "redirect:/ti/auth/login";
+        }
+
+        try {
+            Post post = postService.getPostById(postId);
+            postService.deletePost(user, post);
+            return "redirect:/ti/forum/posts";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        }
+    }
+
+    @GetMapping("/posts/{postId}/like")
+    public String likePost(@PathVariable int postId,
+                           Model model,
+                           HttpSession httpSession) {
+        try {
+            User loggedUser = authenticationHelper.tryGetUserFromSession(httpSession);
+            Post postToBeLiked = postService.getPostById(postId);
+            postService.likePost(postToBeLiked, loggedUser);
+            return "redirect:/ti/forum/posts/" + postId;
+        } catch (AuthenticationException e) {
+            return "redirect:/ti/auth/login";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("error", e.getMessage());
+            return "redirect:/ti/forum/posts/" + postId;
+        }
+    }
+
+    @GetMapping("/posts/{postId}/dislike")
+    public String dislikePost(@PathVariable int postId,
+                              Model model,
+                              HttpSession httpSession) {
+        try {
+            User loggedUser = authenticationHelper.tryGetUserFromSession(httpSession);
+            Post postToBeLiked = postService.getPostById(postId);
+            postService.dislikePost(postToBeLiked, loggedUser);
+            return "redirect:/ti/forum/posts/" + postId;
+        } catch (AuthenticationException e) {
+            return "redirect:/ti/auth/login";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("error", e.getMessage());
+            return "redirect:/ti/forum/posts/" + postId;
+        }
+    }
+
 }

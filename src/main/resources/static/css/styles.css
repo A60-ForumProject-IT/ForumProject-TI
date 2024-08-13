@@ -1,5 +1,3 @@
-/* /static/css/styles.css */
-
 body {
     font-family: 'Roboto', sans-serif;
     background-color: #1d1f21;
@@ -39,7 +37,7 @@ header h3 a:hover {
 }
 
 .body-content {
-    flex: 1; /* Разтяга съдържанието, за да заема цялата налична височина */
+    flex: 1;
     padding: 20px;
     max-width: 1200px;
     margin: 20px auto;
@@ -79,7 +77,7 @@ button:hover, input[type="submit"]:hover {
 
 footer {
     width: 100%;
-    max-width: 1200px; /* Същата ширина като на основния контейнер */
+    max-width: 1200px;
     margin: 0 auto;
     background-color: #2c2f33;
     text-align: center;
@@ -100,13 +98,11 @@ footer p {
     font-size: 1rem;
 }
 
-/* Box shadows */
 .box-shadow {
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
     border-radius: 10px;
 }
 
-/* Specific styles for different sections */
 .header, .row, .form-group, .table {
     background-color: #2c2f33;
     padding: 10px;
@@ -155,12 +151,10 @@ footer p {
     border: 3px solid #50fa7b;
 }
 
-/* FontAwesome icons */
 .fa {
     margin-right: 5px;
 }
 
-/* Form Inputs */
 input[type="text"], input[type="number"], select {
     padding: 8px;
     border-radius: 5px;
@@ -176,7 +170,6 @@ input[type="text"]:focus, input[type="number"]:focus, select:focus {
     outline: none;
 }
 
-/* Hover effects */
 .button-create a:hover {
     background-color: #ff79c6;
     color: #1d1f21;
@@ -187,7 +180,7 @@ input[type="text"]:focus, input[type="number"]:focus, select:focus {
     display: flex;
     justify-content: center;
     margin-top: 20px;
-    margin-bottom: 20px/* Отстояние от последния пост */
+    margin-bottom: 20px
 }
 
 .button-create a {
@@ -199,7 +192,6 @@ input[type="text"]:focus, input[type="number"]:focus, select:focus {
     transition: background-color 0.3s;
 }
 
-/* Post styling */
 .posts-container {
     display: flex;
     flex-direction: column;
@@ -236,7 +228,6 @@ input[type="text"]:focus, input[type="number"]:focus, select:focus {
     color: #ff79c6;
 }
 
-/* Пост Стилове */
 .post-content {
     display: flex;
     justify-content: space-between;
@@ -250,12 +241,10 @@ input[type="text"]:focus, input[type="number"]:focus, select:focus {
     align-items: flex-end;
 }
 
-/* Left-side actions (Reply) */
 .post-left-actions {
     flex: 1;
 }
 
-/* Right-side actions (Edit, Delete, Like, Dislike) */
 .post-right-actions {
     flex: 2;
     display: flex;
@@ -265,7 +254,7 @@ input[type="text"]:focus, input[type="number"]:focus, select:focus {
 }
 
 .post-left {
-    flex: 1; /* Левият контейнер ще заема 50% от ширината */
+    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -309,7 +298,7 @@ input[type="text"]:focus, input[type="number"]:focus, select:focus {
     background-color: #2c2f33;
     border-radius: 10px;
     padding: 20px;
-    border-bottom: 2px solid #50fa7b; /* Green border */
+    border-bottom: 2px solid #50fa7b;
     transition: transform 0.3s, box-shadow 0.3s;
 }
 
@@ -489,7 +478,6 @@ header:hover {
     margin: 0 10px;
 }
 
-/* Comment Section */
 .comments-section {
     background-color: #2c2f33;
     border-radius: 10px;
@@ -507,7 +495,7 @@ header:hover {
     border-radius: 10px;
     padding: 15px;
     margin-top: 15px;
-    border: 2px solid #ff79c6; /* Pink border */
+    border: 2px solid #ff79c6;
     transition: transform 0.3s, box-shadow 0.3s;
     display: flex;
     flex-direction: column;
@@ -529,15 +517,15 @@ header:hover {
     border-radius: 10px;
     padding: 20px;
     margin-bottom: 20px;
-    border: 2px solid #ff79c6;  /* Розовият бордър за коментарите */
-    position: relative;  /* За правилно позициониране на бутоните */
+    border: 2px solid #ff79c6;
+    position: relative;
 }
 
 .comment-author,
 .comment-time {
     display: flex;
     align-items: center;
-    gap: 5px;  /* За да държим иконите и текста на една линия */
+    gap: 5px;
 }
 
 .comment-meta {
@@ -633,4 +621,206 @@ header:hover {
 
 #like-button:hover, #dislike-button:hover {
     color: #ff79c6;
+}
+
+.comment-form-container {
+    background-color: #2c2f33;
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 800px;
+    margin: 20px auto;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.comment-textarea {
+    width: 100%;
+    height: 150px;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #444;
+    background-color: #1d1f21;
+    color: #ffffff;
+    font-size: 1rem;
+}
+
+.comment-textarea:focus {
+    border-color: #50fa7b;
+    outline: none;
+}
+
+.form-group-submit-button {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.btn-submit {
+    background-color: #50fa7b;
+    color: #1d1f21;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.btn-submit:hover {
+    background-color: #ff79c6;
+}
+
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+}
+
+.comment-form {
+    background-color: #2c2f33;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
+    width: 100%;
+    max-width: 600px;
+}
+
+.comment-form h2 {
+    color: #50fa7b;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.comment-form label {
+    color: #c5c8c6;
+    font-size: 1rem;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.comment-form input[type="text"],
+.comment-form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #444;
+    background-color: #1d1f21;
+    color: #ffffff;
+}
+
+.comment-form input[type="submit"] {
+    width: 100%;
+    background-color: #50fa7b;
+    color: #1d1f21;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.comment-form input[type="submit"]:hover {
+    background-color: #ff79c6;
+}
+
+.login-container {
+    background-color: transparent;
+}
+
+.login-outer-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-form {
+    background-color: #2c2f33;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 400px;
+    margin-top: 50px;
+}
+
+.login-form h2 {
+    text-align: center;
+    color: #50fa7b;
+    margin-bottom: 20px;
+}
+
+.login-form label {
+    font-size: 1.1rem;
+    color: #c5c8c6;
+    margin-bottom: 5px;
+}
+
+.login-form input[type="text"],
+.login-form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #444;
+    background-color: #1d1f21;
+    color: #ffffff;
+    box-sizing: border-box;
+}
+
+.login-form input[type="submit"] {
+    width: 100%;
+    background-color: #50fa7b;
+    color: #1d1f21;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: background-color 0.3s;
+}
+
+.login-form input[type="submit"]:hover {
+    background-color: #ff79c6;
+}
+
+.login-form .error {
+    color: #ff5555;
+    font-size: 0.9rem;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    display: block;
+    text-align: center;
+}
+
+.logo-container img {
+    width: 60px;
+    height: 50px;
+    background-color: #50fa7b;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.outer-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.spacer {
+    flex-grow: 1;
+}
+
+.logo-img {
+    max-width: 150px;
+    height: auto;
+    display: block;
+    background-color: transparent;
+}
+
+.logo-img {
+    filter: brightness(0.7);
 }

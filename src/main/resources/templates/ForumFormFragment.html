@@ -10,7 +10,9 @@
 <header th:fragment="header">
     <div class="header-container">
         <div class="logo-container">
-            <h1>TI Logo</h1>
+            <a th:href="@{/ti}">
+                <img th:src="@{/images/ti-logo.jpg}" alt="IT Logo" class="logo-img">
+            </a>
         </div>
         <nav class="navigation">
             <div class="nav-links-center">
@@ -34,5 +36,9 @@
         </nav>
     </div>
 </header>
+
+<footer th:fragment="footer">
+    <p>&copy; 2024 Game Forum. All rights reserved.</p>
+</footer>
 </body>
 </html>

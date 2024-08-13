@@ -4,24 +4,34 @@
     <meta charset="UTF-8">
     <title>Login</title>
     <link rel="stylesheet" href="../static/css/styles.css" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
 <form th:replace="~{ForumFormFragment.html :: header}"></form>
-<h2>Login</h2>
-<form class="body-content" action="#" th:action="@{/ti/auth/login}" th:object="${login}" method="post">
-    <label th:text="#{user.label.username}">Username</label>
-    <br/>
-    <input type="text" th:field="*{username}"/>
-    <label class="error" th:errors="*{username}">Username error placeholder</label>
-    <br/><br/>
 
-    <label th:text="#{user.label.password}">Password</label>
-    <br/>
-    <input type="password" th:field="*{password}"/>
-    <label class="error" th:errors="*{password}">Password error placeholder</label>
-    <br/><br/>
+<div class="body-content">
+    <div class="login-outer-container">
+        <div class="spacer"></div> <!-- Spacer преди формата -->
 
-    <input type="submit" value="Login"/>
-</form>
+        <div class="login-container">
+            <form class="login-form" action="#" th:action="@{/ti/auth/login}" th:object="${login}" method="post">
+                <h2>Login</h2>
+                <label th:text="#{user.label.username}">Username</label>
+                <input type="text" th:field="*{username}"/>
+                <label class="error" th:errors="*{username}">Username error placeholder</label>
+
+                <label th:text="#{user.label.password}">Password</label>
+                <input type="password" th:field="*{password}"/>
+                <label class="error" th:errors="*{password}">Password error placeholder</label>
+
+                <input type="submit" value="Login"/>
+            </form>
+        </div>
+
+        <div class="spacer"></div> <!-- Spacer след формата -->
+    </div>
+</div>
+
+<form th:replace="~{ForumFormFragment.html :: footer}"></form>
 </body>
 </html>

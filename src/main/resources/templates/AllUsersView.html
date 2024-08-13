@@ -4,64 +4,56 @@
     <meta charset="UTF-8">
     <title>Users</title>
     <link rel="stylesheet" href="../static/css/styles.css" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-<header>
-    <div>
-        <h3>
-            <a th:href="@{/ti}">Home</a>
-            <a th:href="@{/ti/forum/posts}">Posts</a>
-            <a th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}">Logout</a>
-            <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}">Login</a>
-            <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/register}">Registration</a>
-        </h3>
-    </div>
-</header>
+<header th:replace="~{ForumFormFragment.html :: header}"></header>
 <div class="body-content">
-    <form action="#" th:action="@{/ti/users/admin/users}" method="get" th:object="${filterUsersOptions}">
-        <label th:text="#{posts.filter.options}">Filter Options</label>
-        <br/><br/>
-        <input type="text" placeholder="username" th:field="*{username}"/>
-        <input type="text" placeholder="first name" th:field="*{firstName}"/>
-        <input type="text" placeholder="email" th:field="*{email}"/>
+    <form action="#" th:action="@{/ti/users/admin/users}" method="get" th:object="${filterUsersOptions}" class="filter-form">
+        <label class="filter-label" th:text="#{posts.filter.options}">Filter Options</label>
+        <div class="filter-inputs">
+            <input type="text" placeholder="Username" th:field="*{username}" class="filter-input"/>
+            <input type="text" placeholder="First Name" th:field="*{firstName}" class="filter-input"/>
+            <input type="text" placeholder="Email" th:field="*{email}" class="filter-input"/>
 
-        <select th:field="*{sortBy}">
-            <option value="">Sort By</option>
-            <option value="username">Username</option>
-            <option value="firstName">First name</option>
-            <option value="email">Email</option>
-        </select>
+            <select th:field="*{sortBy}" class="filter-select">
+                <option value="">Sort By</option>
+                <option value="username">Username</option>
+                <option value="firstName">First name</option>
+                <option value="email">Email</option>
+            </select>
 
-        <select th:field="*{sortOrder}">
-            <option value="">Sort Order</option>
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
-        </select>
+            <select th:field="*{sortOrder}" class="filter-select">
+                <option value="">Sort Order</option>
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+            </select>
 
-        <input type="submit" value="Search"/>
+            <input type="submit" value="Search" class="filter-button"/>
+        </div>
     </form>
 
-    <div th:if="${users.isEmpty()}">
+    <div th:if="${users.isEmpty()}" class="no-users">
         <h2 th:text="#{users.title.empty}">No Users</h2>
     </div>
-    <div th:unless="${users.isEmpty()}">
+    <div th:unless="${users.isEmpty()}" class="users-container">
         <h2 th:text="#{users.title}">All Users</h2>
-
-        <div class="table">
-            <div class="header">
-                <div class="cell" th:text="#{user.label.username}">Username</div>
-                <div class="cell" th:text="#{user.label.firstName}">First name</div>
-                <div class="cell" th:text="#{user.label.email}">Email</div>
-            </div>
-            <div class="row" th:each="user : ${users}">
-                <div class="cell">
-                    <a href="#" th:href="@{/ti/users/admin/users/__${user.id}__}" th:text="${user.username}">Username</a>
+        <div class="header-titles">
+            <div th:text="#{user.label.username}">Username</div>
+            <div th:text="#{user.label.firstName}">First Name</div>
+            <div th:text="#{user.label.email}">Email</div>
+        </div>
+        <div class="user-item" th:each="user : ${users}">
+            <div class="user-info">
+                <div class="user-detail" >
+                <a href="#" th:href="@{/ti/users/admin/users/__${user.id}__}" th:text="${user.username}"> </a>
                 </div>
-                <div class="cell" th:text="${user.firstName}">First name</div>
-                <div class="cell" th:text="${user.email}">Email</div>
+                <div class="user-detail" th:text="${user.firstName}">First name</div>
+                <div class="user-detail" th:text="${user.email}">Email</div>
             </div>
         </div>
     </div>
 </div>
+<footer th:replace="~{ForumFormFragment.html :: footer}"></footer>
 </body>
 </html>

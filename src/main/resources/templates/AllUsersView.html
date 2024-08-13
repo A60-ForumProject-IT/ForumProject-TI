@@ -34,10 +34,10 @@
     </form>
 
     <div th:if="${users.isEmpty()}" class="no-users">
-        <h2 th:text="#{users.title.empty}">No Users</h2>
+        <h2 class="h2-3d-dark" th:text="#{users.title.empty}">No Users</h2>
     </div>
     <div th:unless="${users.isEmpty()}" class="users-container">
-        <h2 th:text="#{users.title}">All Users</h2>
+        <h2 class="h2-3d-dark" th:text="#{users.title}">All Users</h2>
         <div class="header-titles">
             <div th:text="#{user.label.username}">Username</div>
             <div th:text="#{user.label.firstName}">First Name</div>

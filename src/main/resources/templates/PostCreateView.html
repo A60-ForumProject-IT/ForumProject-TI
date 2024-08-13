@@ -14,13 +14,13 @@
     <form th:object="${newPost}" th:action="@{__${requestURI}__}" method="post" class="create-post-form-wrapper">
         <div class="form-group-create">
             <label for="create-post-title">Title</label>
-            <textarea id="create-post-title" th:field="*{title}" class="title-textarea-create" rows="1"></textarea>
+            <textarea id="create-post-title" th:field="*{title}" placeholder="What will be your post title?" class="title-textarea-create" rows="1"></textarea>
             <label class="error-form-error" th:errors="*{title}"></label>
         </div>
 
         <div class="form-group-create">
             <label for="create-post-content">Content</label>
-            <textarea id="create-post-content" th:field="*{content}" class="content-textarea-create" rows="5"></textarea>
+            <textarea id="create-post-content" placeholder="White your the post content here..." th:field="*{content}" class="content-textarea-create" rows="5"></textarea>
             <label class="error-form-error" th:errors="*{content}"></label>
         </div>
 

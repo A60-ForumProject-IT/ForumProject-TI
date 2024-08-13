@@ -824,3 +824,7 @@ header:hover {
 .logo-img {
     filter: brightness(0.7);
 }
+
+.error-form-error {
+    color: indianred;
+}

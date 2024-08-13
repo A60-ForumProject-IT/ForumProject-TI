@@ -18,11 +18,11 @@
                 <h2>Login</h2>
                 <label th:text="#{user.label.username}">Username</label>
                 <input type="text" th:field="*{username}"/>
-                <label class="error" th:errors="*{username}">Username error placeholder</label>
+                <label class="error-form-error" th:errors="*{username}">Username error placeholder</label>
 
                 <label th:text="#{user.label.password}">Password</label>
                 <input type="password" th:field="*{password}"/>
-                <label class="error" th:errors="*{password}">Password error placeholder</label>
+                <label class="error-form-error" th:errors="*{password}">Password error placeholder</label>
 
                 <input type="submit" value="Login"/>
             </form>

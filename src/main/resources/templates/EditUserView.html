@@ -36,22 +36,22 @@
         <div class="user-info">
             <label th:text="#{user.label.firstName}">First Name:</label>
             <input type="text" th:field="*{firstName}"/>
-            <label class="error form-error" th:errors="*{firstName}"></label>
+            <label class="error-form-error" th:errors="*{firstName}"></label>
         </div>
         <div class="user-info">
             <label th:text="#{user.label.lastName}">Last Name:</label>
             <input type="text" th:field="*{lastName}"/>
-            <label class="error form-error" th:errors="*{lastName}"></label>
+            <label class="error-form-error" th:errors="*{lastName}"></label>
         </div>
         <div class="user-info">
             <label th:text="#{user.label.email}">Email:</label>
             <input type="email" th:field="*{email}"/>
-            <label class="error form-error" th:errors="*{email}"></label>
+            <label class="error-form-error" th:errors="*{email}"></label>
         </div>
         <div class="user-info">
             <label th:text="#{user.label.password}">Password:</label>
             <input type="password" th:field="*{password}"/>
-            <label class="error form-error" th:errors="*{password}"></label>
+            <label class="error-form-error" th:errors="*{password}"></label>
         </div>
         <div>
             <button type="submit">Save</button>

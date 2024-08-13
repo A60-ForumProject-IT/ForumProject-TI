@@ -69,13 +69,13 @@
                 </div>
 
                 <div class="edit-delete-buttons">
-                    <form th:if="${loggedInUser.getId() == post.getPostedBy().getId()} OR ${isAdmin}" th:unless="${isBlocked}"
+                    <form th:if="${loggedInUser.getId() == post.getPostedBy().getId()}" th:unless="${isBlocked}"
                           action="#"
                           th:action="@{__${requestURI}__/edit}" method="get">
                         <input class="btn-danger" type="submit" value="Edit Post">
                     </form>
 
-                    <form th:if="${loggedInUser.getId() == post.getPostedBy().getId()} OR ${isAdmin}" action="#"
+                    <form th:if="${loggedInUser.getId() == post.getPostedBy().getId()} OR ${isAdmin} or ${isModerator}" action="#"
                           th:action="@{__${requestURI}__/delete}" method="get">
                         <input class="btn-danger" type="submit" value="Delete Post">
                     </form>
@@ -111,7 +111,7 @@
                             <input class="btn-danger" type="submit" value="Edit">
                         </form>
 
-                        <form th:if="${loggedInUser.getId() == comment.getUserId().getId()} OR ${isAdmin}"
+                        <form th:if="${loggedInUser.getId() == comment.getUserId().getId()} OR ${isAdmin} or ${isModerator}"
                               action="#"
                               th:action="@{/ti/forum/posts/__${comment.getCommentedPost().getPostId()}__/comments/__${comment.getCommentId()}__/delete}"
                               method="get">

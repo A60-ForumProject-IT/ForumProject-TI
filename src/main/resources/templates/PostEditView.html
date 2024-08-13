@@ -9,9 +9,9 @@
 <form th:object="${postDto}" th:action="@{__${requestURI}__}" method="post">
 
     <textarea id="edit-post-title" th:field="*{title}"></textarea>
-    <label class="error form-error" th:errors="*{title}"></label>
+    <label class="error-form-error" th:errors="*{title}"></label>
     <textarea id="edit-post-content" th:field="*{content}"></textarea>
-    <label class="error form-error" th:errors="*{content}"></label>
+    <label class="error-form-error" th:errors="*{content}"></label>
 
     <input type="submit" value="Submit">
 </form>
@@ -30,7 +30,7 @@
 <form action="#" th:action="@{__${requestURI}__/add-tag}" th:object="${tagDto}"
       method="post">
     <input type="text" th:field="*{tagName}" placeholder="place your tag here">
-    <label class="error form-error" th:errors="*{tagName}"></label>
+    <label class="error-form-error" th:errors="*{tagName}"></label>
     <input type="submit" value="Add Tag">
 </form>
 

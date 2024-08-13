@@ -14,6 +14,7 @@
         <form th:object="${commentDto}" th:action="@{__${requestURI}__}" method="post">
             <div class="form-group-submit-button">
                 <textarea th:field="*{content}" class="comment-textarea" placeholder="Write your comment here..."></textarea>
+                <label class="error-form-error" th:errors="*{content}"></label>
             </div>
             <div class="form-group-submit-button">
                 <input type="submit" value="Save Changes" class="btn-submit">

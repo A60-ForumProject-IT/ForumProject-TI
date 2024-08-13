@@ -1,134 +1,59 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Forum</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title th:text="'Forum | Edit'">Edit Post</title>
     <link rel="stylesheet" href="../static/css/styles.css" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-<header>
-    <div class="header-container">
-        <div class="logo-container">
-            <a th:href="@{/ti}">
-                <img th:src="@{/images/ti-logo.jpg}" alt="IT Logo" class="logo-img">
-            </a>
-        </div>
-        <nav class="navigation">
-            <div class="nav-links-center">
-                <a th:href="@{/ti}">Home</a>
-                <a th:href="@{/ti/about}">About</a>
-                <a th:href="@{/ti/forum/posts}">Forum Posts</a>
-                <a th:href="@{/ti/users/edit}">Edit User</a>
-                <a th:if="${isAuthenticated && (isAdmin || isModerator)}" th:href="@{/ti/users/admin}">Admin Panel</a>
-            </div>
-            <div class="nav-links-right">
-                <a th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
-                <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}">
-                    <i class="fas fa-sign-in-alt"></i> Login
-                </a>
-                <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/register}">
-                    <i class="fas fa-user-plus"></i> Registration
-                </a>
-            </div>
-        </nav>
-    </div>
-</header>
+<header th:replace="ForumFormFragment.html :: header"></header>
 
 <div class="body-content">
-    <!-- Filter Form Section -->
-    <form action="#" th:action="@{/ti/forum/posts}" method="get" th:object="${filterPostOptions}" class="filter-form">
-        <h2 th:text="#{posts.filter.options}" class="filter-label">Filter Options</h2>
-        <div class="filter-inputs">
-            <input type="text" placeholder="Search by title..." th:field="*{title}" class="filter-input"/>
-            <input type="text" placeholder="Search by tags..." th:field="*{tagName}" class="filter-input"/>
-            <input type="number" min="0" placeholder="Search by max likes..." th:field="*{maxLikes}"
-                   class="filter-input"/>
-            <input type="number" min="0" placeholder="Search by min likes..." th:field="*{minLikes}"
-                   class="filter-input"/>
-            <input type="number" min="0" placeholder="Search by max dislikes..." th:field="*{maxDislikes}"
-                   class="filter-input"/>
-            <input type="number" min="0" placeholder="Search by min dislikes..." th:field="*{minDislikes}"
-                   class="filter-input"/>
 
-            <select th:field="*{sortBy}" class="filter-select">
-                <option value="">You can sort by...</option>
-                <option value="title">Title</option>
-                <option value="likes">Likes</option>
-                <option value="dislikes">Dislikes</option>
-                <option value="created on">Created On</option>
-                <option value="posted by">Posted By</option>
-            </select>
+        <h2 class="centered-title">Edit Your Post</h2>
+        <form th:object="${postDto}" th:action="@{__${requestURI}__}" method="post">
+            <div class="form-group">
+                <label for="edit-post-title">Post Title</label>
+                <textarea id="edit-post-title" th:field="*{title}" class="title-textarea" rows="1"></textarea>
+                <label class="error-form-error" th:errors="*{title}"></label>
+            </div>
 
-            <select th:field="*{sortOrder}" class="filter-select">
-                <option value="">Sort Order</option>
-                <option value="asc">Ascending</option>
-                <option value="desc">Descending</option>
-            </select>
+            <div class="form-group">
+                <label for="edit-post-content">Post Content</label>
+                <textarea id="edit-post-content" th:field="*{content}" class="content-textarea" rows="5"></textarea>
+                <label class="error-form-error" th:errors="*{content}"></label>
+            </div>
 
-            <input type="submit" value="Search" class="filter-button"/>
-        </div>
-    </form>
+            <div class="form-group-submit-button">
+                <input type="submit" value="Save Changes" class="btn-submit">
+            </div>
+        </form>
 
-    <!-- Posts Section -->
-    <h2 th:text="#{posts.title}">Forum Posts</h2>
 
-    <div class="posts-container">
-        <div th:each="post : ${posts}" class="post-item box-shadow">
-            <div class="post-content">
-                <div class="post-left">
-                    <h3 class="post-title">
-                        <a th:href="@{/ti/forum/posts/__${post.postId}__}" th:text="${post.title}">Post Title</a>
-                    </h3>
-                    <div class="post-meta">
-                        <span class="post-creator">
-                            <i class="fa-solid fa-user-tie"></i>
-                            <span th:text="${post.postedBy.username}">Username</span>
-                        </span>
-                        <span class="post-time">
-                            <i class="fa fa-calendar-alt"></i>
-                            <span th:text="${post.createdOn}">Time of creation</span>
-                        </span>
-                        <span class="post-comments">
-                            <i class="fa fa-comments"></i>
-                            <span th:text="${post.getCommentsCount()}">Comments Count</span>
-                        </span>
-                    </div>
-                </div>
-
-                <div class="post-right">
-                    <div class="post-stats-container">
-                        <div class="post-stats">
-                            <div class="post-likes">
-                                <i class="fa fa-thumbs-up"></i>
-                                <span th:text="${post.likes}">Likes Count</span>
-                            </div>
-                            <div class="post-dislikes">
-                                <i class="fa fa-thumbs-down"></i>
-                                <span th:text="${post.dislikes}">Dislikes Count</span>
-                            </div>
-                        </div>
-                        <div class="post-tags-container">
-                            <div class="post-tags">
-                                <span th:each="tag : ${post.getPostTags()}" th:text="'#' + ${tag}">#Tag</span>
-                            </div>
-                        </div>
-                    </div>
+    <div class="tags-section">
+        <h3 class="centered-title">Tags</h3>
+        <div class="post-tags-container2">
+            <div th:each="tag : ${tagsInPost}" th:unless="${tagsInPost.isEmpty()}">
+                <div class="tag-item">
+                    <span class="tag-name" th:text="${'#' + tag}">#SomeVeryLongWord</span>
+                    <a href="#" th:href="@{__${requestURI}__/remove-tag/__${tag.getId()}__}" class="btn-danger">Remove</a>
                 </div>
             </div>
         </div>
+
+        <form action="#" th:action="@{__${requestURI}__/add-tag}" th:object="${tagDto}" method="post">
+            <div class="form-group centered-form">
+                <input type="text" th:field="*{tagName}" placeholder="Place your tag here" class="filter-input">
+                <label class="error-form-error" th:errors="*{tagName}"></label>
+            </div>
+            <div class="form-group-submit-button">
+                <input type="submit" value="Add Tag" class="btn-submit">
+            </div>
+        </form>
     </div>
 </div>
 
-<form class="button-create">
-    <a th:if="${isAuthenticated}" href="#" th:href="@{/ti/forum/posts/new}" th:text="#{post.create.button}"
-       class="btn-danger">Create New Post</a>
-</form>
-
-<footer>
-    <p>&copy; 2024 Game Forum. All rights reserved.</p>
-</footer>
+<footer th:replace="ForumFormFragment.html :: footer"></footer>
 </body>
 </html>

@@ -36,9 +36,10 @@
         </nav>
     </div>
 </header>
+
 <div class="body-content">
     <form action="#" th:action="@{/ti/forum/posts}" method="get" th:object="${filterPostOptions}" class="filter-form">
-        <h2 th:text="#{posts.filter.options}" class="filter-label">Filter Options</h2>
+        <h2 th:text="#{posts.filter.options}" class="h2-3d-dark">Filter Options</h2>
         <div class="filter-inputs">
             <input type="text" placeholder="Search by title..." th:field="*{title}" class="filter-input"/>
             <input type="text" placeholder="Search by tags..." th:field="*{tagName}" class="filter-input"/>
@@ -70,64 +71,54 @@
         </div>
     </form>
 
-    <div class="posts-wrapper">
-        <div th:if="${posts.isEmpty()}">
-            <h2 th:text="#{posts.title.empty}">No Posts</h2>
-        </div>
+    <div class="posts-container">
+        <h2 th:text="#{posts.title}" class="h2-3d-dark">Forum Posts</h2>
+        <div th:each="post : ${posts}" class="post-item box-shadow">
+            <div class="post-content">
+                <div class="post-left">
+                    <h3 class="post-title">
+                        <a th:href="@{/ti/forum/posts/__${post.postId}__}" th:text="${post.title}">Post Title</a>
+                    </h3>
+                    <div class="post-meta">
+                        <span class="post-creator">
+                            <i class="fa-solid fa-user-tie"></i>
+                            <span th:text="${post.postedBy.username}">Username</span>
+                        </span>
+                        <span class="post-time">
+                            <i class="fa fa-calendar-alt"></i>
+                            <span th:text="${post.createdOn}">Time of creation</span>
+                        </span>
+                        <span class="post-comments">
+                            <i class="fa fa-comments"></i>
+                            <span th:text="${post.getCommentsCount()}">Comments Count</span>
+                        </span>
+                    </div>
+                </div>
 
-        <div th:unless="${posts.isEmpty()}">
-            <h2 th:text="#{posts.title}">All Beers</h2>
-
-            <div class="posts-container">
-                <div th:each="post : ${posts}" class="post-item box-shadow">
-                    <div class="post-content">
-
-                        <div class="post-left">
-                            <h3 class="post-title">
-                                <a th:href="@{/ti/forum/posts/__${post.postId}__}" th:text="${post.title}">Post Title</a>
-                            </h3>
-                            <div class="post-meta">
-                    <span class="post-creator">
-                        <i class="fa-solid fa-user-tie"></i>
-                        <span th:text="${post.postedBy.username}">Username</span>
-                    </span>
-                                <span class="post-time">
-                        <i class="fa fa-calendar-alt"></i>
-                        <span th:text="${post.createdOn}">Time of creation</span>
-                    </span>
-                                <span class="post-comments">
-                        <i class="fa fa-comments"></i>
-                        <span th:text="${post.getCommentsCount()}">Comments Count</span>
-                    </span>
+                <div class="post-right">
+                    <div class="post-stats-container">
+                        <div class="post-stats">
+                            <div class="post-likes">
+                                <i class="fa fa-thumbs-up"></i>
+                                <span th:text="${post.likes}">Likes Count</span>
+                            </div>
+                            <div class="post-dislikes">
+                                <i class="fa fa-thumbs-down"></i>
+                                <span th:text="${post.dislikes}">Dislikes Count</span>
                             </div>
                         </div>
-
-                        <div class="post-right">
-                            <div class="post-stats-container">
-                                <div class="post-stats">
-                                    <div class="post-likes">
-                                        <i class="fa fa-thumbs-up"></i>
-                                        <span th:text="${post.likes}">Likes Count</span>
-                                    </div>
-                                    <div class="post-dislikes">
-                                        <i class="fa fa-thumbs-down"></i>
-                                        <span th:text="${post.dislikes}">Dislikes Count</span>
-                                    </div>
-                                </div>
-                                <div class="post-tags-container">
-                                    <div class="post-tags">
-                                        <span th:each="tag : ${post.getPostTags()}" th:text="'#' + ${tag}">#Tag</span>
-                                    </div>
-                                </div>
+                        <div class="post-tags-container">
+                            <div class="post-tags">
+                                <span th:each="tag : ${post.getPostTags()}" th:text="'#' + ${tag}">#Tag</span>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 <form class="button-create">
     <a th:if="${isAuthenticated}" href="#" th:href="@{/ti/forum/posts/new}" th:text="#{post.create.button}"
        class="btn-danger">Create New Post</a>

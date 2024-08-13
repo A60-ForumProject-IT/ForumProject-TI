@@ -1,39 +1,134 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="'Forum | Edit'">Edit Post</title>
+    <title>Forum</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="../static/css/styles.css" th:href="@{/css/styles.css}">
 </head>
 <body>
-<form th:object="${postDto}" th:action="@{__${requestURI}__}" method="post">
-
-    <textarea id="edit-post-title" th:field="*{title}"></textarea>
-    <label class="error-form-error" th:errors="*{title}"></label>
-    <textarea id="edit-post-content" th:field="*{content}"></textarea>
-    <label class="error-form-error" th:errors="*{content}"></label>
-
-    <input type="submit" value="Submit">
-</form>
-
-
-<div th:each="tag : ${tagsInPost}"
-     th:unless="${tagsInPost.isEmpty()}">
-    <div>
-        <p class="tagName"
-           th:text="${'#'+ tag}">#SomeVeryLongWord</p>
+<header>
+    <div class="header-container">
+        <div class="logo-container">
+            <a th:href="@{/ti}">
+                <img th:src="@{/images/ti-logo.jpg}" alt="IT Logo" class="logo-img">
+            </a>
+        </div>
+        <nav class="navigation">
+            <div class="nav-links-center">
+                <a th:href="@{/ti}">Home</a>
+                <a th:href="@{/ti/about}">About</a>
+                <a th:href="@{/ti/forum/posts}">Forum Posts</a>
+                <a th:href="@{/ti/users/edit}">Edit User</a>
+                <a th:if="${isAuthenticated && (isAdmin || isModerator)}" th:href="@{/ti/users/admin}">Admin Panel</a>
+            </div>
+            <div class="nav-links-right">
+                <a th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+                <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+                <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/register}">
+                    <i class="fas fa-user-plus"></i> Registration
+                </a>
+            </div>
+        </nav>
     </div>
-    <a href="#" th:href="@{__${requestURI}__/remove-tag/__${tag.getId()}__}">Remove</a>
+</header>
+
+<div class="body-content">
+    <!-- Filter Form Section -->
+    <form action="#" th:action="@{/ti/forum/posts}" method="get" th:object="${filterPostOptions}" class="filter-form">
+        <h2 th:text="#{posts.filter.options}" class="filter-label">Filter Options</h2>
+        <div class="filter-inputs">
+            <input type="text" placeholder="Search by title..." th:field="*{title}" class="filter-input"/>
+            <input type="text" placeholder="Search by tags..." th:field="*{tagName}" class="filter-input"/>
+            <input type="number" min="0" placeholder="Search by max likes..." th:field="*{maxLikes}"
+                   class="filter-input"/>
+            <input type="number" min="0" placeholder="Search by min likes..." th:field="*{minLikes}"
+                   class="filter-input"/>
+            <input type="number" min="0" placeholder="Search by max dislikes..." th:field="*{maxDislikes}"
+                   class="filter-input"/>
+            <input type="number" min="0" placeholder="Search by min dislikes..." th:field="*{minDislikes}"
+                   class="filter-input"/>
+
+            <select th:field="*{sortBy}" class="filter-select">
+                <option value="">You can sort by...</option>
+                <option value="title">Title</option>
+                <option value="likes">Likes</option>
+                <option value="dislikes">Dislikes</option>
+                <option value="created on">Created On</option>
+                <option value="posted by">Posted By</option>
+            </select>
+
+            <select th:field="*{sortOrder}" class="filter-select">
+                <option value="">Sort Order</option>
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+            </select>
+
+            <input type="submit" value="Search" class="filter-button"/>
+        </div>
+    </form>
+
+    <!-- Posts Section -->
+    <h2 th:text="#{posts.title}">Forum Posts</h2>
+
+    <div class="posts-container">
+        <div th:each="post : ${posts}" class="post-item box-shadow">
+            <div class="post-content">
+                <div class="post-left">
+                    <h3 class="post-title">
+                        <a th:href="@{/ti/forum/posts/__${post.postId}__}" th:text="${post.title}">Post Title</a>
+                    </h3>
+                    <div class="post-meta">
+                        <span class="post-creator">
+                            <i class="fa-solid fa-user-tie"></i>
+                            <span th:text="${post.postedBy.username}">Username</span>
+                        </span>
+                        <span class="post-time">
+                            <i class="fa fa-calendar-alt"></i>
+                            <span th:text="${post.createdOn}">Time of creation</span>
+                        </span>
+                        <span class="post-comments">
+                            <i class="fa fa-comments"></i>
+                            <span th:text="${post.getCommentsCount()}">Comments Count</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="post-right">
+                    <div class="post-stats-container">
+                        <div class="post-stats">
+                            <div class="post-likes">
+                                <i class="fa fa-thumbs-up"></i>
+                                <span th:text="${post.likes}">Likes Count</span>
+                            </div>
+                            <div class="post-dislikes">
+                                <i class="fa fa-thumbs-down"></i>
+                                <span th:text="${post.dislikes}">Dislikes Count</span>
+                            </div>
+                        </div>
+                        <div class="post-tags-container">
+                            <div class="post-tags">
+                                <span th:each="tag : ${post.getPostTags()}" th:text="'#' + ${tag}">#Tag</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-
-<form action="#" th:action="@{__${requestURI}__/add-tag}" th:object="${tagDto}"
-      method="post">
-    <input type="text" th:field="*{tagName}" placeholder="place your tag here">
-    <label class="error-form-error" th:errors="*{tagName}"></label>
-    <input type="submit" value="Add Tag">
+<form class="button-create">
+    <a th:if="${isAuthenticated}" href="#" th:href="@{/ti/forum/posts/new}" th:text="#{post.create.button}"
+       class="btn-danger">Create New Post</a>
 </form>
 
-
+<footer>
+    <p>&copy; 2024 Game Forum. All rights reserved.</p>
+</footer>
 </body>
 </html>

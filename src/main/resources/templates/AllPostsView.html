@@ -38,17 +38,21 @@
 </header>
 <div class="body-content">
     <form action="#" th:action="@{/ti/forum/posts}" method="get" th:object="${filterPostOptions}" class="filter-form">
-        <label th:text="#{posts.filter.options}" class="filter-label">Filter Options</label>
+        <h2 th:text="#{posts.filter.options}" class="filter-label">Filter Options</h2>
         <div class="filter-inputs">
-            <input type="text" placeholder="Post Title" th:field="*{title}" class="filter-input"/>
-            <input type="text" placeholder="Post Tags" th:field="*{tagName}" class="filter-input"/>
-            <input type="number" min="0" placeholder="Max Likes" th:field="*{maxLikes}" class="filter-input"/>
-            <input type="number" min="0" placeholder="Min Likes" th:field="*{minLikes}" class="filter-input"/>
-            <input type="number" min="0" placeholder="Max Dislikes" th:field="*{maxDislikes}" class="filter-input"/>
-            <input type="number" min="0" placeholder="Min Dislikes" th:field="*{minDislikes}" class="filter-input"/>
+            <input type="text" placeholder="Search by title..." th:field="*{title}" class="filter-input"/>
+            <input type="text" placeholder="Search by tags..." th:field="*{tagName}" class="filter-input"/>
+            <input type="number" min="0" placeholder="Search by max likes..." th:field="*{maxLikes}"
+                   class="filter-input"/>
+            <input type="number" min="0" placeholder="Search by min likes..." th:field="*{minLikes}"
+                   class="filter-input"/>
+            <input type="number" min="0" placeholder="Search by max dislikes..." th:field="*{maxDislikes}"
+                   class="filter-input"/>
+            <input type="number" min="0" placeholder="Search by min dislikes..." th:field="*{minDislikes}"
+                   class="filter-input"/>
 
             <select th:field="*{sortBy}" class="filter-select">
-                <option value="">Sort By</option>
+                <option value="">You can sort by...</option>
                 <option value="title">Title</option>
                 <option value="likes">Likes</option>
                 <option value="dislikes">Dislikes</option>
@@ -66,52 +70,59 @@
         </div>
     </form>
 
-    <div th:if="${posts.isEmpty()}">
-        <h2 th:text="#{posts.title.empty}">No Posts</h2>
-    </div>
-    <div th:unless="${posts.isEmpty()}">
-        <h2 th:text="#{posts.title}">All Beers</h2>
+    <div class="posts-wrapper">
+        <div th:if="${posts.isEmpty()}">
+            <h2 th:text="#{posts.title.empty}">No Posts</h2>
+        </div>
 
-        <div class="posts-container">
-            <div th:each="post : ${posts}" class="post-item box-shadow">
-                <div class="post-content">
+        <div th:unless="${posts.isEmpty()}">
+            <h2 th:text="#{posts.title}">All Beers</h2>
 
-                    <div class="post-left">
-                        <h3 class="post-title">
-                            <a th:href="@{/ti/forum/posts/__${post.postId}__}" th:text="${post.title}">Post Title</a>
-                        </h3>
-                        <div class="post-meta">
+            <div class="posts-container">
+                <div th:each="post : ${posts}" class="post-item box-shadow">
+                    <div class="post-content">
+
+                        <div class="post-left">
+                            <h3 class="post-title">
+                                <a th:href="@{/ti/forum/posts/__${post.postId}__}" th:text="${post.title}">Post Title</a>
+                            </h3>
+                            <div class="post-meta">
                     <span class="post-creator">
-                        <i class="fa fa-user"></i>
+                        <i class="fa-solid fa-user-tie"></i>
                         <span th:text="${post.postedBy.username}">Username</span>
                     </span>
-                            <span class="post-time">
+                                <span class="post-time">
                         <i class="fa fa-calendar-alt"></i>
                         <span th:text="${post.createdOn}">Time of creation</span>
                     </span>
-                        </div>
-                    </div>
-
-                    <div class="post-right">
-                        <div class="post-stats-container">
-                            <div class="post-stats">
-                                <div class="post-likes">
-                                    <i class="fa fa-thumbs-up"></i>
-                                    <span th:text="${post.likes}">Likes Count</span>
-                                </div>
-                                <div class="post-dislikes">
-                                    <i class="fa fa-thumbs-down"></i>
-                                    <span th:text="${post.dislikes}">Dislikes Count</span>
-                                </div>
-                            </div>
-                            <div class="post-tags-container">
-                                <div class="post-tags">
-                                    <span th:each="tag : ${post.getFormattedTags()}" th:text="'#' + ${tag}">#Tag</span>
-                                </div>
+                                <span class="post-comments">
+                        <i class="fa fa-comments"></i>
+                        <span th:text="${post.getCommentsCount()}">Comments Count</span>
+                    </span>
                             </div>
                         </div>
-                    </div>
 
+                        <div class="post-right">
+                            <div class="post-stats-container">
+                                <div class="post-stats">
+                                    <div class="post-likes">
+                                        <i class="fa fa-thumbs-up"></i>
+                                        <span th:text="${post.likes}">Likes Count</span>
+                                    </div>
+                                    <div class="post-dislikes">
+                                        <i class="fa fa-thumbs-down"></i>
+                                        <span th:text="${post.dislikes}">Dislikes Count</span>
+                                    </div>
+                                </div>
+                                <div class="post-tags-container">
+                                    <div class="post-tags">
+                                        <span th:each="tag : ${post.getPostTags()}" th:text="'#' + ${tag}">#Tag</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>

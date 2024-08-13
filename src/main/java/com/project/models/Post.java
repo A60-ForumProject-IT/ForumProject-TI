@@ -72,10 +72,8 @@ public class Post implements Comparable<Post> {
     public Post() {
     }
 
-    public String getFormattedTags() {
-        return postTags.stream()
-                .map(Tag::toString)
-                .collect(Collectors.joining("<br>"));
+    public int getCommentsCount() {
+        return comments.size();
     }
 
     @Override

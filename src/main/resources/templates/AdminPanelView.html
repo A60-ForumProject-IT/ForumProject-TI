@@ -6,21 +6,11 @@
     <link rel="stylesheet" href="../static/css/styles.css" th:href="@{/css/styles.css}">
 </head>
 <body>
-<header>
-    <div>
-        <h3>
-            <a th:href="@{/ti}">Home</a>
-            <a th:href="@{/ti/forum/posts}">Posts</a>
-            <a th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}">Logout</a>
-            <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}">Login</a>
-            <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/register}">Registration</a>
-            <a th:href="@{/ti/users/admin/users}">All Users</a>
-        </h3>
-    </div>
-</header>
-
-<div class="body-content">
+<form th:replace="~{ForumFormFragment.html :: header}"></form>
+<div class="h2-3d-dark">
     <h2>Admin Panel</h2>
 </div>
+<form th:replace="~{ForumFormFragment.html :: footer}"></form>
 </body>
 </html>
+

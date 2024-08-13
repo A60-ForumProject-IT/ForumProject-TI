@@ -31,13 +31,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllUsers(User user, FilteredUsersOptions filteredUsersOptional) {
-        PermissionHelper.isAdmin(user, INVALID_PERMISSION);
+        PermissionHelper.isAdminOrModerator(user, INVALID_PERMISSION);
         return userRepository.getAllUsers(filteredUsersOptional);
     }
 
     @Override
     public User getUserById(User user, int id) {
-        PermissionHelper.isAdmin(user, INVALID_PERMISSION);
+        PermissionHelper.isAdminOrModerator(user, INVALID_PERMISSION);
         return userRepository.getUserById(id);
     }
 

@@ -143,7 +143,7 @@ public class UserMvcController {
     public String showAdminPortal(HttpSession session, Model model) {
         try {
             User user = authenticationHelper.tryGetUserFromSession(session);
-            if (user.getRole().getRoleId() == 3) {
+            if (user.getRole().getRoleId() == 3 || user.getRole().getRoleId() == 2) {
                 return "AdminPanelView";
             }
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
@@ -172,7 +172,7 @@ public class UserMvcController {
                 return "ErrorView";
             }
 
-            if (user.getRole().getRoleId() == 3) {
+            if (user.getRole().getRoleId() == 3 || user.getRole().getRoleId() == 2) {
                 FilteredUsersOptions filteredUsersOptions = new FilteredUsersOptions(
                         filterUserDto.getUsername(),
                         filterUserDto.getFirstName(),
@@ -201,7 +201,7 @@ public class UserMvcController {
     public String showUserDetails(@PathVariable int id, Model model, HttpSession session) {
         try {
             User user = authenticationHelper.tryGetUserFromSession(session);
-            if (user.getRole().getRoleId() == 3) {
+            if (user.getRole().getRoleId() == 3 || user.getRole().getRoleId() == 2) {
                 User userToDisplay = userService.getUserById(user, id);
                 System.out.println("User ID: " + userToDisplay.getId());
                 System.out.println("Phone Numbers: " + userToDisplay.getPhoneNumbers());
@@ -230,7 +230,7 @@ public class UserMvcController {
     public String deleteUser(@PathVariable int id, Model model, HttpSession session) {
         try {
             User user = authenticationHelper.tryGetUserFromSession(session);
-            if (user.getRole().getRoleId() == 3) {
+            if (user.getRole().getRoleId() == 3 || user.getRole().getRoleId() == 2) {
                 userService.deleteUser(user, id);
                 return "redirect:/ti/users/admin/users";
             }
@@ -256,7 +256,7 @@ public class UserMvcController {
     public String blockUser(@PathVariable int id, Model model, HttpSession session) {
         try {
             User user = authenticationHelper.tryGetUserFromSession(session);
-            if (user.getRole().getRoleId() == 3) {
+            if (user.getRole().getRoleId() == 3 || user.getRole().getRoleId() == 2) {
                 userService.blockUser(user, id);
                 return "redirect:/ti/users/admin/users/" + id;
             }
@@ -282,7 +282,7 @@ public class UserMvcController {
     public String unblockUser(@PathVariable int id, Model model, HttpSession session) {
         try {
             User user = authenticationHelper.tryGetUserFromSession(session);
-            if (user.getRole().getRoleId() == 3) {
+            if (user.getRole().getRoleId() == 3 || user.getRole().getRoleId() == 2) {
                 userService.unblocked(user, id);
                 return "redirect:/ti/users/admin/users/" + id;
             }
@@ -394,7 +394,7 @@ public class UserMvcController {
                               Model model, HttpSession session) {
         try {
             User user = authenticationHelper.tryGetUserFromSession(session);
-            if (user.getRole().getRoleId() == 3) {
+            if (user.getRole().getRoleId() == 3 || user.getId() == id) {
                 phoneService.removePhoneFromAdmin(user, phoneId);
                 return "redirect:/ti/users/admin/users/" + id;
             }

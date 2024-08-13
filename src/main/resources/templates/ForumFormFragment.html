@@ -20,7 +20,7 @@
                 <a th:href="@{/ti/about}">About</a>
                 <a th:href="@{/ti/forum/posts}">Forum Posts</a>
                 <a th:href="@{/ti/users/edit}">Edit User</a>
-                <a th:href="@{/ti/users/admin}">Admin Panel</a>
+                <a th:if="${isAuthenticated && (isAdmin || isModerator)}" th:href="@{/ti/users/admin}">Admin Panel</a>
             </div>
             <div class="nav-links-right">
                 <a th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}">

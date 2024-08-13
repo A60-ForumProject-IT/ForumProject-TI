@@ -44,6 +44,11 @@ public class PostMvcController {
         this.tagService = tagService;
     }
 
+    @ModelAttribute("tags")
+    public List<Tag> populateTags() {
+        return tagService.getAllTags();
+    }
+
     @ModelAttribute("isAdmin")
     public boolean populateIsAdmin(HttpSession session) {
         if (session.getAttribute("currentUser") != null) {
@@ -53,11 +58,6 @@ public class PostMvcController {
             }
         }
         return false;
-    }
-
-    @ModelAttribute("tags")
-    public List<Tag> populateTags() {
-        return tagService.getAllTags();
     }
 
     @ModelAttribute("loggedUser")

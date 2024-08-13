@@ -20,7 +20,7 @@
                 <a th:href="@{/ti/about}">About</a>
                 <a th:href="@{/ti/forum/posts}">Forum Posts</a>
                 <a th:href="@{/ti/users/edit}">Edit User</a>
-                <a th:href="@{/ti/users/admin}">Admin Panel</a>
+                <a th:if="${isAuthenticated && (isAdmin || isModerator)}" th:href="@{/ti/users/admin}">Admin Panel</a>
             </div>
             <div class="nav-links-right">
                 <a th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}">
@@ -74,7 +74,7 @@
         <div class="posts-container">
             <div th:each="post : ${posts}" class="post-item box-shadow">
                 <div class="post-content">
-                    <!-- Лявата част: Заглавие, създател, дата -->
+
                     <div class="post-left">
                         <h3 class="post-title">
                             <a th:href="@{/ti/forum/posts/__${post.postId}__}" th:text="${post.title}">Post Title</a>
@@ -90,7 +90,7 @@
                     </span>
                         </div>
                     </div>
-                    <!-- Дясната част: Likes, Dislikes, Тагове -->
+
                     <div class="post-right">
                         <div class="post-stats-container">
                             <div class="post-stats">
@@ -110,6 +110,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>

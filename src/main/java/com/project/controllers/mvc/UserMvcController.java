@@ -15,10 +15,12 @@ import com.project.models.dtos.PhoneNumberDto;
 import com.project.models.dtos.UserDto;
 import com.project.services.contracts.AvatarService;
 import com.project.services.contracts.PhoneService;
+import com.project.services.contracts.RoleService;
 import com.project.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,16 +41,17 @@ public class UserMvcController {
     private final MapperHelper mapperHelper;
     private final AvatarService avatarService;
     private final PhoneService phoneService;
+    private final RoleService roleService;
 
-
-    public UserMvcController(UserService userService, AuthenticationHelper authenticationHelper, MapperHelper mapperHelper, AvatarService avatarService, PhoneService phoneService) {
+    @Autowired
+    public UserMvcController(UserService userService, AuthenticationHelper authenticationHelper, MapperHelper mapperHelper, AvatarService avatarService, PhoneService phoneService, RoleService roleService) {
         this.userService = userService;
         this.authenticationHelper = authenticationHelper;
         this.mapperHelper = mapperHelper;
         this.avatarService = avatarService;
         this.phoneService = phoneService;
+        this.roleService = roleService;
     }
-
 
     @ModelAttribute("isAdmin")
     public boolean populateIsAdmin(HttpSession session) {
@@ -63,7 +66,6 @@ public class UserMvcController {
         return false;
     }
 
-
     @ModelAttribute("isBlocked")
     public boolean populateIsBlocked(HttpSession session) {
         if (session.getAttribute("currentUser") != null) {
@@ -77,7 +79,16 @@ public class UserMvcController {
         return false;
     }
 
-
+    @ModelAttribute("isModerator")
+    public boolean populateIsModerator(HttpSession session) {
+        if (session.getAttribute("currentUser") != null) {
+            User user = authenticationHelper.tryGetUserFromSession(session);
+            if (user.getRole().equals(roleService.getRoleById(2))) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     @ModelAttribute("isAuthenticated")
     public boolean populateIsAuthenticated(HttpSession session) {

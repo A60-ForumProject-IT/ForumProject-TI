@@ -224,6 +224,12 @@ public class PostRepositoryImpl implements PostRepository {
             parameters.put("title", String.format("%%%s%%", value));
         });
 
+        filteredPostsOptions.getTagName().ifPresent(value -> {
+            queryString.append("JOIN post.postTags tags ");
+            filters.add("tags.tag LIKE :tagName");
+            parameters.put("tagName", "%" + value + "%");
+        });
+
         filteredPostsOptions.getContent().ifPresent(value -> {
             filters.add(" post.content like :content ");
             parameters.put("content", String.format("%%%s%%", value));

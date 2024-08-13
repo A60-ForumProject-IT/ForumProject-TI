@@ -47,6 +47,7 @@ public class PostRestController {
                                   @RequestParam(required = false) Integer maxLikes,
                                   @RequestParam(required = false) Integer maxDislikes,
                                   @RequestParam(required = false) String title,
+                                  @RequestParam(required = false) String tagName,
                                   @RequestParam(required = false) String content,
                                   @RequestParam(required = false) LocalDate createdBefore,
                                   @RequestParam(required = false) LocalDate createdAfter,
@@ -56,7 +57,7 @@ public class PostRestController {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             FilteredPostsOptions postFilterOptions =
-                    new FilteredPostsOptions(minLikes, minDislikes,maxLikes, maxDislikes, title, content, createdBefore, createdAfter, postedBy, sortBy, sortOrder);
+                    new FilteredPostsOptions(minLikes, minDislikes,maxLikes, maxDislikes, title, tagName, content, createdBefore, createdAfter, postedBy, sortBy, sortOrder);
             return postService.getAllPosts(postFilterOptions);
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
@@ -138,6 +139,7 @@ public class PostRestController {
                                        @RequestParam(required = false) Integer maxLikes,
                                        @RequestParam(required = false) Integer maxDislikes,
                                        @RequestParam(required = false) String title,
+                                       @RequestParam(required = false) String tagName,
                                        @RequestParam(required = false) String content,
                                        @RequestParam(required = false) LocalDate createdBefore,
                                        @RequestParam(required = false) LocalDate createdAfter,
@@ -147,7 +149,7 @@ public class PostRestController {
         try {
             authenticationHelper.tryGetUser(headers);
             FilteredPostsOptions postFilterOptions =
-                    new FilteredPostsOptions(minLikes, minDislikes,maxLikes, maxDislikes, title, content, createdBefore, createdAfter, postedBy, sortBy, sortOrder);
+                    new FilteredPostsOptions(minLikes, minDislikes,maxLikes, maxDislikes, title, tagName, content, createdBefore, createdAfter, postedBy, sortBy, sortOrder);
             return postService.getAllUsersPosts(userId, postFilterOptions);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());

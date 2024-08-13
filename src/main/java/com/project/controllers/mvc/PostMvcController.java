@@ -100,12 +100,14 @@ public class PostMvcController {
 
     @GetMapping("/posts")
     public String showAllPosts(@ModelAttribute("filterPostOptions") FilterPostDto filterPostDto, Model model) {
+        filterPostDto.sanitize();
         FilteredPostsOptions filteredPostsOptions = new FilteredPostsOptions(
                 filterPostDto.getMaxLikes(),
                 filterPostDto.getMinLikes(),
                 filterPostDto.getMaxDislikes(),
                 filterPostDto.getMinDislikes(),
                 filterPostDto.getTitle(),
+                filterPostDto.getTagName(),
                 filterPostDto.getContent(),
                 filterPostDto.getCreatedBefore(),
                 filterPostDto.getCreatedAfter(),

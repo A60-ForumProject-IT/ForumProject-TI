@@ -137,6 +137,7 @@ public class TestHelpers {
                 0,
                 "Test title",
                 "Test content",
+                "Test content",
                 LocalDate.of(2024, 1, 31),
                 LocalDate.of(2024, 1, 31),
                 "Test User",
@@ -154,6 +155,8 @@ public class TestHelpers {
     public static FilteredUsersOptions createUserFilterOptions(){
         return new FilteredUsersOptions(
                 "username",
+                "tosho",
+                "email",
                 "email",
                 "firstName"
         );

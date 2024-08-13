@@ -41,6 +41,7 @@
         <label th:text="#{posts.filter.options}" class="filter-label">Filter Options</label>
         <div class="filter-inputs">
             <input type="text" placeholder="Post Title" th:field="*{title}" class="filter-input"/>
+            <input type="text" placeholder="Post Tags" th:field="*{tagName}" class="filter-input"/>
             <input type="number" min="0" placeholder="Max Likes" th:field="*{maxLikes}" class="filter-input"/>
             <input type="number" min="0" placeholder="Min Likes" th:field="*{minLikes}" class="filter-input"/>
             <input type="number" min="0" placeholder="Max Dislikes" th:field="*{maxDislikes}" class="filter-input"/>

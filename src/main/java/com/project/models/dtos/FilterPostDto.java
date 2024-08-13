@@ -14,6 +14,7 @@ public class FilterPostDto {
     private Integer maxLikes;
     private Integer maxDislikes;
     private String title;
+    private String tagName;
     private String content;
     private String postedBy;
     private String sortBy;
@@ -25,5 +26,26 @@ public class FilterPostDto {
     private LocalDate createdAfter;
 
     public FilterPostDto() {
+    }
+
+    public void sanitize() {
+        if (title != null && title.trim().isEmpty()) {
+            title = null;
+        }
+        if (tagName != null && tagName.trim().isEmpty()) {
+            tagName = null;
+        }
+        if (content != null && content.trim().isEmpty()) {
+            content = null;
+        }
+        if (postedBy != null && postedBy.trim().isEmpty()) {
+            postedBy = null;
+        }
+        if (sortBy != null && sortBy.trim().isEmpty()) {
+            sortBy = null;
+        }
+        if (sortOrder != null && sortOrder.trim().isEmpty()) {
+            sortOrder = null;
+        }
     }
 }

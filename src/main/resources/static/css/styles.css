@@ -1027,6 +1027,17 @@ header:hover {
     text-align: center;
     letter-spacing: 1px;
 }
+.h3-3d-dark {
+    color: whitesmoke;
+    text-shadow: 2px 2px 0px #282b30,
+    4px 4px 0px #444,
+    6px 6px 2px rgba(0, 0, 0, 0.5);
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+    letter-spacing: 1px;
+}
 
 .create-post-wrapper {
     background-color: #282b30;
@@ -1150,5 +1161,107 @@ header:hover {
 }
 
 .admin-buttons button:hover {
+    background-color: #ff79c6;
+}
+
+.edit-user-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+/* Профилната снимка да бъде кръгла */
+.profile-picture-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+}
+
+.profile-picture-container img {
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.profile-picture-container label,
+.profile-picture-container button {
+    margin: 5px 0;
+}
+
+/* Подравняване на текстовете и input полетата */
+.user-info-container .user-info,
+.admin-phone-container .user-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 10px;
+}
+
+.user-info-container .user-info label,
+.admin-phone-container .user-info label {
+    flex: 0 0 120px; /* Фиксирана ширина за етикета */
+    text-align: right;
+    margin-right: 10px;
+}
+
+.user-info-container .user-info input,
+.admin-phone-container .user-info input {
+    width: 100%; /* Фиксирана ширина за всички input полета */
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #444;
+    background-color: #1d1f21;
+    color: #ffffff;
+    text-align: left;
+}
+
+.user-info-container button,
+.admin-phone-container button {
+    width: 100%;
+    max-width: 150px;
+    margin: 0 auto;
+    display: block;
+}
+
+/* Центриране на бутона Add Phone */
+.admin-phone-container button {
+    width: 100%;
+    max-width: 150px;
+    margin: 0 auto;
+    display: block;
+}
+
+/* Невидими контейнери */
+.profile-picture-container,
+.user-info-container,
+.admin-phone-container {
+    border: none;
+    background-color: transparent;
+    box-shadow: none;
+}
+/* Скрии input[type="file"] */
+input[type="file"] {
+    display: none;
+}
+
+/* Персонализиран бутон за качване на файл */
+.custom-file-upload {
+    display: inline-block;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #50fa7b;
+    color: #1d1f21;
+    border-radius: 5px;
+    border: none;
+    transition: background-color 0.3s;
+    text-align: center;
+}
+
+.custom-file-upload:hover {
     background-color: #ff79c6;
 }

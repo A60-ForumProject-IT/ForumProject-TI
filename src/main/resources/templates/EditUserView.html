@@ -4,72 +4,72 @@
     <meta charset="UTF-8">
     <title>Edit User</title>
     <link rel="stylesheet" href="../static/css/styles.css" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-<header>
-    <div>
-        <div>
-            <h3>
-                <a th:href="@{/ti}">Home</a>
-                <a th:href="@{/ti/forum/posts}">Posts</a>
-                <a th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}">Logout</a>
-                <a th:if="${isAuthenticated}" th:href="@{/ti/users/edit}">Edit User</a>
-                <a th:if="${isAuthenticated && isAdmin}" th:href="@{/ti/users/admin}">Admin Panel</a>
-                <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}">Login</a>
-                <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/register}">Registration</a>
-            </h3>
-        </div>
-    </div>
-</header>
+<header th:replace="~{ForumFormFragment.html :: header}"></header>
 <div class="body-content">
-    <h2>Edit User Information</h2>
+    <h2 class="h2-3d-dark">Edit User Information</h2>
 
-    <form th:action="@{/ti/users/edit/avatar}" method="post" enctype="multipart/form-data">
-        <div class="body-content">
-            <img th:src="${user.avatar.avatar}" alt="Profile Picture" width="100" height="100"/>
+    <div class="edit-user-container">
+        <!-- Контейнер за профилната снимка и бутоните -->
+        <div class="profile-picture-container">
+            <img th:src="${user.avatar.avatar}" alt="Profile Picture" width="150" height="150"/>
+            <form th:action="@{/ti/users/edit/avatar}" method="post" enctype="multipart/form-data">
+                <label for="avatarFile" class="custom-file-upload">Choose Photo</label>
+                <input type="file" id="avatarFile" name="avatarFile" accept="image/*" required>
+                <button type="submit">Upload</button>
+            </form>
         </div>
-        <input type="file" id="avatarFile" name="avatarFile" accept="image/*" required>
-        <button type="submit">Upload</button>
-    </form>
 
-    <form th:action="@{/ti/users/edit}" th:object="${user}" method="post" enctype="multipart/form-data">
-        <div class="user-info">
-            <label th:text="#{user.label.firstName}">First Name:</label>
-            <input type="text" th:field="*{firstName}"/>
-            <label class="error-form-error" th:errors="*{firstName}"></label>
-        </div>
-        <div class="user-info">
-            <label th:text="#{user.label.lastName}">Last Name:</label>
-            <input type="text" th:field="*{lastName}"/>
-            <label class="error-form-error" th:errors="*{lastName}"></label>
-        </div>
-        <div class="user-info">
-            <label th:text="#{user.label.email}">Email:</label>
-            <input type="email" th:field="*{email}"/>
-            <label class="error-form-error" th:errors="*{email}"></label>
-        </div>
-        <div class="user-info">
-            <label th:text="#{user.label.password}">Password:</label>
-            <input type="password" th:field="*{password}"/>
-            <label class="error-form-error" th:errors="*{password}"></label>
-        </div>
-        <div>
-            <button type="submit">Save</button>
-        </div>
-    </form>
-
-    <div th:if="${isAdmin}">
-        <h3>Add Phone Number</h3>
-        <form th:action="@{/ti/users/admin/{id}/phone(id=${userId})}" method="post">
-            <div>
-                <label for="phoneNumber">Phone Number:</label>
-                <input type="text" id="phoneNumber" name="phoneNumber" required/>
+        <!-- Контейнер за данните, които се променят -->
+        <form th:action="@{/ti/users/edit}" th:object="${user}" method="post" enctype="multipart/form-data" class="user-info-container">
+            <div class="user-info">
+                <label th:text="#{user.label.firstName}">First Name:</label>
+                <input type="text" th:field="*{firstName}"/>
+                <label class="error-form-error" th:errors="*{firstName}"></label>
+            </div>
+            <div class="user-info">
+                <label th:text="#{user.label.lastName}">Last Name:</label>
+                <input type="text" th:field="*{lastName}"/>
+                <label class="error-form-error" th:errors="*{lastName}"></label>
+            </div>
+            <div class="user-info">
+                <label th:text="#{user.label.email}">Email:</label>
+                <input type="email" th:field="*{email}"/>
+                <label class="error-form-error" th:errors="*{email}"></label>
+            </div>
+            <div class="user-info">
+                <label th:text="#{user.label.password}">Password:</label>
+                <input type="password" th:field="*{password}"/>
+                <label class="error-form-error" th:errors="*{password}"></label>
             </div>
             <div>
-                <button type="submit">Add Phone</button>
+                <button type="submit">Save</button>
             </div>
         </form>
+        <div th:if="${isAdmin}" class="admin-phone-container">
+            <h3 class="h3-3d-dark">Add Phone Number</h3>
+            <form th:action="@{/ti/users/admin/{id}/phone(id=${userId})}" method="post">
+                <div class="user-info">
+                    <label for="phoneNumber">Phone:</label>
+                    <input type="text" id="phoneNumber" name="phoneNumber" required/>
+                </div>
+                <div>
+                    <button type="submit">Add Phone</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
+<footer th:replace="~{ForumFormFragment.html :: footer}"></footer>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const fileInput = document.querySelector("#avatarFile");
+        const label = document.querySelector("label[for='avatarFile']");
+        label.textContent = "Choose Photo";
+    });
+</script>
 </body>
 </html>

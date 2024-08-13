@@ -1265,3 +1265,56 @@ input[type="file"] {
 .custom-file-upload:hover {
     background-color: #ff79c6;
 }
+
+/* Съществуващ CSS код... */
+
+.registration-form {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #2c2f33;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.registration-form .form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.registration-form .form-label {
+    flex: 0.2 0.1 120px;
+    text-align: right;
+    margin-right: 10px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.registration-form .form-input {
+    flex: 1;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #444;
+    background-color: #1d1f21;
+    color: #ffffff;
+}
+
+.registration-form .btn-submit {
+    width: 100%;
+    max-width: 150px;
+    margin: 0 auto;
+    display: block;
+    background-color: #50fa7b;
+    color: #1d1f21;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.registration-form .btn-submit:hover {
+    background-color: #ff79c6;
+}

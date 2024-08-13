@@ -6,9 +6,10 @@
     <link rel="stylesheet" href="../static/css/styles.css" th:href="@{/css/styles.css}">
 </head>
 <body>
+<header th:replace="~{ForumFormFragment.html :: header}"></header>
 <div class="body-content">
-    <h2 id="login-h2">Register</h2>
-    <form class="create-beer-form" th:action="@{/ti/auth/register}" th:object="${register}" method="post">
+    <h2 class="h2-3d-dark">Register</h2>
+    <form class="registration-form" th:action="@{/ti/auth/register}" th:object="${register}" method="post">
         <div class="form-group">
             <label class="form-label" th:text="#{user.label.username}">Username</label>
             <input type="text" class="form-input" th:field="*{username}"/>
@@ -45,7 +46,9 @@
             <label class="error form-error" th:errors="*{lastName}"></label>
         </div>
 
-        <input type="submit" value="Register" class="btn-primary"/>
+        <input type="submit" value="Register" class="btn-submit centered-btn"/>
     </form>
+</div>
+<footer th:replace="~{ForumFormFragment.html :: footer}"></footer>
 </body>
 </html>

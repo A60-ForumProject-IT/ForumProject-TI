@@ -148,7 +148,7 @@ footer p {
 
 .profile-picture img {
     border-radius: 50%;
-    border: 3px solid #50fa7b;
+    border: 5px solid #50fa7b;
 }
 
 .fa {
@@ -882,7 +882,9 @@ header:hover {
 
 .user-info {
     display: flex;
-    width: 100%;
+    justify-content: center;
+    width: 80%;
+    margin-top: 20px;
 }
 
 .user-detail, .user-email {
@@ -1085,5 +1087,63 @@ header:hover {
 }
 
 .btn-submit-create:hover {
+    background-color: #ff79c6;
+}
+
+.user-profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.user-info-left {
+    width: 45%;
+    text-align: right;
+    margin-right: 30px;
+}
+
+.user-info-right {
+    width: 45%;
+    text-align: left;
+}
+
+.user-info-left p, .user-info-right p {
+    margin: 10px 0;
+}
+
+/* Бутоните за администраторски действия */
+.admin-actions {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.admin-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.admin-buttons form {
+    margin: 0;
+}
+
+.admin-buttons button {
+    width: 150px;
+    background-color: #50fa7b;
+    color: #1d1f21;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.admin-buttons button:hover {
+    background-color: #ff79c6;
+}
+
+.admin-buttons button:hover {
     background-color: #ff79c6;
 }

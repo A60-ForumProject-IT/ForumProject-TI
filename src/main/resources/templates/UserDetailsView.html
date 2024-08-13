@@ -8,83 +8,63 @@
 </head>
 <body>
 <header th:replace="~{ForumFormFragment.html :: header}"></header>
-<main>
-    <div class="body-content">
-        <h1>User Details</h1>
-        <div class="user-details-container">
-            <div class="profile-picture">
-                <img th:src="${user.avatar.avatar}" alt="Profile Picture" width="250" height="200"/>
-            </div>
-            <div class="user-info">
-                <div>
-                    <label>Username:</label>
-                    <span th:text="${user.username}"></span>
-                </div>
-                <div>
-                    <label>First Name:</label>
-                    <span th:text="${user.firstName}"></span>
-                </div>
-                <div>
-                    <label>Last Name:</label>
-                    <span th:text="${user.lastName}"></span>
-                </div>
-                <div>
-                    <label>Email:</label>
-                    <span th:text="${user.email}"></span>
-                </div>
-                <div>
-                    <label>Role:</label>
-                    <span th:text="${user.role.name}"></span>
-                </div>
-                <div th:if="${user.role.roleId == 3}">
-                    <label>Phones:</label>
-                    <div class="phone-numbers-container">
-                        <div th:each="phone : ${user.phoneNumbers}" class="phone-number">
-                            <span th:text="${phone.phoneNumber}"></span>
-                            <form th:action="@{/ti/users/admin/{id}/phone/{phoneId}/remove(id=${user.id}, phoneId=${phone.id})}"
-                                  method="post" style="display:inline;">
-                                <button type="submit">Delete</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
 
+    <div class="body-content">
+        <div class="user-profile-container">
+            <!-- Profile Picture -->
+            <div class="profile-picture">
+                <img th:src="${user.avatar.avatar}" alt="Profile Picture" width="200" height="200"/>
+            </div>
+            <!-- User Info -->
+            <div class="user-info">
+                <div class="user-info-left">
+                    <p><strong>Username:</strong></p>
+                    <p><strong>First Name:</strong></p>
+                    <p><strong>Last Name:</strong></p>
+                    <p><strong>Email:</strong></p>
+                    <p><strong>Role:</strong></p>
+                </div>
+                <div class="user-info-right">
+                    <p><span th:text="${user.username}"></span></p>
+                    <p><span th:text="${user.firstName}"></span></p>
+                    <p><span th:text="${user.lastName}"></span></p>
+                    <p><span th:text="${user.email}"></span></p>
+                    <p><span th:text="${user.role.name}"></span></p>
+                </div>
             </div>
         </div>
 
-        <div class="body-content">
+        <!-- Admin Actions -->
+        <div class="admin-actions">
             <h2>Admin Actions</h2>
-            <form th:action="@{/ti/users/admin/users/{id}/delete(id=${user.id})}" method="post">
-                <button type="submit">Delete User</button>
-            </form>
-            <br/>
+            <div class="admin-buttons">
+                <form th:action="@{/ti/users/admin/users/{id}/delete(id=${user.id})}" method="post">
+                    <button type="submit">Delete User</button>
+                </form>
 
-            <form th:unless="*{user.isBlocked()}" th:action="@{/ti/users/admin/users/{id}/block(id=${user.id})}"
-                  method="post">
-                <button type="submit">Block User</button>
-            </form>
-            <br/>
+                <form th:unless="*{user.isBlocked()}" th:action="@{/ti/users/admin/users/{id}/block(id=${user.id})}"
+                      method="post">
+                    <button type="submit">Block User</button>
+                </form>
 
-            <form th:if="*{user.isBlocked()}" th:action="@{/ti/users/admin/users/{id}/unblock(id=${user.id})}"
-                  method="post">
-                <button type="submit">Unblock User</button>
-                <br/>
-            </form>
+                <form th:if="*{user.isBlocked()}" th:action="@{/ti/users/admin/users/{id}/unblock(id=${user.id})}"
+                      method="post">
+                    <button type="submit">Unblock User</button>
+                </form>
 
-            <form th:if="*{user.getRole().roleId == 1}" th:action="@{/ti/users/admin/users/{id}/promote(id=${user.id})}"
-                  method="post">
-                <button type="submit">Make moderator</button>
-                <br/>
-            </form>
+                <form th:if="*{user.getRole().roleId == 1}" th:action="@{/ti/users/admin/users/{id}/promote(id=${user.id})}"
+                      method="post">
+                    <button type="submit">Make Moderator</button>
+                </form>
 
-            <form th:if="*{user.getRole().roleId == 2}" th:action="@{/ti/users/admin/users/{id}/demote(id=${user.id})}"
-                  method="post">
-                <button type="submit">Demote moderator</button>
-            </form>
-            <br/>
+                <form th:if="*{user.getRole().roleId == 2}" th:action="@{/ti/users/admin/users/{id}/demote(id=${user.id})}"
+                      method="post">
+                    <button type="submit" id="demote-moderator-button">Demote Moderator</button>
+                </form>
+            </div>
         </div>
     </div>
-</main>
+
 <footer th:replace="~{ForumFormFragment.html :: footer}"></footer>
 </body>
 </html>

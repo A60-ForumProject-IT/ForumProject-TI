@@ -120,12 +120,10 @@
 </div>
 
 <form class="button-create">
-    <a th:if="${isAuthenticated}" href="#" th:href="@{/ti/forum/posts/new}" th:text="#{post.create.button}"
+    <a th:if="${isAuthenticated && !isBlocked}" href="#" th:href="@{/ti/forum/posts/new}" th:text="#{post.create.button}"
        class="btn-danger">Create New Post</a>
 </form>
 
-<footer>
-    <p>&copy; 2024 Game Forum. All rights reserved.</p>
-</footer>
+<form th:replace="ForumFormFragment.html :: footer"></form>
 </body>
 </html>

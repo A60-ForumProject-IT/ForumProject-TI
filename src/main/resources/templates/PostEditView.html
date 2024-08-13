@@ -11,7 +11,7 @@
 
 <div class="body-content">
 
-        <h2 class="centered-title">Edit Your Post</h2>
+        <h2 class="h2-3d-dark">Edit Your Post</h2>
         <form th:object="${postDto}" th:action="@{__${requestURI}__}" method="post">
             <div class="form-group">
                 <label for="edit-post-title">Post Title</label>
@@ -32,7 +32,7 @@
 
 
     <div class="tags-section">
-        <h3 class="centered-title">Tags</h3>
+        <h3 class="h2-3d-dark">Tags</h3>
         <div class="post-tags-container2">
             <div th:each="tag : ${tagsInPost}" th:unless="${tagsInPost.isEmpty()}">
                 <div class="tag-item">

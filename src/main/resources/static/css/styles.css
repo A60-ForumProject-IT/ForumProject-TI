@@ -1330,18 +1330,18 @@ input[type="file"] {
 }
 
 .filter-input[type="date"] {
-    background-color: #1d1f21; /* Цвета на фона на текстовото поле */
-    color: transparent; /* Скриване на текста */
+    background-color: #1d1f21;
+    color: transparent;
 }
 
 .filter-input[type="date"]::placeholder {
-    color: #c5c8c6; /* Цвят на плейсхолдъра */
-    opacity: 1; /* Видимост на плейсхолдъра */
+    color: #c5c8c6;
+    opacity: 1;
 }
 
 .filter-input[type="date"]::-webkit-clear-button,
 .filter-input[type="date"]::-webkit-inner-spin-button {
-    display: none; /* Скриване на вътрешните бутони и спинери */
+    display: none;
 }
 
 /* About Page Specific Styles */

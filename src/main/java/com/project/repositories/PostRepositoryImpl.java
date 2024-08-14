@@ -121,7 +121,12 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public List<Post> getMostLikedPostsMvc() {
         try (Session session = sessionFactory.openSession()) {
-            String hql = "FROM Post p ORDER BY p.likes DESC";
+            String hql = "SELECT p " +
+                    "FROM Post p " +
+                    "LEFT JOIN p.usersWhoLikedPost users " +
+                    "GROUP BY p " +
+                    "ORDER BY COUNT(users) DESC";
+
             Query<Post> query = session.createQuery(hql, Post.class);
             query.setMaxResults(10);
             return query.list();

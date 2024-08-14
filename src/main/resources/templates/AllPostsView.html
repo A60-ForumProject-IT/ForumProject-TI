@@ -7,36 +7,7 @@
     <link rel="stylesheet" href="../static/css/styles.css" th:href="@{/css/styles.css}">
 </head>
 <body>
-<header>
-    <div class="header-container">
-        <div class="logo-container">
-            <a th:href="@{/ti}">
-                <img th:src="@{/images/ti-logo.jpg}" alt="IT Logo" class="logo-img">
-            </a>
-        </div>
-        <nav class="navigation">
-            <div class="nav-links-center">
-                <a th:href="@{/ti}">Home</a>
-                <a th:href="@{/ti/about}">About</a>
-                <a th:href="@{/ti/forum/posts}">Forum Posts</a>
-                <a th:href="@{/ti/users/edit}">Edit User</a>
-                <a th:if="${isAuthenticated && (isAdmin || isModerator)}" th:href="@{/ti/users/admin}">Admin Panel</a>
-            </div>
-            <div class="nav-links-right">
-                <a th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
-                <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}">
-                    <i class="fas fa-sign-in-alt"></i> Login
-                </a>
-                <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/register}">
-                    <i class="fas fa-user-plus"></i> Registration
-                </a>
-            </div>
-        </nav>
-    </div>
-</header>
-
+<form th:replace="ForumFormFragment.html :: header"></form>
 <div class="body-content">
     <form action="#" th:action="@{/ti/forum/posts}" method="get" th:object="${filterPostOptions}" class="filter-form">
         <h2 th:text="#{posts.filter.options}" class="h2-3d-dark">Filter Options</h2>

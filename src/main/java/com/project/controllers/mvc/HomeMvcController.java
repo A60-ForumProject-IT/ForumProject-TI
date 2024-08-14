@@ -86,10 +86,25 @@ public class HomeMvcController {
         long postsCount = postService.getTotalPostsCount();
         model.addAttribute("userCount", userCount);
         model.addAttribute("postsCount", postsCount);
-        model.addAttribute("mostCommentedPosts", postService.getMostCommentedPostsMvc());
-        model.addAttribute("mostRecentPosts", postService.getMostRecentPostsMvc());
-        model.addAttribute("mostLikedPosts", postService.getMostLikedPostsMvc());
         return "HomeView";
+    }
+
+    @GetMapping("/top10mostCommentedPosts")
+    public String showTop10MostCommentedPosts(Model model) {
+        model.addAttribute("mostCommentedPosts", postService.getMostCommentedPostsMvc());
+        return "TopTenMostCommentedPosts";
+    }
+
+    @GetMapping("/top10mostLikedPosts")
+    public String showTop10MostLikedPosts(Model model) {
+        model.addAttribute("mostLikedPosts", postService.getMostLikedPostsMvc());
+        return "TopTenMostLikedPosts";
+    }
+
+    @GetMapping("/top10mostRecentPosts")
+    public String showTop10MostRecentPosts(Model model) {
+        model.addAttribute("mostRecentPosts", postService.getMostRecentPostsMvc());
+        return "TopTenMostRecentPosts";
     }
 
     @GetMapping("/about")

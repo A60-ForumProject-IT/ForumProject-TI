@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Forum</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../static/css/styles.css" th:href="@{/css/styles.css}">
+</head>
+<body>
+<form th:replace="ForumFormFragment.html :: header"></form>
+
+<div class="body-content">
+    <div class="posts-container">
+        <form action="#" th:action="@{/ti/top10mostLikedPosts}" method="get" th:object="${mostLikedPosts}" class="filter-form">
+            <h2 th:text="#{posts.top10liked}" class="h2-3d-dark">Forum Posts</h2>
+            <div th:each="post : ${mostLikedPosts}" class="post-item box-shadow">
+                <div class="post-content">
+                    <div class="post-left">
+                        <h3 class="post-title">
+                            <a th:href="@{/ti/forum/posts/__${post.postId}__}" th:text="${post.title}">Post Title</a>
+                        </h3>
+                        <div class="post-meta">
+                        <span class="post-creator">
+                            <i class="fa-solid fa-user-tie"></i>
+                            <span th:text="${post.postedBy.username}">Username</span>
+                        </span>
+                            <span class="post-time">
+                            <i class="fa fa-calendar-alt"></i>
+                            <span th:text="${post.createdOn}">Time of creation</span>
+                        </span>
+                            <span class="post-comments">
+                            <i class="fa fa-comments"></i>
+                            <span th:text="${post.getComments().size()}">Comments Count</span>
+                        </span>
+                        </div>
+                    </div>
+
+                    <div class="post-right">
+                        <div class="post-stats-container">
+                            <div class="post-stats">
+                                <div class="post-likes">
+                                    <i class="fa fa-thumbs-up"></i>
+                                    <span th:text="${post.usersWhoLikedPost.size()}">Likes Count</span>
+                                </div>
+                                <div class="post-dislikes">
+                                    <i class="fa fa-thumbs-down"></i>
+                                    <span th:text="${post.usersWhoDislikedPost.size()}">Dislikes Count</span>
+                                </div>
+                            </div>
+                            <div class="post-tags-container">
+                                <div class="post-tags">
+                                    <span th:each="tag : ${post.getPostTags()}" th:text="'#' + ${tag}">#Tag</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<form th:replace="ForumFormFragment.html :: footer"></form>
+</body>
+</html>

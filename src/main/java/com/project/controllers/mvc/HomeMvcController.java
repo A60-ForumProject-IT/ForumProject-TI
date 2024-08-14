@@ -83,4 +83,9 @@ public class HomeMvcController {
         model.addAttribute("userCount", userCount);
         return "HomeView";
     }
+
+    @GetMapping("/about")
+    public String showAboutPage() {
+        return "AboutView";
+    }
 }

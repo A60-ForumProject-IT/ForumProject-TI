@@ -1027,6 +1027,7 @@ header:hover {
     text-align: center;
     letter-spacing: 1px;
 }
+
 .h3-3d-dark {
     color: whitesmoke;
     text-shadow: 2px 2px 0px #282b30,
@@ -1127,6 +1128,14 @@ header:hover {
 
 .user-info-left p, .user-info-right p {
     margin: 10px 0;
+}
+
+#role-user-admin {
+    margin: 10px 0 8px 0;
+}
+
+#phone-number-user {
+    margin: 0 20px 0 0;
 }
 
 /* Бутоните за администраторски действия */
@@ -1244,6 +1253,7 @@ header:hover {
     background-color: transparent;
     box-shadow: none;
 }
+
 /* Скрии input[type="file"] */
 input[type="file"] {
     display: none;
@@ -1333,3 +1343,78 @@ input[type="file"] {
 .filter-input[type="date"]::-webkit-inner-spin-button {
     display: none; /* Скриване на вътрешните бутони и спинери */
 }
+
+/* About Page Specific Styles */
+.about-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #2c2f33;
+    border-radius: 10px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.about-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 12px 20px rgba(0, 0, 0, 0.5);
+}
+
+.about-title {
+    font-size: 2.5rem;
+    color: #50fa7b;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.about-content p {
+    color: #c5c8c6;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    text-align: justify;
+}
+
+.about-content p:last-child {
+    margin-bottom: 0;
+}
+
+/* Глобални ефекти за елементи като линкове, бутони и т.н. */
+a, button {
+    transition: color 0.3s, background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+
+a:hover, button:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* Подравняване на телефонните номера и бутоните */
+.phone-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.phone-number-container {
+    flex: 1;
+    text-align: left;
+    display: flex;
+    align-items: center;
+}
+
+.phone-number {
+    margin-right: 10px;
+}
+
+.phone-button-container {
+    flex-shrink: 0;
+}
+
+.phone-delete-button {
+    padding: 5px 10px;
+    font-size: 14px;
+    line-height: 1;
+}
+

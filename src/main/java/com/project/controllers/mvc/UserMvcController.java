@@ -207,8 +207,6 @@ public class UserMvcController {
             User user = authenticationHelper.tryGetUserFromSession(session);
             if (user.getRole().getRoleId() == 3 || user.getRole().getRoleId() == 2) {
                 User userToDisplay = userService.getUserById(user, id);
-                System.out.println("User ID: " + userToDisplay.getId());
-                System.out.println("Phone Numbers: " + userToDisplay.getPhoneNumbers());
                 model.addAttribute("user", userToDisplay);
                 return "UserDetailsView";
             }

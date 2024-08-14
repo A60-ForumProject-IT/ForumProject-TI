@@ -24,20 +24,26 @@
                 <p><strong>Last Name:</strong></p>
                 <p><strong>Email:</strong></p>
                 <p><strong>Role:</strong></p>
-                <p th:if="${user.role.roleId == 3}"><strong>Phones:</strong></p>
+                <div th:if="${user.role.roleId == 3}"><strong>Phones:</strong></div>
             </div>
             <div class="user-info-right">
-                <p><span th:text="${user.username}"></span></p>
-                <p><span th:text="${user.firstName}"></span></p>
-                <p><span th:text="${user.lastName}"></span></p>
-                <p><span th:text="${user.email}"></span></p>
-                <p><span th:text="${user.role.name}"></span></p>
+                <p><span class="user-info-right" th:text="${user.username}"></span></p>
+                <p><span class="user-info-right" th:text="${user.firstName}"></span></p>
+                <p><span class="user-info-right" th:text="${user.lastName}"></span></p>
+                <p><span class="user-info-right" th:text="${user.email}"></span></p>
+                <p id="role-user-admin"><span  th:text="${user.role.name}"></span></p>
                 <div th:if="${user.role.roleId == 3}">
-    <span th:each="phone : ${user.phoneNumbers}">
-        <p th:text="${phone.phoneNumber}"></p>
-    </span>
+                    <div th:each="phone : ${user.phoneNumbers}" class="phone-row">
+                        <div class="phone-number-container">
+                            <p id="phone-number-user" th:text="${phone.phoneNumber}"></p>
+                            <div class="phone-button-container">
+                                <form th:action="@{/ti/users/admin/{id}/phone/{phoneId}/remove(id=${user.id}, phoneId=${phone.id})}" method="post">
+                                    <button type="submit" class="phone-delete-button">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
             </div>
         </div>
     </div>

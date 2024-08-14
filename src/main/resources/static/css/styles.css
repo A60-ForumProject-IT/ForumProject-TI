@@ -1491,28 +1491,6 @@ a:hover, button:hover {
     display: none;
 }
 
-.stat-text {
-    color: #50fa7b;
-    font-size: 1.2rem;
-    text-shadow:
-            2px 2px 0 #000,
-            4px 4px 0 #2c2f33,
-            6px 6px 5px rgba(0, 0, 0, 0.5),
-            8px 8px 10px rgba(0, 0, 0, 0.7);
-    transition: transform 0.3s, color 0.3s;
-}
-
-.stat-text:hover {
-    color: #ff79c6;
-    transform: translateY(-4px);
-    text-shadow:
-            2px 2px 0 #000,
-            4px 4px 0 #282b30,
-            6px 6px 8px rgba(0, 0, 0, 0.7),
-            8px 8px 12px rgba(0, 0, 0, 0.9);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
-}
-
 .stat-icon {
     transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
     text-shadow:
@@ -1541,17 +1519,16 @@ a:hover, button:hover {
             4px 4px 0 #2c2f33,
             6px 6px 5px rgba(0, 0, 0, 0.5),
             8px 8px 10px rgba(0, 0, 0, 0.7);
-    transition: transform 0.3s, color 0.3s;
+    transition: color 0.3s;
 }
 
 .stat-number:hover {
-    transform: translateY(-4px);
+    color: #ff79c6;
     text-shadow:
             2px 2px 0 #000,
             4px 4px 0 #282b30,
             6px 6px 8px rgba(0, 0, 0, 0.7),
             8px 8px 12px rgba(0, 0, 0, 0.9);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
 }
 
 .stat-text {
@@ -1562,26 +1539,34 @@ a:hover, button:hover {
             4px 4px 0 #2c2f33,
             6px 6px 5px rgba(0, 0, 0, 0.5),
             8px 8px 10px rgba(0, 0, 0, 0.7);
-    transition: transform 0.3s, color 0.3s;
+    transition: color 0.3s;
 }
 
 .stat-text:hover {
     color: #ff79c6;
-    transform: translateY(-4px);
     text-shadow:
             2px 2px 0 #000,
             4px 4px 0 #282b30,
             6px 6px 8px rgba(0, 0, 0, 0.7),
             8px 8px 12px rgba(0, 0, 0, 0.9);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
 }
 
 .stat-icon {
     transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+    text-shadow:
+            2px 2px 0 #000,
+            4px 4px 0 #2c2f33,
+            6px 6px 5px rgba(0, 0, 0, 0.5),
+            8px 8px 10px rgba(0, 0, 0, 0.7);
 }
 
 .stat-item:hover .stat-icon {
     transform: rotate(20deg) scale(1.2);
     color: #ff79c6;
+    text-shadow:
+            2px 2px 0 #000,
+            4px 4px 0 #282b30,
+            6px 6px 8px rgba(0, 0, 0, 0.7),
+            8px 8px 12px rgba(0, 0, 0, 0.9);
 }
 

@@ -12,8 +12,6 @@
     <h1>Game Forum</h1>
     <h2 th:text="#{home.label.welcome}">Welcome (design)!</h2>
     <p>This is a place where gamers can discuss their favorite games, share tips, and connect with others.</p>
-    <p>Total registered users: <span th:text="${userCount}"></span></p>
-    <p>For the time being we have created total posts: <span th:text="${postsCount}" ></span></p>
 
     <h4 th:text="#{home.label.welcome.user}">welcome user</h4>
     <h4 th:if="${username != null}" th:text="${username}">username</h4>
@@ -21,12 +19,12 @@
     <div class="forum-stats-container">
         <div class="stat-item">
             <i class="fa fa-users fa-3x stat-icon"></i>
-            <div th:text="${userCount}" class="stat-count stat-number">25</div> <!-- Добавяне на клас за 3D ефекта на числата -->
+            <div th:text="${userCount}" class="stat-count stat-number">25</div>
             <p class="stat-text">Total users we have</p>
         </div>
         <div class="stat-item">
             <i class="fa fa-file-alt fa-3x stat-icon"></i>
-            <div th:text="${postsCount}" class="stat-count stat-number">25</div> <!-- Добавяне на клас за 3D ефекта на числата -->
+            <div th:text="${postsCount}" class="stat-count stat-number">25</div>
             <p class="stat-text">Total posts they've written</p>
         </div>
     </div>

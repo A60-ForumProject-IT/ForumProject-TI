@@ -49,6 +49,15 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
+    public List<Comment> getAllCommentsFromUser(int userId) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Comment> query = session.createQuery("FROM Comment WHERE userId = :userId", Comment.class);
+            query.setParameter("userId", userId);
+            return query.list();
+        }
+    }
+
+    @Override
     public Comment getCommentByContent(String content) {
         try (Session session = sessionFactory.openSession()) {
             Query<Comment> query = session.createQuery("FROM Comment WHERE content = :content", Comment.class);
@@ -98,5 +107,10 @@ public class CommentRepositoryImpl implements CommentRepository {
             session.remove(comment);
             session.getTransaction().commit();
         }
+    }
+
+    @Override
+    public List<Comment> getAllUserComments(int userId) {
+        return getAllCommentsFromUser(userId);
     }
 }

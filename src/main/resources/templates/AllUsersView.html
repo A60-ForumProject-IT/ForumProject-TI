@@ -46,7 +46,7 @@
         <div class="user-item" th:each="user : ${users}">
             <div class="user-info1">
                 <div class="user-detail" >
-                <a href="#" th:href="@{/ti/users/admin/users/__${user.id}__}" th:text="${user.username}"> </a>
+                <a href="#" th:href="@{/ti/users/__${user.id}__}" th:text="${user.username}"> </a>
                 </div>
                 <div class="user-detail" th:text="${user.firstName}">First name</div>
                 <div class="user-detail" th:text="${user.email}">Email</div>

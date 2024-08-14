@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All User's comments</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../static/css/styles.css" th:href="@{/css/styles.css}">
+</head>
+<body>
+<form th:replace="ForumFormFragment.html :: header"></form>
+<div class="body-content">
+    <div class="posts-container">
+        <h2 th:text="${user.firstName}+'’s all comments'" class="h2-3d-dark">Forum Posts</h2>
+        <div th:each="comment : ${user.comments}" class="comment-item-container">
+            <p class="comment-content" th:text="${comment.content}">Content</p>
+
+            <div class="comment-meta">
+                <div class="comment-meta-info">
+        <span class="comment-author">
+            <i class="fa fa-user"></i> Author: <span th:text="${comment.userId.username}">Username</span>
+        </span>
+                    <span class="comment-time">
+            <i class="fa fa-calendar-alt"></i> <span
+                            th:text="${#temporals.format(comment.createdOn, 'dd-MMM-yyyy HH:mm')}">Created On</span>
+        </span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<form th:replace="ForumFormFragment.html :: footer"></form>
+</body>
+</html>

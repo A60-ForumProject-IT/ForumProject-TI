@@ -17,4 +17,6 @@ public interface CommentService {
     void deleteComment(Comment comment, User user);
 
     Comment getCommentById(int commentId);
+
+    List<Comment> getAllUserComments(int user);
 }

@@ -255,7 +255,7 @@ public class UserMvcController {
             User user = authenticationHelper.tryGetUserFromSession(session);
             if (user.getRole().getRoleId() == 3 || user.getRole().getRoleId() == 2) {
                 userService.blockUser(user, id);
-                return "redirect:/ti/users/admin/users/" + id;
+                return "redirect:/ti/users/" + id;
             }
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
             model.addAttribute("error", YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE);
@@ -281,7 +281,7 @@ public class UserMvcController {
             User user = authenticationHelper.tryGetUserFromSession(session);
             if (user.getRole().getRoleId() == 3 || user.getRole().getRoleId() == 2) {
                 userService.unblocked(user, id);
-                return "redirect:/ti/users/admin/users/" + id;
+                return "redirect:/ti/users/" + id;
             }
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
             model.addAttribute("error", YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE);
@@ -308,7 +308,7 @@ public class UserMvcController {
             User userToBePromoted = userService.getUserById(user, id);
             if (user.getRole().getRoleId() == 3) {
                 userService.userToBeAdmin(userToBePromoted);
-                return "redirect:/ti/users/admin/users/" + id;
+                return "redirect:/ti/users/" + id;
             }
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
             model.addAttribute("error", YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE);
@@ -335,7 +335,7 @@ public class UserMvcController {
             User userToBeDemoted = userService.getUserById(user, id);
             if (user.getRole().getRoleId() == 3) {
                 userService.userToBeDemoted(userToBeDemoted);
-                return "redirect:/ti/users/admin/users/" + id;
+                return "redirect:/ti/users/" + id;
             }
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
             model.addAttribute("error", YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE);
@@ -362,7 +362,7 @@ public class UserMvcController {
             PhoneNumber phoneNumber = mapperHelper.getFromPhoneDto(phoneNumberDto);
             if (user.getRole().getRoleId() == 3) {
                 phoneService.addPhoneToAnAdmin(user, phoneNumber);
-                return "redirect:/ti/users/admin/users/" + id;
+                return "redirect:/ti/users/" + id;
             }
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
             model.addAttribute("error", YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE);
@@ -393,11 +393,55 @@ public class UserMvcController {
             User user = authenticationHelper.tryGetUserFromSession(session);
             if (user.getRole().getRoleId() == 3 || user.getId() == id) {
                 phoneService.removePhoneFromAdmin(user, phoneId);
-                return "redirect:/ti/users/admin/users/" + id;
+                return "redirect:/ti/users/" + id;
             }
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
             model.addAttribute("error", YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE);
             return "ErrorView";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (AuthenticationException e) {
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE);
+            return "ErrorView";
+        }
+    }
+
+    @GetMapping("/{id}/posts")
+    public String showUserPosts(@PathVariable int id, Model model, HttpSession session) {
+        try {
+            User user = authenticationHelper.tryGetUserFromSession(session);
+            User userToDisplay = userService.getUserById(user, id);
+            model.addAttribute("user", userToDisplay);
+            return "UserAllPostsView";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (AuthenticationException e) {
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE);
+            return "ErrorView";
+        }
+    }
+
+    @GetMapping("/{id}/comments")
+    public String showUserComments(@PathVariable int id, Model model, HttpSession session) {
+        try {
+            User user = authenticationHelper.tryGetUserFromSession(session);
+            User userToDisplay = userService.getUserById(user, id);
+            model.addAttribute("user", userToDisplay);
+            return "UserAllCommentsView";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
             model.addAttribute("error", e.getMessage());

@@ -24,7 +24,7 @@
                 <p><strong>Last Name:</strong></p>
                 <p><strong>Email:</strong></p>
                 <p><strong>Role:</strong></p>
-                <div th:if="${user.role.roleId == 3}"><strong>Phones:</strong></div>
+                <div th:if="${user.getRole().roleId ==3}"><strong>Phones:</strong></div>
             </div>
             <div class="user-info-right">
                 <p><span class="user-info-right" th:text="${user.username}"></span></p>
@@ -32,12 +32,13 @@
                 <p><span class="user-info-right" th:text="${user.lastName}"></span></p>
                 <p><span class="user-info-right" th:text="${user.email}"></span></p>
                 <p id="role-user-admin"><span th:text="${user.role.name}"></span></p>
-                <div th:if="${user.role.roleId == 3}">
+                <div th:if="${isAdmin}">
                     <div th:each="phone : ${user.phoneNumbers}" class="phone-row">
                         <div class="phone-number-container">
                             <p id="phone-number-user" th:text="${phone.phoneNumber}"></p>
                             <div class="phone-button-container">
-                                <form th:action="@{/ti/users/admin/{id}/phone/{phoneId}/remove(id=${user.id}, phoneId=${phone.id})}"
+                                <form th:if="${isAdmin}"
+                                      th:action="@{/ti/users/admin/{id}/phone/{phoneId}/remove(id=${user.id}, phoneId=${phone.id})}"
                                       method="post">
                                     <button type="submit" class="phone-delete-button">Delete</button>
                                 </form>
@@ -48,13 +49,12 @@
             </div>
         </div>
     </div>
-
     <!-- Admin Actions -->
     <div th:if="${isAdmin} and ${isModerator}">
         <div class="admin-actions">
             <h2 class="h3-3d-dark">Admin Actions</h2>
             <div class="admin-buttons">
-                <form th:action="@{/ti/users/admin/users/{id}/delete(id=${user.id})}" method="post">
+                <form th:action="@{/ti/users/{id}/delete(id=${user.id})}" method="post">
                     <button type="submit">Delete User</button>
                 </form>
 
@@ -83,8 +83,12 @@
 
         </div>
     </div>
+    <div class="forum-buttons-container">
+        <a href="#" th:href="@{/ti/users/{id}/posts(id=${user.id})}" class="forum-button-3d">User's all posts</a>
+        <a href="#" th:href="@{/ti/users/{id}/comments(id=${user.id})}" class="forum-button-3d">User's all comments</a>
+<!--        <a href="#" th:href="@{/ti/top10mostRecentPosts}" class="forum-button-3d">Top 10 most recent posts</a>-->
+    </div>
 </div>
-
 <footer th:replace="~{ForumFormFragment.html :: footer}"></footer>
 </body>
 </html>

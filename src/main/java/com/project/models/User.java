@@ -48,11 +48,11 @@ public class User implements Comparable<User> {
     private boolean isBlocked;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "postedBy", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "postedBy", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 
     @JsonIgnore

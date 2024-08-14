@@ -78,4 +78,9 @@ public class CommentServiceImpl implements CommentService {
     public Comment getCommentById(int commentId) {
         return commentRepository.getCommentById(commentId);
     }
+
+    @Override
+    public List<Comment> getAllUserComments(int user) {
+        return commentRepository.getAllUserComments(user);
+    }
 }

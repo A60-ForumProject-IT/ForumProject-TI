@@ -11,8 +11,6 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -237,12 +235,12 @@ public class PostRepositoryImpl implements PostRepository {
 
         filteredPostsOptions.getCreatedBefore().ifPresent(value -> {
             filters.add(" post.createdOn < :createdBefore ");
-            parameters.put("createdBefore", value.atStartOfDay());
+            parameters.put("createdBefore", value);
         });
 
         filteredPostsOptions.getCreatedAfter().ifPresent(value -> {
             filters.add(" post.createdOn > :createdAfter ");
-            parameters.put("createdAfter", value.atStartOfDay());
+            parameters.put("createdAfter", value);
         });
 
         filteredPostsOptions.getPostedBy().ifPresent(value -> {

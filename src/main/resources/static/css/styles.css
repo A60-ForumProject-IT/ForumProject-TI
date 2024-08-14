@@ -1318,3 +1318,18 @@ input[type="file"] {
 .registration-form .btn-submit:hover {
     background-color: #ff79c6;
 }
+
+.filter-input[type="date"] {
+    background-color: #1d1f21; /* Цвета на фона на текстовото поле */
+    color: transparent; /* Скриване на текста */
+}
+
+.filter-input[type="date"]::placeholder {
+    color: #c5c8c6; /* Цвят на плейсхолдъра */
+    opacity: 1; /* Видимост на плейсхолдъра */
+}
+
+.filter-input[type="date"]::-webkit-clear-button,
+.filter-input[type="date"]::-webkit-inner-spin-button {
+    display: none; /* Скриване на вътрешните бутони и спинери */
+}

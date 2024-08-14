@@ -16,14 +16,14 @@ public class FilterPostDto {
     private String title;
     private String tagName;
     private String content;
-    private String postedBy;
-    private String sortBy;
-    private String sortOrder;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate createdBefore;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate createdAfter;
+    private String postedBy;
+    private String sortBy;
+    private String sortOrder;
 
     public FilterPostDto() {
     }

@@ -43,6 +43,17 @@
         <div class="filter-inputs">
             <input type="text" placeholder="Search by title..." th:field="*{title}" class="filter-input"/>
             <input type="text" placeholder="Search by tags..." th:field="*{tagName}" class="filter-input"/>
+            <input type="text" placeholder="Search by date before..."
+                   th:field="*{createdBefore}"
+                   class="filter-input created-before"
+                   onfocus="(this.type='date')"
+                   onblur="(this.type='text')">
+
+            <input type="text" placeholder="Search by date after..."
+                   th:field="*{createdAfter}"
+                   class="filter-input created-after"
+                   onfocus="(this.type='date')"
+                   onblur="(this.type='text')">
             <input type="number" min="0" placeholder="Search by max likes..." th:field="*{maxLikes}"
                    class="filter-input"/>
             <input type="number" min="0" placeholder="Search by min likes..." th:field="*{minLikes}"

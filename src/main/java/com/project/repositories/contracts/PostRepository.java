@@ -32,4 +32,10 @@ public interface PostRepository {
     void addTagToPost(Post post);
 
     void deleteTagFromPost(Post post);
+
+    List<Post> getMostRecentPostsMvc();
+
+    List<Post> getMostLikedPostsMvc();
+
+    List<Post> getMostCommentedPostsMvc();
 }

@@ -2,6 +2,7 @@ package com.project.controllers.mvc;
 
 import com.project.helpers.AuthenticationHelper;
 import com.project.models.User;
+import com.project.services.contracts.PostService;
 import com.project.services.contracts.RoleService;
 import com.project.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -17,11 +18,13 @@ public class HomeMvcController {
     private final AuthenticationHelper authenticationHelper;
     private final UserService userService;
     private final RoleService roleService;
+    private final PostService postService;
 
-    public HomeMvcController(AuthenticationHelper authenticationHelper, UserService userService, RoleService roleService) {
+    public HomeMvcController(AuthenticationHelper authenticationHelper, UserService userService, RoleService roleService, PostService postService) {
         this.authenticationHelper = authenticationHelper;
         this.userService = userService;
         this.roleService = roleService;
+        this.postService = postService;
     }
 
     @ModelAttribute("isAdmin")
@@ -80,7 +83,12 @@ public class HomeMvcController {
     @GetMapping
     public String showHomePage(Model model) {
         long userCount = userService.countAllUsers();
+        long postsCount = postService.getTotalPostsCount();
         model.addAttribute("userCount", userCount);
+        model.addAttribute("postsCount", postsCount);
+        model.addAttribute("mostCommentedPosts", postService.getMostCommentedPostsMvc());
+        model.addAttribute("mostRecentPosts", postService.getMostRecentPostsMvc());
+        model.addAttribute("mostLikedPosts", postService.getMostLikedPostsMvc());
         return "HomeView";
     }
 

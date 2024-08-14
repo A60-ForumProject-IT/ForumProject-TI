@@ -101,7 +101,7 @@
                         </span>
                         <span class="post-comments">
                             <i class="fa fa-comments"></i>
-                            <span th:text="${post.getCommentsCount()}">Comments Count</span>
+                            <span th:text="${post.getComments().size()}">Comments Count</span>
                         </span>
                     </div>
                 </div>
@@ -111,11 +111,11 @@
                         <div class="post-stats">
                             <div class="post-likes">
                                 <i class="fa fa-thumbs-up"></i>
-                                <span th:text="${post.likes}">Likes Count</span>
+                                <span th:text="${post.usersWhoLikedPost.size()}">Likes Count</span>
                             </div>
                             <div class="post-dislikes">
                                 <i class="fa fa-thumbs-down"></i>
-                                <span th:text="${post.dislikes}">Dislikes Count</span>
+                                <span th:text="${post.usersWhoDislikedPost.size()}">Dislikes Count</span>
                             </div>
                         </div>
                         <div class="post-tags-container">

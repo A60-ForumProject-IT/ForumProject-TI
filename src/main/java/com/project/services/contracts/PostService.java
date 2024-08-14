@@ -39,7 +39,9 @@ public interface PostService {
 
     Post getPostByTitle(String title);
 
-    boolean hasUserLikedPost(Post post, User user);
+    List<Post> getMostRecentPostsMvc();
 
-    boolean hasUserDislikedPost(Post post, User user);
+    List<Post> getMostLikedPostsMvc();
+
+    List<Post> getMostCommentedPostsMvc();
 }

@@ -2,29 +2,49 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>About</title>
+    <title>About Us</title>
     <link rel="stylesheet" href="../static/css/styles.css" th:href="@{/css/styles.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-<header th:replace="~{ForumFormFragment.html :: header}"></header>
+<form th:replace="~{ForumFormFragment.html :: header}"></form>
 <div class="body-content">
+    <h1 class="page-title">About Us</h1>
     <div class="about-container">
-        <h2 class="h2-3d-dark">About the Game Forum</h2>
-        <div class="about-content">
-            <p>
-                Welcome to the Game Forum! Our community is dedicated to bringing together gamers from around the world to discuss, share, and enjoy everything related to gaming.
-            </p>
-            <p>
-                Whether you are a casual gamer or a hardcore enthusiast, our forum provides a platform for you to connect with like-minded individuals, stay up to date with the latest gaming news, and participate in engaging discussions.
-            </p>
-            <p>
-                We believe in fostering a friendly and inclusive environment where everyone feels welcome. Join us and be a part of the ultimate gaming community!
-            </p>
+        <h2 class="section-title">🎯 Our Mission:</h2>
+        <p class="feature-text">
+            At IT Forum, our mission is to create a vibrant and inclusive community where gamers of all levels can connect, share, and grow together. We believe that gaming is more than just a hobby—it's a passion that brings people together from all corners of the world. Our goal is to provide a space where everyone feels welcome, whether you're a casual gamer, a hardcore enthusiast, or someone just starting their gaming journey.
+        </p>
+
+        <h2 class="section-title">📜 Our Story:</h2>
+        <p class="feature-text">
+            IT Forum was founded in 2023 by a group of dedicated gamers who wanted to create a place where people could share their love for gaming without boundaries. What started as a small community of friends has grown into a bustling hub where gamers can discuss everything from the latest AAA titles to hidden indie gems.
+        </p>
+        <p class="feature-text">
+            Over the years, we've expanded our forums to cover a wide range of gaming topics, including game reviews, strategy guides, industry news, and more. We're proud of how far we've come, and we're excited to see where the future takes us as we continue to grow and evolve with the gaming industry.
+        </p>
+
+        <h2 class="section-title">🌟 What Makes Us Unique:</h2>
+        <div class="feature-text">
+            <p><i class="fas fa-users"></i> A Community First Approach: Our forum is built by gamers, for gamers. We listen to our community and make sure that our platform evolves to meet their needs. Your voice matters here.</p>
+            <p><i class="fas fa-gamepad"></i> Diverse Gaming Content: Whether you're into PC gaming, consoles, mobile games, or tabletop RPGs, we've got something for you. Our forums are organized to help you find exactly what you're looking for, no matter your gaming preference.</p>
+            <p><i class="fas fa-brain"></i> Passionate and Knowledgeable Members: Our community is full of experienced gamers who are eager to share their knowledge and help others improve. Whether you're looking for tips on a tough boss fight or advice on building the perfect gaming rig, you'll find plenty of experts willing to lend a hand.</p>
+            <p><i class="fas fa-shield-alt"></i> Safe and Inclusive Environment: We believe that gaming should be fun and accessible for everyone. Our moderation team works hard to maintain a friendly and respectful atmosphere where all members can enjoy themselves without fear of harassment or discrimination.</p>
         </div>
+
+        <h2 class="section-title">🤝 Meet the Team:</h2>
+        <p class="feature-text">
+            Behind IT Forum is a team of passionate gamers who are dedicated to making this forum the best it can be. From our moderators to our content creators, each member of our team plays a vital role in keeping the community active and engaging. We're all gamers at heart, and we understand the importance of having a space where you can connect with others who share your passion.
+        </p>
+
+        <h2 class="section-title">🚀 Join Us:</h2>
+        <p class="feature-text">
+            Whether you're here to find like-minded gamers, stay updated on the latest news, or just hang out and chat, IT Forum is the place for you. We're always looking for new members to join our community, so don't hesitate to sign up and start participating. Together, we can make [Your Forum Name] the ultimate destination for gamers everywhere.
+        </p>
     </div>
 </div>
-
-<footer th:replace="~{ForumFormFragment.html :: footer}"></footer>
+<footer>
+    <p>&copy; 2024 Game Forum. All rights reserved.</p>
+</footer>
 </body>
 </html>

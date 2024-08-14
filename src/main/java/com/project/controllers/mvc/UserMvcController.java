@@ -201,18 +201,13 @@ public class UserMvcController {
         }
     }
 
-    @GetMapping("/admin/users/{id}")
+    @GetMapping("/{id}")
     public String showUserDetails(@PathVariable int id, Model model, HttpSession session) {
         try {
             User user = authenticationHelper.tryGetUserFromSession(session);
-            if (user.getRole().getRoleId() == 3 || user.getRole().getRoleId() == 2) {
                 User userToDisplay = userService.getUserById(user, id);
                 model.addAttribute("user", userToDisplay);
                 return "UserDetailsView";
-            }
-            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
-            model.addAttribute("error", YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE);
-            return "ErrorView";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
             model.addAttribute("error", e.getMessage());

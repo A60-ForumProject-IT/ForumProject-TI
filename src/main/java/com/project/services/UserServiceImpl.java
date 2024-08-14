@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(User user, int id) {
-        PermissionHelper.isAdminOrModerator(user, INVALID_PERMISSION);
+        //PermissionHelper.isAdminOrModerator(user, INVALID_PERMISSION);
         return userRepository.getUserById(id);
     }
 

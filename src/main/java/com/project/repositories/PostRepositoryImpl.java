@@ -155,9 +155,24 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public void updatePost(Post post) {
-        try(Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.merge(post);
+
+            Post existingPost = session.get(Post.class, post.getPostId());
+
+            if (existingPost != null) {
+                existingPost.setTitle(post.getTitle());
+                existingPost.setContent(post.getContent());
+                existingPost.setLikes(post.getLikes());
+                existingPost.setDislikes(post.getDislikes());
+                existingPost.setUsersWhoLikedPost(post.getUsersWhoLikedPost());
+                existingPost.setUsersWhoDislikedPost(post.getUsersWhoDislikedPost());
+
+                session.update(existingPost);
+            } else {
+                session.saveOrUpdate(post);
+            }
+
             session.getTransaction().commit();
         }
     }

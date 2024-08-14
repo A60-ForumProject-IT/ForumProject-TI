@@ -24,7 +24,6 @@ public class PostServiceImpl implements PostService {
     public static final String AUTHORIZATION_EXCEPTION = "You are not creator of the post to edit it!";
     public static final String BLOCKED_USER_ERROR = "You are blocked and cannot create posts!";
     public static final String UNAUTHORIZED_DELETE_ERROR = "You are not authorized to delete this post!";
-    public static final String FILTER_AND_SORT_ERROR = "You are not authorized to filter and sort posts!";
     public static final String CREATOR_LIKE_ERROR = "You are the creator of the post and can't like it!";
     public static final String MULTIPLE_LIKE_ERROR = "You already liked this comment!";
     public static final String BLOCKED_USER_EDIT_ERROR = "You are blocked and can't edit your post!";
@@ -157,10 +156,6 @@ public class PostServiceImpl implements PostService {
 
         Set<Tag> tagSet = post.getPostTags();
 
-//        if (!tag.getTag().startsWith("#")) {
-//            throw new ForbiddenTagException("Tag should start with #");
-//        }
-
         if (tagSet.contains(tag)) {
             throw new DuplicateEntityException("Tag", "name", tag.getTag());
         }
@@ -197,15 +192,22 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<Post> getMostRecentPostsMvc() {
+        return postRepository.getMostRecentPostsMvc();
+    }
+
+    @Override
+    public List<Post> getMostLikedPostsMvc() {
+        return postRepository.getMostLikedPostsMvc();
+    }
+
+    @Override
+    public List<Post> getMostCommentedPostsMvc() {
+        return postRepository.getMostCommentedPostsMvc();
+    }
+
+    @Override
     public List<Post> getAllUsersPosts(int userId, FilteredPostsOptions postFilterOptions) {
         return postRepository.getAllUsersPosts(userId, postFilterOptions);
-    }
-
-    public boolean hasUserLikedPost(Post post, User user) {
-        return post.getUsersWhoLikedPost().contains(user); // Example logic
-    }
-
-    public boolean hasUserDislikedPost(Post post, User user) {
-        return post.getUsersWhoDislikedPost().contains(user); // Example logic
     }
 }

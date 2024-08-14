@@ -8,15 +8,16 @@
 </head>
 <body>
 <form th:replace="~{ForumFormFragment.html :: header}"></form>
-<main class="body-content">
+<div class="body-content">
     <h1>Game Forum</h1>
     <h2 th:text="#{home.label.welcome}">Welcome (design)!</h2>
     <p>This is a place where gamers can discuss their favorite games, share tips, and connect with others.</p>
     <p>Total registered users: <span th:text="${userCount}"></span></p>
+    <p>For the time being we have created total posts: <span th:text="${postsCount}" ></span></p>
 
     <h4 th:text="#{home.label.welcome.user}">welcome user</h4>
     <h4 th:if="${username != null}" th:text="${username}">username</h4>
-</main>
+</div>
 <footer>
     <p>&copy; 2024 Game Forum. All rights reserved.</p>
 </footer>

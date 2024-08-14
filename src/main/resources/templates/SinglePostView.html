@@ -58,14 +58,14 @@
                        th:href="@{__${requestURI}__/like}">
                         <i class="fa fa-thumbs-up"></i>
                     </a>
-                    <span th:text="${post.getLikes()}">4</span>
+                    <span th:text="${post.getUsersWhoLikedPost().size()}">4</span>
 
                     <a id="dislike-button"
                        th:if="${loggedInUser.getId() != post.getPostedBy().getId()}"
                        th:href="@{__${requestURI}__/dislike}">
                         <i class="fa fa-thumbs-down"></i>
                     </a>
-                    <span th:text="${post.getDislikes()}">3</span>
+                    <span th:text="${post.getUsersWhoDislikedPost().size()}">3</span>
                 </div>
 
                 <div class="edit-delete-buttons">

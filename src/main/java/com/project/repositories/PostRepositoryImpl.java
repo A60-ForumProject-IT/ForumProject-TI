@@ -109,6 +109,36 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
+    public List<Post> getMostRecentPostsMvc() {
+        try (Session session = sessionFactory.openSession()) {
+            String hql = "FROM Post p ORDER BY p.createdOn DESC";
+            Query<Post> query = session.createQuery(hql, Post.class);
+            query.setMaxResults(10);
+            return query.list();
+        }
+    }
+
+    @Override
+    public List<Post> getMostLikedPostsMvc() {
+        try (Session session = sessionFactory.openSession()) {
+            String hql = "FROM Post p ORDER BY p.likes DESC";
+            Query<Post> query = session.createQuery(hql, Post.class);
+            query.setMaxResults(10);
+            return query.list();
+        }
+    }
+
+    @Override
+    public List<Post> getMostCommentedPostsMvc() {
+        try (Session session = sessionFactory.openSession()) {
+            String hql = "SELECT c.commentedPost FROM Comment c GROUP BY c.commentedPost ORDER BY COUNT(c.id) DESC";
+            Query<Post> query = session.createQuery(hql, Post.class);
+            query.setMaxResults(10);
+            return query.list();
+        }
+    }
+
+    @Override
     public Post createPost(Post post) {
         try(Session session = sessionFactory.openSession()) {
             session.beginTransaction();

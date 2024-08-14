@@ -1,5 +1,5 @@
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Times New Roman', sans-serif;
     background-color: #1d1f21;
     color: #c5c8c6;
     margin: 0;
@@ -357,6 +357,7 @@ input[type="text"]:focus, input[type="number"]:focus, select:focus {
 
 .navigation a {
     color: #ffffff;
+    font-size: 18px;
     text-decoration: none;
     padding: 8px 15px;
     border-radius: 10px;
@@ -458,7 +459,7 @@ header:hover {
 .like-dislike-buttons a {
     color: #ffffff;
     text-decoration: none;
-    padding: 10px 15px;
+    padding: 10px 10px;
     border-radius: 5px;
     transition: background-color 0.3s;
     display: flex;
@@ -1646,3 +1647,12 @@ strong {
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
 }
 
+.static-icon {
+    color: #50fa7b;
+    cursor: default;
+    font-size: 20px;
+}
+
+#post-creator-username {
+    color: #ff79c6;
+}

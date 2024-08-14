@@ -30,6 +30,8 @@
                        th:href="@{__${requestURI}__/like}">
                         <i class="fa fa-thumbs-up"></i>
                     </a>
+                    <i class="fa fa-thumbs-up static-icon"
+                       th:if="${loggedInUser.getId() == post.getPostedBy().getId()}"></i>
                     <span th:text="${post.getUsersWhoLikedPost().size()}">4</span>
 
                     <a id="dislike-button"
@@ -37,6 +39,8 @@
                        th:href="@{__${requestURI}__/dislike}">
                         <i class="fa fa-thumbs-down"></i>
                     </a>
+                    <i class="fa fa-thumbs-down static-icon"
+                       th:if="${loggedInUser.getId() == post.getPostedBy().getId()}"></i>
                     <span th:text="${post.getUsersWhoDislikedPost().size()}">3</span>
                 </div>
 
@@ -47,7 +51,8 @@
                         <input class="btn-danger" type="submit" value="Edit Post">
                     </form>
 
-                    <form th:if="${loggedInUser.getId() == post.getPostedBy().getId()} OR ${isAdmin} or ${isModerator}" action="#"
+                    <form th:if="${loggedInUser.getId() == post.getPostedBy().getId()} OR ${isAdmin} or ${isModerator}"
+                          action="#"
                           th:action="@{__${requestURI}__/delete}" method="get">
                         <input class="btn-danger" type="submit" value="Delete Post">
                     </form>
@@ -68,10 +73,12 @@
                 <div class="comment-meta">
                     <div class="comment-meta-info">
         <span class="comment-author">
-            <i class="fa fa-user"></i> Author: <span th:text="${comment.userId.username}">Username</span>
-        </span>
+    <i class="fa fa-user"></i> Author:
+    <a th:href="@{/ti/users/{id}(id=${comment.userId.id})}" th:text="${comment.userId.username}">Username</a>
+</span>
                         <span class="comment-time">
-            <i class="fa fa-calendar-alt"></i> <span th:text="${#temporals.format(comment.createdOn, 'dd-MMM-yyyy HH:mm')}">Created On</span>
+            <i class="fa fa-calendar-alt"></i> <span
+                                th:text="${#temporals.format(comment.createdOn, 'dd-MMM-yyyy HH:mm')}">Created On</span>
         </span>
                     </div>
                     <div class="comment-actions">

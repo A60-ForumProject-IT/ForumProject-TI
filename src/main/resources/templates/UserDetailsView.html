@@ -50,7 +50,7 @@
         </div>
     </div>
     <!-- Admin Actions -->
-    <div th:if="${isAdmin} and ${isModerator}">
+    <div th:if="${isAdmin} or ${isModerator}">
         <div class="admin-actions">
             <h2 class="h3-3d-dark">Admin Actions</h2>
             <div class="admin-buttons">

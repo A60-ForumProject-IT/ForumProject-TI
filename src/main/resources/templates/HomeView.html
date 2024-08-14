@@ -17,6 +17,25 @@
 
     <h4 th:text="#{home.label.welcome.user}">welcome user</h4>
     <h4 th:if="${username != null}" th:text="${username}">username</h4>
+
+    <div class="forum-stats-container">
+        <div class="stat-item">
+            <i class="fa fa-users fa-3x stat-icon"></i>
+            <div th:text="${userCount}" class="stat-count stat-number">25</div> <!-- Добавяне на клас за 3D ефекта на числата -->
+            <p class="stat-text">Total users we have</p>
+        </div>
+        <div class="stat-item">
+            <i class="fa fa-file-alt fa-3x stat-icon"></i>
+            <div th:text="${postsCount}" class="stat-count stat-number">25</div> <!-- Добавяне на клас за 3D ефекта на числата -->
+            <p class="stat-text">Total posts they've written</p>
+        </div>
+    </div>
+
+    <div class="forum-buttons-container">
+        <a href="#" th:href="@{/ti/top10mostLikedPosts}" class="forum-button-3d">Top 10 most liked posts</a>
+        <a href="#" th:href="@{/ti/top10mostCommentedPosts}" class="forum-button-3d">Top 10 most commented posts</a>
+        <a href="#" th:href="@{/ti/top10mostRecentPosts}" class="forum-button-3d">Top 10 most recent posts</a>
+    </div>
 </div>
 <footer>
     <p>&copy; 2024 Game Forum. All rights reserved.</p>

@@ -9,12 +9,28 @@
 <body>
 <form th:replace="~{ForumFormFragment.html :: header}"></form>
 <div class="body-content">
-    <h1>Game Forum</h1>
-    <h2 th:text="#{home.label.welcome}">Welcome (design)!</h2>
-    <p>This is a place where gamers can discuss their favorite games, share tips, and connect with others.</p>
+    <h1 class="page-title">Welcome to IT - Your Ultimate Gaming Hub!</h1>
+    <p class="feature-text">🎮 <strong>Join the Community of Gamers, By Gamers</strong><br>
+        Welcome to IT, the go-to place where gamers from around the world come together to discuss,
+        share, and celebrate their passion for gaming. Whether you're into hardcore FPS, strategy games, or casual
+        mobile gaming, you'll find your tribe here.</p>
 
-    <h4 th:text="#{home.label.welcome.user}">welcome user</h4>
-    <h4 th:if="${username != null}" th:text="${username}">username</h4>
+    <h3 class="section-title">What we offer?</h3>
+    <p class="feature-text">💬 <strong>Engage in Thriving Discussions</strong><br>
+        Dive into conversations across a wide range of gaming topics. From the latest releases and game strategies to
+        nostalgic classics and upcoming events, our forums are buzzing with activity. Have a question? Our community is
+        here to help!</p>
+
+    <p class="feature-text">📚 <strong>Share Your Knowledge</strong><br>
+        Got some tips and tricks to share? Want to post your latest game review or walkthrough? Our forum is the perfect
+        place to showcase your expertise and help fellow gamers improve their skills.</p>
+
+    <h3 class="section-title">Why join IT forum?</h3>
+    <ul class="benefits-list">
+        <li><strong>Friendly Community:</strong> We foster a positive and inclusive environment where everyone is welcome, regardless of skill level.</li>
+        <li><strong>Comprehensive Content:</strong> From deep-dive discussions to light-hearted memes, you'll find a variety of content tailored to your interests.</li>
+        <li><strong>Active Moderation:</strong> Our dedicated team ensures that the forum remains a safe and enjoyable place for all members.</li>
+    </ul>
 
     <div class="forum-stats-container">
         <div class="stat-item">

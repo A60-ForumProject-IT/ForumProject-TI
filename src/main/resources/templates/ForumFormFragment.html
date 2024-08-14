@@ -16,12 +16,24 @@
         </div>
         <nav class="navigation">
             <div class="nav-links-center">
-                <a th:href="@{/ti}">Home</a>
-                <a th:href="@{/ti/about}">About</a>
-                <a th:href="@{/ti/forum/posts}">Forum Posts</a>
-                <a th:href="@{/ti/users/edit}">Edit User</a>
-                <a th:if="${isAuthenticated && (isAdmin || isModerator)}" th:href="@{/ti/users/admin}">Admin Panel</a>
-                <a th:if="${isAuthenticated && (isAdmin || isModerator)}" th:href="@{/ti/users/admin/users}">All Users</a>
+                <a th:href="@{/ti}">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a th:href="@{/ti/about}">
+                    <i class="fas fa-info-circle"></i> About
+                </a>
+                <a th:href="@{/ti/forum/posts}">
+                    <i class="fas fa-comments"></i> Forum Posts
+                </a>
+                <a th:href="@{/ti/users/edit}">
+                    <i class="fas fa-user-edit"></i> Edit User
+                </a>
+                <a th:if="${isAuthenticated && (isAdmin || isModerator)}" th:href="@{/ti/users/admin}">
+                    <i class="fas fa-user-shield"></i> Admin Panel
+                </a>
+                <a th:if="${isAuthenticated && (isAdmin || isModerator)}" th:href="@{/ti/users/admin/users}">
+                    <i class="fas fa-users-cog"></i> All Users
+                </a>
             </div>
             <div class="nav-links-right">
                 <a th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}">

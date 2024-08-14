@@ -6,16 +6,8 @@
     <link rel="stylesheet" href="../static/css/styles.css" th:href="@{/css/styles.css}">
 </head>
 <body>
-<header>
-    <div>
-        <h3>
-            <a th:href="@{/ti}">Home</a>
-            <a th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}">Logout</a>
-            <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}">Login</a>
-            <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/register}">Registration</a>
-        </h3>
-    </div>
-</header>
+<form th:replace="ForumFormFragment.html :: header"></form>
+
 
 <div class="body-content">
     <h2 class="label-error" th:text="${statusCode}">HTTP Status Code</h2>

@@ -1347,13 +1347,17 @@ input[type="file"] {
 /* About Page Specific Styles */
 .about-container {
     max-width: 800px;
-    margin: 40px auto;
     padding: 20px;
     background-color: #2c2f33;
     border-radius: 10px;
     box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
     text-align: center;
     transition: transform 0.3s, box-shadow 0.3s;
+    flex-grow: 1; /* Поемане на оставащото пространство */
+    margin: 40px auto; /* Разстояние от хедъра и футъра */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .about-container:hover {
@@ -1379,7 +1383,6 @@ input[type="file"] {
 .about-content p:last-child {
     margin-bottom: 0;
 }
-
 /* Глобални ефекти за елементи като линкове, бутони и т.н. */
 a, button {
     transition: color 0.3s, background-color 0.3s, transform 0.3s, box-shadow 0.3s;

@@ -53,6 +53,15 @@
             </div>
         </div>
     </div>
+
+    <!-- Пагинация -->
+    <div class="pagination">
+        <a th:href="@{/ti/users/admin/users(page=${currentPage - 1}, size=${pageSize})}"
+           th:if="${currentPage > 0}">Previous</a>
+        <span>Page <span th:text="${currentPage + 1}">1</span></span>
+        <a th:href="@{/ti/users/admin/users(page=${currentPage + 1}, size=${pageSize})}"
+           th:if="${users.size() == pageSize}">Next</a>
+    </div>
 </div>
 <footer th:replace="~{ForumFormFragment.html :: footer}"></footer>
 </body>

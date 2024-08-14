@@ -58,12 +58,14 @@ public class UserRestController {
                                   @RequestParam(required = false) String firstName,
                                   @RequestParam(required = false) String email,
                                   @RequestParam(required = false) String sortBy,
-                                  @RequestParam(required = false) String SortOrder
+                                  @RequestParam(required = false) String SortOrder,
+                                  @RequestParam(defaultValue = "0") int page, // Параметър за страницата
+                                  @RequestParam(defaultValue = "5") int size // Параметър за размера на страницата
     ) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             FilteredUsersOptions filteredUsersOptional = new FilteredUsersOptions(username, firstName, email, sortBy, SortOrder);
-            return userService.getAllUsers(user, filteredUsersOptional);
+            return userService.getAllUsers(user, filteredUsersOptional, page, size);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (AuthenticationException e) {

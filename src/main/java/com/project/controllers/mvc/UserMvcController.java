@@ -162,6 +162,8 @@ public class UserMvcController {
 
     @GetMapping("/admin/users")
     public String showAllUsers(@ModelAttribute("filterUsersOptions") FilterUserDto filterUserDto,
+                               @RequestParam(defaultValue = "0") int page, // Параметър за страницата
+                               @RequestParam(defaultValue = "5") int size, // Параметър за размера на страницата
                                Model model, HttpSession session) {
         try {
             User user = authenticationHelper.tryGetUserFromSession(session);
@@ -180,9 +182,11 @@ public class UserMvcController {
                         filterUserDto.getSortBy(),
                         filterUserDto.getSortOrder()
                 );
-                List<User> users = userService.getAllUsers(user, filteredUsersOptions);
+                List<User> users = userService.getAllUsers(user, filteredUsersOptions, page, size);
                 model.addAttribute("filterUsersOptions", filterUserDto);
                 model.addAttribute("users", users);
+                model.addAttribute("currentPage", page); // Добавяме текущата страница
+                model.addAttribute("pageSize", size); // Добавяме размера на страницата
                 return "AllUsersView";
             }
             return "ErrorView";

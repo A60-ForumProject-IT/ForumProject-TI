@@ -7,7 +7,7 @@ import com.project.models.User;
 import java.util.List;
 
 public interface UserService {
-    List<User> getAllUsers(User user, FilteredUsersOptions filteredUsersOptional);
+    List<User> getAllUsers(User user, FilteredUsersOptions filteredUsersOptional, int page, int size);
 
     User getUserById(User user, int id);
     

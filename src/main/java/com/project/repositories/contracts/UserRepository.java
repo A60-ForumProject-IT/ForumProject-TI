@@ -7,7 +7,7 @@ import com.project.models.User;
 import java.util.List;
 
 public interface UserRepository {
-    List<User> getAllUsers(FilteredUsersOptions filteredUsersOptional);
+    List<User> getAllUsers(FilteredUsersOptions filteredUsersOptional, int page, int size);
 
     User getUserById(int id);
 

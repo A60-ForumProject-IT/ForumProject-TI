@@ -30,9 +30,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAllUsers(User user, FilteredUsersOptions filteredUsersOptional) {
+    public List<User> getAllUsers(User user, FilteredUsersOptions filteredUsersOptional, int page, int size) {
         PermissionHelper.isAdminOrModerator(user, INVALID_PERMISSION);
-        return userRepository.getAllUsers(filteredUsersOptional);
+        return userRepository.getAllUsers(filteredUsersOptional, page, size);
     }
 
     @Override

@@ -26,7 +26,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<User> getAllUsers(FilteredUsersOptions filteredUsersOptional) {
+    public List<User> getAllUsers(FilteredUsersOptions filteredUsersOptional, int page, int size) {
         try (Session session = sessionFactory.openSession()) {
             StringBuilder hql = new StringBuilder("from User ");
             List<String> filtered = new ArrayList<>();
@@ -53,6 +53,8 @@ public class UserRepositoryImpl implements UserRepository {
             hql.append(generateOrderBy(filteredUsersOptional));
             Query<User> query = session.createQuery(hql.toString(), User.class);
             query.setProperties(params);
+            query.setFirstResult(page * size); // Начален запис
+            query.setMaxResults(size); // Колко записа да вземе
             return query.list();
         }
 

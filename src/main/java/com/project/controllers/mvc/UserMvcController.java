@@ -36,6 +36,8 @@ import java.util.List;
 public class UserMvcController {
 
     public static final String YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE = "You dont have access to this page";
+    public static final String INVALID_INPUT = "Invalid input";
+    public static final String PHONE_NUMBER_MUST_BE_ONLY_DIGITS = "Phone number must be only digits";
     private final UserService userService;
     private final AuthenticationHelper authenticationHelper;
     private final MapperHelper mapperHelper;
@@ -57,7 +59,7 @@ public class UserMvcController {
     public boolean populateIsAdmin(HttpSession session) {
         if (session.getAttribute("currentUser") != null) {
             User user = authenticationHelper.tryGetUserFromSession(session);
-            if ( user.getRole().getRoleId() == 3) {
+            if (user.getRole().getRoleId() == 3) {
                 return true;
             } else {
                 return false;
@@ -102,6 +104,7 @@ public class UserMvcController {
             model.addAttribute("user", currentUser);
             model.addAttribute("userId", currentUser.getId());
             model.addAttribute("isAdmin", currentUser.getRole().getRoleId() == 3);
+            model.addAttribute("phoneNumber", currentUser.getPhoneNumbers());
             return "EditUserView";
         } catch (AuthenticationException e) {
             return "redirect:/ti/auth/login";
@@ -205,9 +208,9 @@ public class UserMvcController {
     public String showUserDetails(@PathVariable int id, Model model, HttpSession session) {
         try {
             User user = authenticationHelper.tryGetUserFromSession(session);
-                User userToDisplay = userService.getUserById(user, id);
-                model.addAttribute("user", userToDisplay);
-                return "UserDetailsView";
+            User userToDisplay = userService.getUserById(user, id);
+            model.addAttribute("user", userToDisplay);
+            return "UserDetailsView";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -356,9 +359,17 @@ public class UserMvcController {
     }
 
     @PostMapping("/admin/{id}/phone")
-    public String addPhone(@PathVariable int id, @ModelAttribute @Valid  PhoneNumberDto phoneNumberDto, Model model, HttpSession session) {
+    public String addPhone(@PathVariable int id, @ModelAttribute("phoneNumber") @Valid PhoneNumberDto phoneNumberDto,
+                           BindingResult bindingResult, Model model, HttpSession session) {
+        User user = authenticationHelper.tryGetUserFromSession(session);
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("statusCode", INVALID_INPUT);
+            model.addAttribute("error", PHONE_NUMBER_MUST_BE_ONLY_DIGITS);
+            return "ErrorView";
+        }
         try {
-            User user = authenticationHelper.tryGetUserFromSession(session);
+
             PhoneNumber phoneNumber = mapperHelper.getFromPhoneDto(phoneNumberDto);
             if (user.getRole().getRoleId() == 3) {
                 phoneService.addPhoneToAnAdmin(user, phoneNumber);
@@ -381,6 +392,10 @@ public class UserMvcController {
             return "ErrorView";
         } catch (DuplicateEntityException e) {
             model.addAttribute("statusCode", HttpStatus.CONFLICT.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (Exception e) {
+            model.addAttribute("statusCode", HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         }

@@ -38,7 +38,9 @@ public class MapperHelper {
 
     public User updateUserFromDto(UserDto userDto, int id) {
         User user = userRepository.getUserById(id);
-        user.setPassword(userDto.getPassword());
+        if (userDto.getPassword() != null && !userDto.getPassword().isEmpty()) {
+            user.setPassword(userDto.getPassword());
+        }
         user.setEmail(userDto.getEmail());
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());

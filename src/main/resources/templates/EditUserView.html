@@ -51,8 +51,12 @@
             <form th:action="@{/ti/users/admin/{id}/phone(id=${userId})}" method="post">
                 <div class="user-info">
                     <label for="phoneNumber">Phone:</label>
-                    <input type="text" id="phoneNumber" name="phoneNumber" required/>
+                    <input type="text" id="phoneNumber" th:field="*{phoneNumber}" required/>
+                    <!-- Label for displaying validation errors -->
+                    <label class="error" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></label>
                 </div>
+
+
                 <div>
                     <button type="submit">Add Phone</button>
                 </div>

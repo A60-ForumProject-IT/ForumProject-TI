@@ -51,8 +51,6 @@
         <a href="#" th:href="@{/ti/top10mostRecentPosts}" class="forum-button-3d">Top 10 most recent posts</a>
     </div>
 </div>
-<footer>
-    <p>&copy; 2024 Game Forum. All rights reserved.</p>
-</footer>
+<form th:replace="ForumFormFragment.html :: footer"></form>
 </body>
 </html>

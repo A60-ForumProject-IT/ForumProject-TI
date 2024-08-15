@@ -143,10 +143,13 @@ public class PostMvcController {
     }
 
     @PostMapping("/posts/new")
-    public String handleCreatePost(@Valid @ModelAttribute("postDto") PostDto postDto,
+    public String handleCreatePost(@Valid @ModelAttribute("newPost") PostDto postDto,
                                    BindingResult errors,
                                    Model model,
                                    HttpSession session) {
+        if (errors.hasErrors()) {
+            return "PostCreateView";
+        }
 
         User user;
         try {
@@ -235,10 +238,10 @@ public class PostMvcController {
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         } catch (UnauthorizedOperationException e) {
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         } catch (DuplicateEntityException e) {
-            // Добави грешката в BindingResult
             errors.rejectValue("title", "error.postDto", e.getMessage());
             return "PostEditView";
         }

@@ -207,6 +207,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public int getFilteredPostsCount(FilteredPostsOptions postFilterOptions) {
+        return postRepository.getFilteredPostsCount(postFilterOptions);
+    }
+
+    @Override
     public List<Post> getAllUsersPosts(int userId, FilteredPostsOptions postFilterOptions) {
         return postRepository.getAllUsersPosts(userId, postFilterOptions);
     }

@@ -44,4 +44,6 @@ public interface PostService {
     List<Post> getMostLikedPostsMvc();
 
     List<Post> getMostCommentedPostsMvc();
+
+    int getFilteredPostsCount(FilteredPostsOptions postFilterOptions);
 }

@@ -38,4 +38,6 @@ public interface PostRepository {
     List<Post> getMostLikedPostsMvc();
 
     List<Post> getMostCommentedPostsMvc();
+
+    int getFilteredPostsCount(FilteredPostsOptions postFilterOptions);
 }

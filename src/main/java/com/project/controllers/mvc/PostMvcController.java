@@ -119,8 +119,8 @@ public class PostMvcController {
                 filterPostDto.getSortOrder()
         );
         List<Post> posts = postService.getAllPosts(filteredPostsOptions, page, size);
-        int totalPosts = postService.getTotalPostsCount();
-        int totalPages = (int) Math.ceil((double) totalPosts / size);
+        int totalFilteredPosts = postService.getFilteredPostsCount(filteredPostsOptions);
+        int totalPages = (int) Math.ceil((double) totalFilteredPosts / size);
 
         model.addAttribute("filterPostOptions", filterPostDto);
         model.addAttribute("posts", posts);

@@ -367,4 +367,73 @@ public class PostRepositoryImpl implements PostRepository {
         query.setProperties(parameters);
         return query.list();
     }
+
+    @Override
+    public int getFilteredPostsCount(FilteredPostsOptions filteredPostsOptions) {
+        try (Session session = sessionFactory.openSession()) {
+            List<String> filters = new ArrayList<>();
+            Map<String, Object> parameters = new HashMap<>();
+            StringBuilder queryString = new StringBuilder("SELECT COUNT(post) FROM Post AS post ");
+
+            if (filteredPostsOptions.getTagName().isPresent()) {
+                queryString.append("JOIN post.postTags tags ");
+                filters.add("tags.tag LIKE :tagName");
+                parameters.put("tagName", "%" + filteredPostsOptions.getTagName().get() + "%");
+            }
+
+            filteredPostsOptions.getMinLikes().ifPresent(value -> {
+                filters.add(" post.likes >= :minLikes ");
+                parameters.put("minLikes", value);
+            });
+
+            filteredPostsOptions.getMinDislikes().ifPresent(value -> {
+                filters.add(" post.dislikes >= :minDislikes ");
+                parameters.put("minDislikes", value);
+            });
+
+            filteredPostsOptions.getMaxLikes().ifPresent(value -> {
+                filters.add(" post.likes <= :maxLikes ");
+                parameters.put("maxLikes", value);
+            });
+
+            filteredPostsOptions.getMaxDislikes().ifPresent(value -> {
+                filters.add(" post.dislikes <= :maxDislikes ");
+                parameters.put("maxDislikes", value);
+            });
+
+            filteredPostsOptions.getTitle().ifPresent(value -> {
+                filters.add(" post.title LIKE :title ");
+                parameters.put("title", "%" + value + "%");
+            });
+
+            filteredPostsOptions.getContent().ifPresent(value -> {
+                filters.add(" post.content LIKE :content ");
+                parameters.put("content", "%" + value + "%");
+            });
+
+            filteredPostsOptions.getCreatedBefore().ifPresent(value -> {
+                filters.add(" post.createdOn < :createdBefore ");
+                parameters.put("createdBefore", value);
+            });
+
+            filteredPostsOptions.getCreatedAfter().ifPresent(value -> {
+                filters.add(" post.createdOn > :createdAfter ");
+                parameters.put("createdAfter", value);
+            });
+
+            filteredPostsOptions.getPostedBy().ifPresent(value -> {
+                filters.add(" post.postedBy.username LIKE :postedBy ");
+                parameters.put("postedBy", "%" + value + "%");
+            });
+
+            if (!filters.isEmpty()) {
+                queryString.append(" WHERE ").append(String.join(" AND ", filters));
+            }
+
+            Query<Long> query = session.createQuery(queryString.toString(), Long.class);
+            query.setProperties(parameters);
+
+            return Math.toIntExact(query.uniqueResult());
+        }
+    }
 }

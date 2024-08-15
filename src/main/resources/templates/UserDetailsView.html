@@ -10,13 +10,11 @@
 <header th:replace="~{ForumFormFragment.html :: header}"></header>
 
 <div class="body-content">
-    <h2 class="h2-3d-dark">User Details</h2>
+    <h2 class="h2-3d-dark" th:text="${user.getUsername()} + '\'s details'">User Details</h2>
     <div class="user-profile-container">
-        <!-- Profile Picture -->
         <div class="profile-picture">
             <img th:src="${user.avatar.avatar}" alt="Profile Picture" width="200" height="200"/>
         </div>
-        <!-- User Info -->
         <div class="user-info">
             <div class="user-info-left">
                 <p><strong>Username:</strong></p>
@@ -49,12 +47,12 @@
             </div>
         </div>
     </div>
-    <!-- Admin Actions -->
+
     <div th:if="${isAdmin} or ${isModerator}">
         <div class="admin-actions">
             <h2 class="h3-3d-dark">Admin Actions</h2>
             <div class="admin-buttons">
-                <form th:action="@{/ti/users/{id}/delete(id=${user.id})}" method="post">
+                <form th:action="@{/ti/users/admin/users/{id}/delete(id=${user.id})}" method="post">
                     <button type="submit">Delete User</button>
                 </form>
 
@@ -84,9 +82,8 @@
         </div>
     </div>
     <div class="forum-buttons-container">
-        <a href="#" th:href="@{/ti/users/{id}/posts(id=${user.id})}" class="forum-button-3d">User's all posts</a>
-        <a href="#" th:href="@{/ti/users/{id}/comments(id=${user.id})}" class="forum-button-3d">User's all comments</a>
-<!--        <a href="#" th:href="@{/ti/top10mostRecentPosts}" class="forum-button-3d">Top 10 most recent posts</a>-->
+        <a href="#" th:href="@{/ti/users/{id}/posts(id=${user.id})}" th:text="${user.getUsername()} + '\'s all posts'" class="forum-button-3d">User's all posts</a>
+        <a href="#" th:href="@{/ti/users/{id}/comments(id=${user.id})}" th:text="${user.getUsername()} + '\'s all comments'" class="forum-button-3d">User's all comments</a>
     </div>
 </div>
 <footer th:replace="~{ForumFormFragment.html :: footer}"></footer>

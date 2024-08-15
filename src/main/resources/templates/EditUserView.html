@@ -14,8 +14,8 @@
     <div class="edit-user-container">
         <!-- Контейнер за профилната снимка и бутоните -->
         <div class="profile-picture-container">
-            <img th:src="${user.avatar.avatar}" alt="Profile Picture" width="150" height="150"/>
-            <form th:action="@{/ti/users/edit/avatar}" method="post" enctype="multipart/form-data">
+            <img th:object="${avatarUrl}" th:src="${avatarUrl}" alt="Profile Picture" width="150" height="150"/>
+            <form  th:action="@{/ti/users/edit/avatar}" method="post" enctype="multipart/form-data">
                 <label for="avatarFile" class="custom-file-upload">Choose Photo</label>
                 <input type="file" id="avatarFile" name="avatarFile" accept="image/*" required>
                 <button type="submit">Upload</button>
@@ -23,26 +23,31 @@
         </div>
 
         <!-- Контейнер за данните, които се променят -->
-        <form th:action="@{/ti/users/edit}" th:object="${user}" method="post" enctype="multipart/form-data" class="user-info-container">
+        <form th:action="@{/ti/users/edit}" th:object="${userDto}" method="post" enctype="multipart/form-data" class="user-info-container">
             <div class="user-info">
                 <label th:text="#{user.label.firstName}">First Name:</label>
-                <input type="text" th:field="*{firstName}"/>
+                <input type="text" th:field="*{firstName}" required/>
                 <label class="error-form-error" th:errors="*{firstName}"></label>
             </div>
             <div class="user-info">
                 <label th:text="#{user.label.lastName}">Last Name:</label>
-                <input type="text" th:field="*{lastName}"/>
+                <input type="text" th:field="*{lastName}" required/>
                 <label class="error-form-error" th:errors="*{lastName}"></label>
             </div>
             <div class="user-info">
                 <label th:text="#{user.label.email}">Email:</label>
-                <input type="email" th:field="*{email}"/>
+                <input type="email" th:field="*{email}" required/>
                 <label class="error-form-error" th:errors="*{email}"></label>
             </div>
             <div class="user-info">
                 <label th:text="#{user.label.password}">Password:</label>
                 <input type="password" th:field="*{password}" required/>
                 <label class="error-form-error" th:errors="*{password}"></label>
+            </div>
+            <div class="user-info">
+                <label th:text="#{user.label.password-confirm}">Password:</label>
+                <input type="password" th:field="*{passwordConfirmation}" required/>
+                <label class="error-form-error" th:errors="*{passwordConfirmation}"></label>
             </div>
             <div>
                 <button type="submit">Save</button>

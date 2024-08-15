@@ -13,8 +13,11 @@ import lombok.Setter;
 public class UserDto {
 
     @NotNull(message = "Password can't be empty.")
-    @Size(min = 8)
+    @Size(min = 8, message = "Password should be at least 8 characters.")
     private String password;
+
+    @Size(min = 8, message = "Password should be at least 8 characters.")
+    private String passwordConfirmation;
 
     @Email(message = "Email is invalid.")
     private String email;
@@ -29,9 +32,10 @@ public class UserDto {
 
     private Avatar avatar;
 
-    public UserDto() {}
+    public UserDto() {
+    }
 
-    public UserDto( String password, String email, String firstName, String lastName, Avatar avatar) {
+    public UserDto(String password, String email, String firstName, String lastName, Avatar avatar) {
         this.password = password;
         this.email = email;
         this.firstName = firstName;

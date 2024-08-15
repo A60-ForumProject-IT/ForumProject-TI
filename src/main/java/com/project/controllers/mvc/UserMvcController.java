@@ -97,9 +97,11 @@ public class UserMvcController {
 
     @GetMapping("/edit")
     public String showEditUserPage(Model model, HttpSession session) {
-        User currentUser = authenticationHelper.tryGetUserFromSession(session);
         try {
+            User currentUser = authenticationHelper.tryGetUserFromSession(session);
             model.addAttribute("user", currentUser);
+            model.addAttribute("avatarUrl", currentUser.getAvatar().getAvatar());
+            model.addAttribute("userDto", new UserDto());
             model.addAttribute("userId", currentUser.getId());
             model.addAttribute("isAdmin", currentUser.getRole().getRoleId() == 3);
             return "EditUserView";
@@ -110,19 +112,26 @@ public class UserMvcController {
 
     @PostMapping("/edit")
     public String handleEditUser(
-            @Valid @ModelAttribute("user") UserDto userToBeEdited,
+            @Valid @ModelAttribute("userDto") UserDto userToBeEdited,
             BindingResult bindingResult, HttpSession session) {
 
-        User currentUser = authenticationHelper.tryGetUserFromSession(session);
 
         if (bindingResult.hasErrors()) {
             return "EditUserView";
         }
         try {
+            User currentUser = authenticationHelper.tryGetUserFromSession(session);
+            if (!userToBeEdited.getPassword().equals(userToBeEdited.getPasswordConfirmation())) {
+                bindingResult.rejectValue("passwordConfirmation", "registration_error", "Passwords do not match");
+                return "EditUserView";
+            }
             User updatedUser = mapperHelper.updateUserFromDto(userToBeEdited, currentUser.getId());
             userService.update(currentUser, updatedUser);
             return "redirect:/ti";
-        } catch (Exception e) {
+        } catch (AuthenticationException e) {
+            bindingResult.rejectValue("username", "error.user", e.getMessage());
+            return "EditUserView";
+        } catch (EntityNotFoundException e) {
             bindingResult.rejectValue("username", "error.user", e.getMessage());
             return "EditUserView";
         }

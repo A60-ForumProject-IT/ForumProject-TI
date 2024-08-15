@@ -45,6 +45,7 @@ public class MapperHelper {
         return user;
     }
 
+
     public Post fromPostDto(PostDto postDto, User user) {
         Post post = new Post();
         post.setTitle(postDto.getTitle());

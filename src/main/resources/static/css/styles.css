@@ -1656,3 +1656,33 @@ strong {
 #post-creator-username {
     color: #ff79c6;
 }
+
+.pagination {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.pagination ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+}
+
+.pagination li {
+    display: inline;
+    margin: 0 5px;
+}
+
+.pagination li a {
+    color: #00ff00;
+    text-decoration: none;
+    padding: 6px 13px;
+    border: 1px solid #00ff00;
+    border-radius: 4px;
+}
+
+.pagination li a.active {
+    background-color: #00ff00;
+    color: #000;
+}

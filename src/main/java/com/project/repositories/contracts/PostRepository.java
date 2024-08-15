@@ -9,7 +9,7 @@ import java.util.List;
 public interface PostRepository {
     List<Post> getAllUsersPosts(int userId, FilteredPostsOptions postFilterOptions);
 
-    List<Post> getAllPosts(FilteredPostsOptions filteredPostsOptions);
+    List<Post> getAllPosts(FilteredPostsOptions filteredPostsOptions, int page, int size);
 
     Post getPostById(int postId);
 

@@ -99,7 +99,10 @@ public class PostMvcController {
     }
 
     @GetMapping("/posts")
-    public String showAllPosts(@ModelAttribute("filterPostOptions") FilterPostDto filterPostDto, Model model) {
+    public String showAllPosts(@ModelAttribute("filterPostOptions") FilterPostDto filterPostDto,
+                               @RequestParam(value = "page", defaultValue = "1") int page,
+                               @RequestParam(value = "size", defaultValue = "10") int size,
+                               Model model) {
         filterPostDto.sanitize();
         FilteredPostsOptions filteredPostsOptions = new FilteredPostsOptions(
                 filterPostDto.getMaxLikes(),
@@ -115,9 +118,15 @@ public class PostMvcController {
                 filterPostDto.getSortBy(),
                 filterPostDto.getSortOrder()
         );
-        List<Post> posts = postService.getAllPosts(filteredPostsOptions);
+        List<Post> posts = postService.getAllPosts(filteredPostsOptions, page, size);
+        int totalPosts = postService.getTotalPostsCount();
+        int totalPages = (int) Math.ceil((double) totalPosts / size);
+
         model.addAttribute("filterPostOptions", filterPostDto);
         model.addAttribute("posts", posts);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("size", size);
         return "AllPostsView";
     }
 

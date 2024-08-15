@@ -26,9 +26,11 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
-    public List<Post> getAllPosts(FilteredPostsOptions filteredPostsOptions) {
+    public List<Post> getAllPosts(FilteredPostsOptions filteredPostsOptions, int page, int size) {
         try (Session session = sessionFactory.openSession()) {
-            return filterPostOptions(filteredPostsOptions, session);
+            List<Post> posts = filterPostOptions(filteredPostsOptions, session);
+            int start = (page - 1) * size;
+            return posts.subList(start, Math.min(start + size, posts.size()));
         }
     }
 

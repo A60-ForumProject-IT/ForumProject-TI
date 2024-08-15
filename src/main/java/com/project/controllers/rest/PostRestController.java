@@ -53,12 +53,14 @@ public class PostRestController {
                                   @RequestParam(required = false) LocalDate createdAfter,
                                   @RequestParam(required = false) String postedBy,
                                   @RequestParam(required = false) String sortBy,
-                                  @RequestParam(required = false) String sortOrder) {
+                                  @RequestParam(required = false) String sortOrder,
+                                  @RequestParam(value = "page", defaultValue = "1") int page,
+                                  @RequestParam(value = "size", defaultValue = "10") int size) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             FilteredPostsOptions postFilterOptions =
                     new FilteredPostsOptions(minLikes, minDislikes,maxLikes, maxDislikes, title, tagName, content, createdBefore, createdAfter, postedBy, sortBy, sortOrder);
-            return postService.getAllPosts(postFilterOptions);
+            return postService.getAllPosts(postFilterOptions, page, size);
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (UnauthorizedOperationException e) {

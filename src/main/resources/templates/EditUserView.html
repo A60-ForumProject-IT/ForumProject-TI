@@ -12,7 +12,6 @@
     <h2 class="h2-3d-dark">Edit User Information</h2>
 
     <div class="edit-user-container">
-        <!-- Контейнер за профилната снимка и бутоните -->
         <div class="profile-picture-container">
             <img th:src="${user.avatar.avatar}" alt="Profile Picture" width="150" height="150"/>
             <form th:action="@{/ti/users/edit/avatar}" method="post" enctype="multipart/form-data">
@@ -22,7 +21,6 @@
             </form>
         </div>
 
-        <!-- Контейнер за данните, които се променят -->
         <form th:action="@{/ti/users/edit}" th:object="${user}" method="post" enctype="multipart/form-data" class="user-info-container">
             <div class="user-info">
                 <label th:text="#{user.label.firstName}">First Name:</label>

@@ -16,7 +16,7 @@
             <div class="form-group">
                 <label for="edit-post-title">Post Title</label>
                 <textarea id="edit-post-title" th:field="*{title}" class="title-textarea" rows="1"></textarea>
-                <label class="error-form-error" th:errors="*{title}"></label>
+                <label class="error-form-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></label>
             </div>
 
             <div class="form-group">
@@ -32,7 +32,7 @@
 
 
     <div class="tags-section">
-        <h3 class="h2-3d-dark">Tags</h3>
+        <h3 th:if="${tagDto != null}" class="h2-3d-dark">Tags</h3>
         <div class="post-tags-container2">
             <div th:each="tag : ${tagsInPost}" th:unless="${tagsInPost.isEmpty()}">
                 <div class="tag-item">
@@ -42,7 +42,7 @@
             </div>
         </div>
 
-        <form action="#" th:action="@{__${requestURI}__/add-tag}" th:object="${tagDto}" method="post">
+        <form action="#" th:if="${tagDto != null}" th:action="@{__${requestURI}__/add-tag}" th:object="${tagDto}" method="post">
             <div class="form-group centered-form">
                 <input type="text" th:field="*{tagName}" placeholder="Place your tag here" class="filter-input">
                 <label class="error-form-error" th:errors="*{tagName}"></label>

@@ -237,6 +237,10 @@ public class PostMvcController {
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
+        } catch (DuplicateEntityException e) {
+            // Добави грешката в BindingResult
+            errors.rejectValue("title", "error.postDto", e.getMessage());
+            return "PostEditView";
         }
     }
 
@@ -432,6 +436,7 @@ public class PostMvcController {
         Post post = postService.getPostById(postId);
         model.addAttribute("postDto", mapperHelper.toPostDto(post));
         model.addAttribute("tagDto", tagDto);
+        model.addAttribute("tagsInPost", post.getPostTags());
         model.addAttribute("postId", postId);
         if (errors.hasErrors()) {
             return "PostEditView";

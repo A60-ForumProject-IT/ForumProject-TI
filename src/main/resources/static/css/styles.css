@@ -637,7 +637,7 @@ header:hover {
 }
 
 .comment-textarea {
-    width: 100%;
+    width: 93%;
     height: 150px;
     padding: 15px;
     border-radius: 5px;
@@ -1728,4 +1728,12 @@ strong {
     50% { transform: translateX(5px); }
     75% { transform: translateX(-5px); }
     100% { transform: translateX(0); }
+}
+
+#edit-post-title {
+    height: 70px;
+}
+
+#edit-post-content {
+    height: 120px;
 }

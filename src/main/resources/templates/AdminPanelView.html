@@ -8,10 +8,32 @@
 </head>
 <body>
 <form th:replace="~{ForumFormFragment.html :: header}"></form>
-<div class="h2-3d-dark">
-    <h2>Admin Panel</h2>
+<div class="body-content">
+    <h1 class="page-title">Admin Panel</h1>
+    <div class="admin-container">
+        <h2 class="section-title">🔍 User Management:</h2>
+        <p class="feature-text">
+            As the overlord of the gaming universe, you'll have the power to search for users by username, email, or first name. It's like having a cheat code to find anyone in the forum, whether they're hiding under a creative alias or just using their real name (boring, we know!). Once you find them, you can decide their fate—block them to silence their virtual voice or unblock them to let them back into the action.
+        </p>
+
+        <h2 class="section-title">💼 Content Control:</h2>
+        <p class="feature-text">
+            You're in charge of the battlefield! Any post that doesn't meet the forum’s standards or just rubs you the wrong way can be swiftly deleted with the click of a button. But don't worry, you can also channel your inner librarian and organize posts like a pro. Sort and filter through the endless sea of gamer wisdom and memes, and make sure the best content rises to the top.
+        </p>
+
+        <h2 class="section-title">🛠️ Forum Customization:</h2>
+        <p class="feature-text">
+            With great power comes great responsibility—and also some cool customization options! Tweak the forum settings, update the latest news, and even sprinkle in some fun Easter eggs for your fellow gamers to discover. After all, who says admin work can't be fun? Remember, this is your playground, so feel free to get creative and keep the community buzzing with excitement.
+        </p>
+
+        <h2 class="section-title">🎮 Game On:</h2>
+        <p class="feature-text">
+            Whether you're blocking trolls or curating the next great discussion thread, the admin panel is your command center. So gear up, get your game face on, and let the moderation begin. It's not just about managing a forum—it's about shaping an epic online experience for every gamer who logs in. Ready? Press start!
+        </p>
+    </div>
 </div>
-<form th:replace="~{ForumFormFragment.html :: footer}"></form>
+<footer>
+    <p>&copy; 2024 Game Forum. All rights reserved.</p>
+</footer>
 </body>
 </html>
-

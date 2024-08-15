@@ -349,7 +349,7 @@ public class PostMvcController {
                                         Model model,
                                         HttpSession session) {
         if (errors.hasErrors()) {
-            return "SinglePostView";
+            return "CommentEditView";
         }
         try {
             User loggedInUser = authenticationHelper.tryGetUserFromSession(session);
@@ -365,6 +365,9 @@ public class PostMvcController {
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
+        } catch (DuplicateEntityException e) {
+            errors.rejectValue("content", "duplicateComment", e.getMessage());
+            return "CommentEditView";
         }
     }
 

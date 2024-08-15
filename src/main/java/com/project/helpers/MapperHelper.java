@@ -38,9 +38,7 @@ public class MapperHelper {
 
     public User updateUserFromDto(UserDto userDto, int id) {
         User user = userRepository.getUserById(id);
-        if (userDto.getPassword() != null && !userDto.getPassword().isEmpty()) {
-            user.setPassword(userDto.getPassword());
-        }
+        user.setPassword(userDto.getPassword());
         user.setEmail(userDto.getEmail());
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
@@ -55,6 +53,7 @@ public class MapperHelper {
         post.setCreatedOn(LocalDate.now());
         return post;
     }
+
 
     public Post fromPostDtoToUpdate(PostDto postDto, int id) {
         Post post = postService.getPostById(id);

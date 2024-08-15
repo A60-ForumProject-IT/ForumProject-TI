@@ -55,15 +55,17 @@
         </form>
         <div th:if="${isAdmin}" class="admin-phone-container">
             <h3 class="h3-3d-dark">Add Phone Number</h3>
-            <form th:action="@{/ti/users/admin/{id}/phone(id=${userId})}" method="post">
+            <form th:object="${phoneNumber}" th:action="@{/ti/users/admin/{id}/phone(id=${userId})}" method="post">
                 <div class="user-info">
                     <label for="phoneNumber">Phone:</label>
-                    <input type="text" id="phoneNumber" name="phoneNumber" required/>
+                    <input type="text" id="phoneNumber" th:field="*{phoneNumber}" required/>
+                    <label class="error-form-error" th:errors="*{phoneNumber}"></label>
                 </div>
                 <div>
                     <button type="submit">Add Phone</button>
                 </div>
             </form>
+
         </div>
     </div>
 </div>

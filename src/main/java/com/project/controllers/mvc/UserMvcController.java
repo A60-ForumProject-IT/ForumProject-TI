@@ -102,27 +102,36 @@ public class UserMvcController {
             model.addAttribute("user", currentUser);
             model.addAttribute("avatarUrl", currentUser.getAvatar().getAvatar());
             model.addAttribute("userDto", new UserDto());
-            model.addAttribute("userId", currentUser.getId());
+            model.addAttribute("userId", currentUser.getId());  // Добави userId в модела
             model.addAttribute("isAdmin", currentUser.getRole().getRoleId() == 3);
+            model.addAttribute("phoneNumber", new PhoneNumberDto());
             return "EditUserView";
         } catch (AuthenticationException e) {
             return "redirect:/ti/auth/login";
         }
     }
 
+
     @PostMapping("/edit")
     public String handleEditUser(
             @Valid @ModelAttribute("userDto") UserDto userToBeEdited,
-            BindingResult bindingResult, HttpSession session) {
+            BindingResult bindingResult, HttpSession session, Model model) {
 
-
+        User currentUser = authenticationHelper.tryGetUserFromSession(session);
         if (bindingResult.hasErrors()) {
+            model.addAttribute("user", currentUser);
+            model.addAttribute("avatarUrl", currentUser.getAvatar().getAvatar());
+            model.addAttribute("userId", currentUser.getId());
+            model.addAttribute("isAdmin", currentUser.getRole().getRoleId() == 3);
+            model.addAttribute("phoneNumber", new PhoneNumberDto());
             return "EditUserView";
         }
+
         try {
-            User currentUser = authenticationHelper.tryGetUserFromSession(session);
             if (!userToBeEdited.getPassword().equals(userToBeEdited.getPasswordConfirmation())) {
                 bindingResult.rejectValue("passwordConfirmation", "registration_error", "Passwords do not match");
+                model.addAttribute("userId", currentUser.getId());
+                model.addAttribute("phoneNumber", new PhoneNumberDto());
                 return "EditUserView";
             }
             User updatedUser = mapperHelper.updateUserFromDto(userToBeEdited, currentUser.getId());
@@ -130,9 +139,13 @@ public class UserMvcController {
             return "redirect:/ti";
         } catch (AuthenticationException e) {
             bindingResult.rejectValue("username", "error.user", e.getMessage());
+            model.addAttribute("userId", currentUser.getId());
+            model.addAttribute("phoneNumber", new PhoneNumberDto());
             return "EditUserView";
         } catch (EntityNotFoundException e) {
             bindingResult.rejectValue("username", "error.user", e.getMessage());
+            model.addAttribute("userId", currentUser.getId());
+            model.addAttribute("phoneNumber", new PhoneNumberDto());
             return "EditUserView";
         }
     }
@@ -172,8 +185,8 @@ public class UserMvcController {
 
     @GetMapping("/admin/users")
     public String showAllUsers(@ModelAttribute("filterUsersOptions") FilterUserDto filterUserDto,
-                               @RequestParam(defaultValue = "0") int page, // Параметър за страницата
-                               @RequestParam(defaultValue = "5") int size, // Параметър за размера на страницата
+                               @RequestParam(defaultValue = "0") int page,
+                               @RequestParam(defaultValue = "5") int size,
                                Model model, HttpSession session) {
         try {
             User user = authenticationHelper.tryGetUserFromSession(session);
@@ -195,8 +208,8 @@ public class UserMvcController {
                 List<User> users = userService.getAllUsers(user, filteredUsersOptions, page, size);
                 model.addAttribute("filterUsersOptions", filterUserDto);
                 model.addAttribute("users", users);
-                model.addAttribute("currentPage", page); // Добавяме текущата страница
-                model.addAttribute("pageSize", size); // Добавяме размера на страницата
+                model.addAttribute("currentPage", page);
+                model.addAttribute("pageSize", size);
                 return "AllUsersView";
             }
             return "ErrorView";
@@ -366,12 +379,24 @@ public class UserMvcController {
     }
 
     @PostMapping("/admin/{id}/phone")
-    public String addPhone(@PathVariable int id, @ModelAttribute @Valid  PhoneNumberDto phoneNumberDto, Model model, HttpSession session) {
-        User user = authenticationHelper.tryGetUserFromSession(session);
+    public String addPhone(@PathVariable int id, @Valid @ModelAttribute("phoneNumber") PhoneNumberDto phoneNumberDto,
+                           BindingResult bindingResult, Model model, HttpSession session) {
+
+        User currentUser = authenticationHelper.tryGetUserFromSession(session);
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("phoneNumber", phoneNumberDto);
+            model.addAttribute("userId", currentUser.getId());
+            model.addAttribute("userDto", new UserDto());
+            model.addAttribute("user", currentUser);
+            model.addAttribute("avatarUrl", currentUser.getAvatar().getAvatar());
+            model.addAttribute("isAdmin", currentUser.getRole().getRoleId() == 3);
+            return "EditUserView";
+        }
+
         try {
             PhoneNumber phoneNumber = mapperHelper.getFromPhoneDto(phoneNumberDto);
-            if (user.getRole().getRoleId() == 3) {
-                phoneService.addPhoneToAnAdmin(user, phoneNumber);
+            if (currentUser.getRole().getRoleId() == 3) {
+                phoneService.addPhoneToAnAdmin(currentUser, phoneNumber);
                 return "redirect:/ti/users/" + id;
             }
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
@@ -390,11 +415,14 @@ public class UserMvcController {
             model.addAttribute("error", YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE);
             return "ErrorView";
         } catch (DuplicateEntityException e) {
-            model.addAttribute("statusCode", HttpStatus.CONFLICT.getReasonPhrase());
-            model.addAttribute("error", e.getMessage());
-            return "ErrorView";
+            bindingResult.rejectValue("phoneNumber", "error.phone", e.getMessage());
+            model.addAttribute("userId", currentUser.getId());
+            model.addAttribute("userDto", new UserDto());
+            model.addAttribute("phoneNumber", phoneNumberDto);
+            return "EditUserView";
         }
     }
+
 
     @PostMapping("/admin/{id}/phone/{phoneId}/remove")
     public String removePhone(@PathVariable int id, @PathVariable int phoneId,

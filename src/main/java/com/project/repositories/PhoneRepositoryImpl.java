@@ -51,7 +51,6 @@ public class PhoneRepositoryImpl implements PhoneRepository {
 
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            // Reattach the entity to the session if it's detached
             if (!session.contains(phoneNumber)) {
                 phoneNumber = session.merge(phoneNumber);
             }

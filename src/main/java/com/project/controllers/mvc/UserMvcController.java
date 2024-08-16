@@ -400,8 +400,9 @@ public class UserMvcController {
 
         String avatarUrl = currentUser.getAvatar() != null ? currentUser.getAvatar().getAvatar() : "/images/default-avatar.png";
         model.addAttribute("avatarUrl", avatarUrl);
-
+        UserDto userDto = null;
         try {
+            userDto = mapperHelper.toUserDto(currentUser);
             PhoneNumber phoneNumber = mapperHelper.getFromPhoneDto(phoneNumberDto);
             if (currentUser.getRole().getRoleId() == 3) {
                 phoneService.addPhoneToAnAdmin(currentUser, phoneNumber);
@@ -425,7 +426,7 @@ public class UserMvcController {
         } catch (DuplicateEntityException e) {
             bindingResult.rejectValue("phoneNumber", "error.phone", e.getMessage());
             model.addAttribute("userId", currentUser.getId());
-            model.addAttribute("userDto", new UserDto());
+            model.addAttribute("userDto", userDto);
             model.addAttribute("phoneNumber", phoneNumberDto);
             return "EditUserView";
         }

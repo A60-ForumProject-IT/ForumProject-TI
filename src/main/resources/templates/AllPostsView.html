@@ -16,6 +16,7 @@
         <h2 th:text="#{posts.filter.options}" class="h2-3d-dark">Filter Options</h2>
         <div class="filter-inputs">
             <input type="text" placeholder="Search by title..." th:field="*{title}" class="filter-input"/>
+            <input type="text" placeholder="Search by content..." th:field="*{content}" class="filter-input"/>
             <input type="text" placeholder="Search by tags..." th:field="*{tagName}" class="filter-input"/>
             <input type="text" placeholder="Search by date before..."
                    th:field="*{createdBefore}"
@@ -42,8 +43,7 @@
                 <option value="title">Title</option>
                 <option value="likes">Likes</option>
                 <option value="dislikes">Dislikes</option>
-                <option value="created on">Created On</option>
-                <option value="posted by">Posted By</option>
+                <option value="createdOn">Created On</option>
             </select>
 
             <select th:field="*{sortOrder}" class="filter-select">

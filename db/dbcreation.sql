@@ -1,3 +1,6 @@
+CREATE DATABASE IF NOT EXISTS forum;
+USE forum;
+
 create table avatars
 (
     id         int auto_increment

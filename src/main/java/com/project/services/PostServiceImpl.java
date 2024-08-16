@@ -84,7 +84,7 @@ public class PostServiceImpl implements PostService {
             post.setDislikes(post.getDislikes() - 1);
         }
         usersWhoLikedThePost.add(user);
-        post.setLikes(post.getDislikes() + 1);
+        post.setLikes(post.getLikes() + 1);
 
         postRepository.updatePost(post);
     }

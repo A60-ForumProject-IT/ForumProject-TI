@@ -1,5 +1,9 @@
-CREATE DATABASE IF NOT EXISTS forum;
-USE forum;
+create table avatars
+(
+    id         int auto_increment
+        primary key,
+    avatar_url varchar(255) not null
+);
 
 create table roles
 (
@@ -17,25 +21,38 @@ create table tags
 
 create table users
 (
-    id           int auto_increment
+    id         int auto_increment
         primary key,
-    username     varchar(50)          not null,
-    password     varchar(255)         not null,
-    email        varchar(100)         not null,
-    first_name   varchar(50)          null,
-    last_name    varchar(50)          null,
-    role_id      int                  null,
-    phone_number varchar(20)          null,
-    is_blocked   tinyint(1) default 0 null,
+    username   varchar(50)          not null,
+    password   varchar(255)         not null,
+    email      varchar(100)         not null,
+    first_name varchar(50)          null,
+    last_name  varchar(50)          null,
+    role_id    int                  null,
+    is_blocked tinyint(1) default 0 null,
     constraint email
         unique (email),
-    constraint phone_number
-        unique (phone_number),
     constraint username
         unique (username),
     constraint users_ibfk_1
         foreign key (role_id) references roles (id)
 );
+
+create table phone_numbers
+(
+    id           int auto_increment
+        primary key,
+    phone_number varchar(20) not null,
+    user_id      int         not null,
+    constraint phone_number_unique
+        unique (phone_number),
+    constraint phone_numbers_ibfk_1
+        foreign key (user_id) references users (id)
+            on delete cascade
+);
+
+create index user_id
+    on phone_numbers (user_id);
 
 create table posts
 (
@@ -80,7 +97,8 @@ create table posts_users_dislikes
     user_id int not null,
     primary key (post_id, user_id),
     constraint posts_users_dislikes_ibfk_1
-        foreign key (post_id) references posts (id),
+        foreign key (post_id) references posts (id)
+            on delete cascade,
     constraint posts_users_dislikes_ibfk_2
         foreign key (user_id) references users (id)
 );
@@ -94,7 +112,8 @@ create table posts_users_likes
     user_id int not null,
     primary key (post_id, user_id),
     constraint posts_users_likes_ibfk_1
-        foreign key (post_id) references posts (id),
+        foreign key (post_id) references posts (id)
+            on delete cascade,
     constraint posts_users_likes_ibfk_2
         foreign key (user_id) references users (id)
 );
@@ -118,3 +137,20 @@ create index post_id
 
 create index role_id
     on users (role_id);
+
+create table users_avatars
+(
+    user_id   int not null,
+    avatar_id int not null,
+    primary key (user_id, avatar_id),
+    constraint users_avatars_ibfk_1
+        foreign key (user_id) references users (id)
+            on delete cascade,
+    constraint users_avatars_ibfk_2
+        foreign key (avatar_id) references avatars (id)
+            on delete cascade
+);
+
+create index avatar_id
+    on users_avatars (avatar_id);
+

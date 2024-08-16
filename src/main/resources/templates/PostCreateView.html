@@ -11,21 +11,21 @@
 
 <div class="body-content">
     <h2 class="h2-3d-dark-create">Create Post</h2>
-    <form th:object="${newPost}" th:action="@{__${requestURI}__}" method="post" class="create-post-form-wrapper">
-        <div class="form-group-create">
+    <form th:object="${newPost}" th:action="@{__${requestURI}__}" method="post" class="create-post-form-container">
+        <div class="post-form-group">
             <label for="create-post-title">Title</label>
-            <textarea id="create-post-title" th:field="*{title}" placeholder="What will be your post title?" class="title-textarea-create" rows="1"></textarea>
-            <label class="error-form-error" th:errors="*{title}"></label>
+            <textarea id="create-post-title" th:field="*{title}" placeholder="What will be your post title?" class="post-textarea-title" rows="1" required></textarea>
+            <label class="error-message" th:errors="*{title}"></label>
         </div>
 
-        <div class="form-group-create">
+        <div class="post-form-group">
             <label for="create-post-content">Content</label>
-            <textarea id="create-post-content" placeholder="White your the post content here..." th:field="*{content}" class="content-textarea-create" rows="5"></textarea>
-            <label class="error-form-error" th:errors="*{content}"></label>
+            <textarea id="create-post-content" placeholder="Write your post content here..." th:field="*{content}" class="post-textarea-content" rows="5" required></textarea>
+            <label class="error-message" th:errors="*{content}"></label>
         </div>
 
-        <div class="form-group-submit-button-create">
-            <input type="submit" value="Create Post" class="btn-submit-create">
+        <div class="post-submit-button-container">
+            <input type="submit" value="Create Post" class="post-submit-button">
         </div>
     </form>
 </div>

@@ -102,22 +102,23 @@
     <div class="pagination" th:if="${totalPages > 1}">
         <ul>
             <li th:if="${currentPage > 1}">
-                <a th:href="@{/ti/forum/posts(page=${currentPage - 1}, size=${size})}" aria-label="Previous">
+                <a th:href="@{/ti/forum/posts(page=${currentPage - 1}, size=${size}, sortBy=${filterPostOptions.sortBy}, sortOrder=${filterPostOptions.sortOrder}, title=${filterPostOptions.title}, tagName=${filterPostOptions.tagName}, createdBefore=${filterPostOptions.createdBefore}, createdAfter=${filterPostOptions.createdAfter}, minLikes=${filterPostOptions.minLikes}, maxLikes=${filterPostOptions.maxLikes}, minDislikes=${filterPostOptions.minDislikes}, maxDislikes=${filterPostOptions.maxDislikes})}" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
             <li th:each="i : ${#numbers.sequence(1, totalPages)}">
-                <a th:href="@{/ti/forum/posts(page=${i}, size=${size})}"
+                <a th:href="@{/ti/forum/posts(page=${i}, size=${size}, sortBy=${filterPostOptions.sortBy}, sortOrder=${filterPostOptions.sortOrder}, title=${filterPostOptions.title}, tagName=${filterPostOptions.tagName}, createdBefore=${filterPostOptions.createdBefore}, createdAfter=${filterPostOptions.createdAfter}, minLikes=${filterPostOptions.minLikes}, maxLikes=${filterPostOptions.maxLikes}, minDislikes=${filterPostOptions.minDislikes}, maxDislikes=${filterPostOptions.maxDislikes})}"
                    th:text="${i}"
                    th:class="${i == currentPage} ? 'active' : ''">1</a>
             </li>
             <li th:if="${currentPage < totalPages}">
-                <a th:href="@{/ti/forum/posts(page=${currentPage + 1}, size=${size})}" aria-label="Next">
+                <a th:href="@{/ti/forum/posts(page=${currentPage + 1}, size=${size}, sortBy=${filterPostOptions.sortBy}, sortOrder=${filterPostOptions.sortOrder}, title=${filterPostOptions.title}, tagName=${filterPostOptions.tagName}, createdBefore=${filterPostOptions.createdBefore}, createdAfter=${filterPostOptions.createdAfter}, minLikes=${filterPostOptions.minLikes}, maxLikes=${filterPostOptions.maxLikes}, minDislikes=${filterPostOptions.minDislikes}, maxDislikes=${filterPostOptions.maxDislikes})}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
         </ul>
     </div>
+
 </div>
 
 <form class="button-create">

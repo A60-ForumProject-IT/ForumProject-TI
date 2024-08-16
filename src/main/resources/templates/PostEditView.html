@@ -12,19 +12,18 @@
 <header th:replace="ForumFormFragment.html :: header"></header>
 
 <div class="body-content">
-
         <h2 class="h2-3d-dark">Edit Your Post</h2>
-        <form th:object="${postDto}" th:action="@{__${requestURI}__}" method="post">
-            <div class="form-group">
-                <label for="edit-post-title">Post Title</label>
-                <textarea id="edit-post-title" th:field="*{title}" class="title-textarea" rows="1"></textarea>
-                <label class="error-form-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></label>
+        <form th:object="${postDto}" th:action="@{__${requestURI}__}" method="post" class="create-post-form-container">
+            <div class="post-form-group">
+                <label for="create-post-title">Title</label>
+                <textarea id="create-post-title" th:field="*{title}" placeholder="What will be your post title?" class="post-textarea-title" rows="1" required></textarea>
+                <label class="error-message" th:errors="*{title}"></label>
             </div>
 
-            <div class="form-group">
-                <label for="edit-post-content">Post Content</label>
-                <textarea id="edit-post-content" th:field="*{content}" class="content-textarea" rows="5"></textarea>
-                <label class="error-form-error" th:errors="*{content}"></label>
+            <div class="post-form-group">
+                <label for="create-post-content">Content</label>
+                <textarea id="create-post-content" placeholder="Write your post content here..." th:field="*{content}" class="post-textarea-content" rows="5" required></textarea>
+                <label class="error-message" th:errors="*{content}"></label>
             </div>
 
             <div class="form-group-submit-button">

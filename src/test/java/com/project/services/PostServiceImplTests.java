@@ -78,13 +78,13 @@ class PostServiceImplTests {
         posts.add(TestHelpers.createMockPost1());
         FilteredPostsOptions filterOptions = TestHelpers.createPostFilterOptions();
 
-        Mockito.when(postRepository.getAllPosts(Mockito.any()))
+        Mockito.when(postRepository.getAllPosts(filterOptions, 1, 10))
                 .thenReturn(posts);
 
-        postService.getAllPosts(filterOptions);
+        postService.getAllPosts(filterOptions, 1, 10);
 
         Mockito.verify(postRepository, Mockito.times(1))
-                .getAllPosts(filterOptions);
+                .getAllPosts(filterOptions, 1,10 );
     }
 
     @Test

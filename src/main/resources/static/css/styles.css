@@ -20,7 +20,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 2px solid #50fa7b;
+    border-bottom: 2px solid #55c3d7;
 }
 
 header h3 a {
@@ -32,7 +32,7 @@ header h3 a {
 }
 
 header h3 a:hover {
-    color: #50fa7b;
+    color: #55c3d7;
     background-color: #444;
 }
 
@@ -52,16 +52,16 @@ h1, h2, h3, h4 {
 }
 
 a {
-    color: #50fa7b;
+    color: #55c3d7;
     text-decoration: none;
 }
 
 a:hover {
-    color: #ff79c6;
+    color: #ffac4a;
 }
 
 button, input[type="submit"] {
-    background-color: #50fa7b;
+    background-color: #55c3d7;
     color: #1d1f21;
     padding: 10px 20px;
     border: none;
@@ -72,7 +72,7 @@ button, input[type="submit"] {
 }
 
 button:hover, input[type="submit"]:hover {
-    background-color: #ff79c6;
+    background-color: #ffac4a;
 }
 
 footer {
@@ -80,7 +80,7 @@ footer {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-    border-top: 2px solid #50fa7b;
+    border-top: 2px solid #55c3d7;
     text-align: center;
     color: #c5c8c6;
     margin-top: 5px;
@@ -107,7 +107,7 @@ footer p {
 }
 
 .social-icons a {
-    color: #50fa7b;
+    color: #55c3d7;
     text-decoration: none;
     font-size: 1.5rem;
     transition: color 0.3s, transform 0.3s;
@@ -123,7 +123,7 @@ footer p {
 }
 
 .social-icons a:hover {
-    color: #ff79c6;
+    color: #ffac4a;
     transform: scale(1.2);
 }
 
@@ -180,7 +180,7 @@ footer p {
 
 .profile-picture img {
     border-radius: 50%;
-    border: 5px solid #50fa7b;
+    border: 5px solid #55c3d7;
 }
 
 .fa {
@@ -198,12 +198,12 @@ input[type="text"], input[type="number"], select {
 }
 
 input[type="text"]:focus, input[type="number"]:focus, select:focus {
-    border-color: #50fa7b;
+    border-color: #55c3d7;
     outline: none;
 }
 
 .button-create a:hover {
-    background-color: #ff79c6;
+    background-color: #ffac4a;
     color: #1d1f21;
     border-radius: 5px;
 }
@@ -216,7 +216,7 @@ input[type="text"]:focus, input[type="number"]:focus, select:focus {
 }
 
 .button-create a {
-    background-color: #50fa7b;
+    background-color: #55c3d7;
     color: #1d1f21;
     padding: 10px 20px;
     border-radius: 5px;
@@ -241,7 +241,7 @@ input[type="text"]:focus, input[type="number"]:focus, select:focus {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    border-bottom: 2px solid #50fa7b;
+    border-bottom: 2px solid #55c3d7;
 }
 
 .post-item:hover {
@@ -255,12 +255,12 @@ input[type="text"]:focus, input[type="number"]:focus, select:focus {
 
 .post-title a {
     font-size: 1.5rem;
-    color: #50fa7b;
+    color: #55c3d7;
     text-decoration: none;
 }
 
 .post-title a:hover {
-    color: #ff79c6;
+    color: #ffac4a;
 }
 
 .post-content {
@@ -326,14 +326,14 @@ input[type="text"]:focus, input[type="number"]:focus, select:focus {
 .post-title {
     margin-bottom: 10px;
     font-size: 1.5rem;
-    color: #50fa7b;
+    color: #55c3d7;
 }
 
 .single-post-container {
     background-color: #2c2f33;
     border-radius: 10px;
     padding: 20px;
-    border-bottom: 2px solid #50fa7b;
+    border-bottom: 2px solid #55c3d7;
     transition: transform 0.3s, box-shadow 0.3s;
 }
 
@@ -348,7 +348,7 @@ input[type="text"]:focus, input[type="number"]:focus, select:focus {
 }
 
 .post-title a:hover {
-    color: #ff79c6;
+    color: #ffac4a;
 }
 
 .post-meta {
@@ -363,7 +363,7 @@ input[type="text"]:focus, input[type="number"]:focus, select:focus {
     background-color: #444;
     border-radius: 5px;
     padding: 5px 10px;
-    color: #ff79c6;
+    color: #ffac4a;
     font-size: 0.9rem;
 }
 
@@ -408,7 +408,7 @@ input[type="text"]:focus, input[type="number"]:focus, select:focus {
 
 .navigation a:hover {
     background-color: #444;
-    color: #50fa7b;
+    color: #55c3d7;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
     transform: scale(1.05);
 }
@@ -462,7 +462,7 @@ header:hover {
 }
 
 .filter-button {
-    background-color: #50fa7b;
+    background-color: #55c3d7;
     color: #1d1f21;
     padding: 8px 15px;
     border-radius: 5px;
@@ -473,7 +473,7 @@ header:hover {
 }
 
 .filter-button:hover {
-    background-color: #ff79c6;
+    background-color: #ffac4a;
 }
 
 .filter-select {
@@ -501,7 +501,7 @@ header:hover {
 
 .like-dislike-buttons a:hover {
     background-color: #444;
-    color: #50fa7b;
+    color: #55c3d7;
 }
 
 .like-dislike-buttons {
@@ -531,7 +531,7 @@ header:hover {
     border-radius: 10px;
     padding: 15px;
     margin-top: 15px;
-    border: 2px solid #ff79c6;
+    border: 2px solid #ffac4a;
     transition: transform 0.3s, box-shadow 0.3s;
     display: flex;
     flex-direction: column;
@@ -553,7 +553,7 @@ header:hover {
     border-radius: 10px;
     padding: 20px;
     margin-bottom: 20px;
-    border: 2px solid #ff79c6;
+    border: 2px solid #ffac4a;
     position: relative;
 }
 
@@ -628,22 +628,22 @@ header:hover {
 }
 
 .btn-danger {
-    background-color: #50fa7b;
+    background-color: #55c3d7;
     color: #1d1f21;
-    padding: 10px 20px; /* Увеличен padding за по-дебел вид */
+    padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    font-weight: bold; /* Удебеляване на текста */
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Добавяне на светлосянка за 3D ефект */
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
     transition: background-color 0.3s, transform 0.3s;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .btn-danger:hover {
-    background-color: #ff79c6;
-    transform: translateY(-2px); /* Леко повдигане при hover */
+    background-color: #ffac4a;
+    transform: translateY(-2px);
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
 }
 
@@ -654,7 +654,7 @@ header:hover {
 }
 
 #like-button, #dislike-button {
-    color: #50fa7b;
+    color: #55c3d7;
     cursor: pointer;
     text-decoration: none;
     transition: color 0.3s;
@@ -662,7 +662,7 @@ header:hover {
 }
 
 #like-button:hover, #dislike-button:hover {
-    color: #ff79c6;
+    color: #ffac4a;
 }
 
 .comment-form-container {
@@ -686,7 +686,7 @@ header:hover {
 }
 
 .comment-textarea:focus {
-    border-color: #50fa7b;
+    border-color: #55c3d7;
     outline: none;
 }
 
@@ -696,7 +696,7 @@ header:hover {
 }
 
 .btn-submit {
-    background-color: #50fa7b;
+    background-color: #55c3d7;
     color: #1d1f21;
     padding: 10px 20px;
     border-radius: 5px;
@@ -707,7 +707,7 @@ header:hover {
 }
 
 .btn-submit:hover {
-    background-color: #ff79c6;
+    background-color: #ffac4a;
 }
 
 .form-container {
@@ -727,7 +727,7 @@ header:hover {
 }
 
 .comment-form h2 {
-    color: #50fa7b;
+    color: #55c3d7;
     margin-bottom: 20px;
     text-align: center;
 }
@@ -752,7 +752,7 @@ header:hover {
 
 .comment-form input[type="submit"] {
     width: 100%;
-    background-color: #50fa7b;
+    background-color: #55c3d7;
     color: #1d1f21;
     padding: 10px;
     border: none;
@@ -762,7 +762,7 @@ header:hover {
 }
 
 .comment-form input[type="submit"]:hover {
-    background-color: #ff79c6;
+    background-color: #ffac4a;
 }
 
 .login-container {
@@ -789,7 +789,7 @@ header:hover {
 
 .login-form h2 {
     text-align: center;
-    color: #50fa7b;
+    color: #55c3d7;
     margin-bottom: 20px;
 }
 
@@ -814,7 +814,7 @@ header:hover {
 
 .login-form input[type="submit"] {
     width: 100%;
-    background-color: #50fa7b;
+    background-color: #55c3d7;
     color: #1d1f21;
     padding: 10px;
     border: none;
@@ -825,7 +825,7 @@ header:hover {
 }
 
 .login-form input[type="submit"]:hover {
-    background-color: #ff79c6;
+    background-color: #ffac4a;
 }
 
 .login-form .error {
@@ -840,7 +840,7 @@ header:hover {
 .logo-container img {
     width: 60px;
     height: 50px;
-    background-color: #50fa7b;
+    background-color: #55c3d7;
     border-radius: 5px;
     padding: 5px;
 }
@@ -938,7 +938,7 @@ header:hover {
     transition: transform 0.3s, box-shadow 0.3s;
     display: flex;
     justify-content: space-between;
-    border-bottom: 2px solid #50fa7b;
+    border-bottom: 2px solid #55c3d7;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
 }
 
@@ -965,7 +965,7 @@ header:hover {
 }
 
 .user-detail {
-    color: #50fa7b;
+    color: #55c3d7;
     font-weight: bold;
 }
 
@@ -1045,7 +1045,7 @@ header:hover {
 
 .tag-name {
     margin-right: 10px;
-    color: #ff79c6;
+    color: #ffac4a;
 }
 
 .post-tags-container2 {
@@ -1164,7 +1164,7 @@ header:hover {
 }
 
 .btn-submit-create {
-    background-color: #50fa7b;
+    background-color: #55c3d7;
     color: #1d1f21;
     padding: 10px 20px;
     border-radius: 5px;
@@ -1175,7 +1175,7 @@ header:hover {
 }
 
 .btn-submit-create:hover {
-    background-color: #ff79c6;
+    background-color: #ffac4a;
 }
 
 .user-profile-container {
@@ -1226,7 +1226,7 @@ header:hover {
 
 .admin-buttons button {
     width: 150px;
-    background-color: #50fa7b;
+    background-color: #55c3d7;
     color: #1d1f21;
     padding: 10px 20px;
     border-radius: 5px;
@@ -1236,11 +1236,11 @@ header:hover {
 }
 
 .admin-buttons button:hover {
-    background-color: #ff79c6;
+    background-color: #ffac4a;
 }
 
 .admin-buttons button:hover {
-    background-color: #ff79c6;
+    background-color: #ffac4a;
 }
 
 .edit-user-container {
@@ -1328,7 +1328,7 @@ input[type="file"] {
     display: inline-block;
     padding: 10px 20px;
     cursor: pointer;
-    background-color: #50fa7b;
+    background-color: #55c3d7;
     color: #1d1f21;
     border-radius: 5px;
     border: none;
@@ -1337,7 +1337,7 @@ input[type="file"] {
 }
 
 .custom-file-upload:hover {
-    background-color: #ff79c6;
+    background-color: #ffac4a;
 }
 
 .registration-form {
@@ -1377,7 +1377,7 @@ input[type="file"] {
     max-width: 150px;
     margin: 0 auto;
     display: block;
-    background-color: #50fa7b;
+    background-color: #55c3d7;
     color: #1d1f21;
     padding: 10px 20px;
     border-radius: 5px;
@@ -1388,7 +1388,7 @@ input[type="file"] {
 }
 
 .registration-form .btn-submit:hover {
-    background-color: #ff79c6;
+    background-color: #ffac4a;
 }
 
 .filter-input[type="date"] {
@@ -1484,7 +1484,7 @@ a:hover, button:hover {
 
 .stat-item {
     text-align: center;
-    color: #50fa7b;
+    color: #55c3d7;
     flex: 1;
     max-width: 200px;
 }
@@ -1496,7 +1496,7 @@ a:hover, button:hover {
 
 .stat-item:hover i {
     transform: scale(1.2);
-    color: #ff79c6;
+    color: #ffac4a;
 }
 
 .stat-count {
@@ -1516,7 +1516,7 @@ a:hover, button:hover {
 .forum-button {
     padding: 15px 25px;
     border-radius: 10px;
-    background-color: #50fa7b;
+    background-color: #55c3d7;
     color: #1d1f21;
     text-align: center;
     text-decoration: none;
@@ -1526,12 +1526,12 @@ a:hover, button:hover {
 }
 
 .forum-button:hover {
-    background-color: #ff79c6;
+    background-color: #ffac4a;
     transform: scale(1.05);
 }
 
 .forum-button-3d {
-    color: #50fa7b;
+    color: #55c3d7;
     font-size: 1.2rem;
     text-decoration: none;
     position: relative;
@@ -1547,7 +1547,7 @@ a:hover, button:hover {
 }
 
 .forum-button-3d:hover {
-    color: #ff79c6;
+    color: #ffac4a;
     transform: translateY(-5px);
     text-shadow:
             2px 2px 0 #000,
@@ -1573,7 +1573,7 @@ a:hover, button:hover {
 
 .stat-item:hover .stat-icon {
     transform: rotate(20deg) scale(1.2);
-    color: #ff79c6;
+    color: #ffac4a;
     text-shadow:
             2px 2px 0 #000,
             4px 4px 0 #282b30,
@@ -1594,7 +1594,7 @@ a:hover, button:hover {
 }
 
 .stat-number:hover {
-    color: #ff79c6;
+    color: #ffac4a;
     text-shadow:
             2px 2px 0 #000,
             4px 4px 0 #282b30,
@@ -1603,7 +1603,7 @@ a:hover, button:hover {
 }
 
 .stat-text {
-    color: #50fa7b;
+    color: #55c3d7;
     font-size: 1.2rem;
     text-shadow:
             2px 2px 0 #000,
@@ -1614,7 +1614,7 @@ a:hover, button:hover {
 }
 
 .stat-text:hover {
-    color: #ff79c6;
+    color: #ffac4a;
     text-shadow:
             2px 2px 0 #000,
             4px 4px 0 #282b30,
@@ -1633,7 +1633,7 @@ a:hover, button:hover {
 
 .stat-item:hover .stat-icon {
     transform: rotate(20deg) scale(1.2);
-    color: #ff79c6;
+    color: #ffac4a;
     text-shadow:
             2px 2px 0 #000,
             4px 4px 0 #282b30,
@@ -1643,7 +1643,7 @@ a:hover, button:hover {
 
 .page-title {
     font-size: 2.5rem;
-    color: #50fa7b;
+    color: #55c3d7;
     text-align: center;
     margin-bottom: 20px;
     text-shadow:
@@ -1655,7 +1655,7 @@ a:hover, button:hover {
 }
 
 .page-title:hover {
-    color: #ff79c6;
+    color: #ffac4a;
     text-shadow:
             2px 2px 0 #000,
             4px 4px 0 #282b30,
@@ -1675,7 +1675,7 @@ a:hover, button:hover {
 
 .section-title {
     font-size: 2rem;
-    color: #ff79c6;
+    color: #ffac4a;
     text-align: center;
     margin-bottom: 20px;
     text-shadow:
@@ -1687,7 +1687,7 @@ a:hover, button:hover {
 }
 
 .section-title:hover {
-    color: #50fa7b;
+    color: #55c3d7;
     text-shadow:
             2px 2px 0 #000,
             4px 4px 0 #282b30,
@@ -1718,13 +1718,13 @@ strong {
 }
 
 .static-icon {
-    color: #50fa7b;
+    color: #55c3d7;
     cursor: default;
     font-size: 20px;
 }
 
 #post-creator-username {
-    color: #ff79c6;
+    color: #ffac4a;
 }
 
 .pagination {
@@ -1745,15 +1745,15 @@ strong {
 }
 
 .pagination li a {
-    color: #00ff00;
+    color: #55c3d7;
     text-decoration: none;
     padding: 6px 13px;
-    border: 1px solid #00ff00;
+    border: 1px solid #55c3d7;
     border-radius: 4px;
 }
 
 .pagination li a.active {
-    background-color: #00ff00;
+    background-color: #55c3d7;
     color: #000;
 }
 
@@ -1786,7 +1786,7 @@ strong {
 }
 
 button, input[type="submit"], .btn-danger, .btn-submit, .custom-file-upload {
-    background-color: #50fa7b;
+    background-color: #55c3d7;
     color: #1d1f21;
     padding: 10px 20px;
     border: none;
@@ -1800,7 +1800,7 @@ button, input[type="submit"], .btn-danger, .btn-submit, .custom-file-upload {
 }
 
 button:hover, input[type="submit"]:hover, .btn-danger:hover, .btn-submit:hover, .custom-file-upload:hover {
-    background-color: #ff79c6;
+    background-color: #ffac4a;
     transform: translateY(-2px);
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
 }
@@ -1828,7 +1828,7 @@ button:hover, input[type="submit"]:hover, .btn-danger:hover, .btn-submit:hover, 
 }
 
 .input-container input:focus {
-    border-color: #50fa7b;
+    border-color: #55c3d7;
     outline: none;
 }
 
@@ -1873,7 +1873,7 @@ button:hover, input[type="submit"]:hover, .btn-danger:hover, .btn-submit:hover, 
 
 .post-textarea-title:focus,
 .post-textarea-content:focus {
-    border-color: #50fa7b;
+    border-color: #55c3d7;
     outline: none;
 }
 
@@ -1889,7 +1889,7 @@ button:hover, input[type="submit"]:hover, .btn-danger:hover, .btn-submit:hover, 
 }
 
 .post-submit-button {
-    background-color: #50fa7b;
+    background-color: #55c3d7;
     color: #1d1f21;
     padding: 10px 20px;
     border-radius: 5px;
@@ -1902,18 +1902,18 @@ button:hover, input[type="submit"]:hover, .btn-danger:hover, .btn-submit:hover, 
 }
 
 .post-submit-button:hover {
-    background-color: #ff79c6;
+    background-color: #ffac4a;
     transform: translateY(-2px);
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
 }
-/********************************************************************************************/
+
 .background-images {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: -1; /* Поставя фоновите изображения зад съдържанието */
+    z-index: -1;
     overflow: hidden;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1923,7 +1923,7 @@ button:hover, input[type="submit"]:hover, .btn-danger:hover, .btn-submit:hover, 
 .game-bg {
     background-size: cover;
     background-position: center;
-    filter: brightness(0.7); /* Изсветляване на изображенията */
+    filter: brightness(0.9);
     transition: filter 0.3s ease, transform 0.2s ease-out;
 }
 

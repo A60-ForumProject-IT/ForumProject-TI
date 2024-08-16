@@ -12,11 +12,11 @@
 
 <div class="body-content">
     <form action="#" th:action="@{/ti/users/{id}/comments(id=${userId})}" method="get"
-          th:object="${filterCommentOptions}" class="filter-form">
+          th:object="${filterCommentOptions}" class="custom-filter-form">
         <h2 th:text="#{comments.filter.options}" class="h2-3d-dark">Filter Options</h2>
-        <div class="filter-inputs">
-            <input type="text" placeholder="Search by word..." th:field="*{keyWord}"/>
-            <input type="submit" value="Search" class="filter-button"/>
+        <div class="custom-filter-inputs">
+            <input type="text" placeholder="Search by content..." th:field="*{keyWord}" class="custom-input-field"/>
+            <input type="submit" value="Search" class="custom-filter-button"/>
         </div>
     </form>
     <div class="posts-container">
@@ -28,9 +28,10 @@
             </p>
             <div class="comment-meta">
                 <div class="comment-meta-info">
-        <span class="comment-author">
-            <i class="fa fa-user"></i> Author: <span th:text="${comment.userId.username}">Username</span>
-        </span>
+        <span class="post-creator">
+    <i class="fa-solid fa-user-tie"></i>
+    <a id="post-creator-username" th:href="@{/ti/users/{id}(id=${comment.userId.id})}" th:text="${comment.userId.username}">Username</a>
+</span>
                     <span class="comment-time">
             <i class="fa fa-calendar-alt"></i> <span
                             th:text="${#temporals.format(comment.createdOn, 'dd-MMM-yyyy HH:mm')}">Created On</span>

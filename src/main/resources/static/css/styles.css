@@ -1946,3 +1946,42 @@ button:hover, input[type="submit"]:hover, .btn-danger:hover, .btn-submit:hover, 
     opacity: 0.90;
     transition: opacity 0.3s ease;
 }
+
+.custom-filter-form {
+    padding: 20px;
+    background-color: #2c2f33;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.custom-filter-inputs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.custom-input-field {
+    width: 500px;
+    padding: 10px;
+    border: 1px solid #444;
+    border-radius: 5px;
+    background-color: #1a1a1a;
+    color: #fff;
+}
+
+.custom-filter-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #00bcd4;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.custom-filter-button:hover {
+    background-color: #0097a7;
+}

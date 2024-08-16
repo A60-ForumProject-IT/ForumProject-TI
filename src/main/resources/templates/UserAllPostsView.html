@@ -21,9 +21,9 @@
                     </h3>
                     <div class="post-meta">
                         <span class="post-creator">
-                            <i class="fa-solid fa-user-tie"></i>
-                            <span th:text="${post.postedBy.username}">Username</span>
-                        </span>
+    <i class="fa-solid fa-user-tie"></i>
+    <a id="post-creator-username" th:href="@{/ti/users/{id}(id=${post.getPostedBy().id})}" th:text="${post.getPostedBy().username}">Username</a>
+</span>
                         <span class="post-time">
                             <i class="fa fa-calendar-alt"></i>
                             <span th:text="${post.createdOn}">Time of creation</span>

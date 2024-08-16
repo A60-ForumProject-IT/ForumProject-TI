@@ -6,17 +6,12 @@ import com.project.exceptions.EntityNotFoundException;
 import com.project.exceptions.UnauthorizedOperationException;
 import com.project.helpers.AuthenticationHelper;
 import com.project.helpers.MapperHelper;
-import com.project.models.Avatar;
-import com.project.models.FilteredUsersOptions;
-import com.project.models.PhoneNumber;
-import com.project.models.User;
+import com.project.models.*;
+import com.project.models.dtos.FilterCommentDto;
 import com.project.models.dtos.FilterUserDto;
 import com.project.models.dtos.PhoneNumberDto;
 import com.project.models.dtos.UserDto;
-import com.project.services.contracts.AvatarService;
-import com.project.services.contracts.PhoneService;
-import com.project.services.contracts.RoleService;
-import com.project.services.contracts.UserService;
+import com.project.services.contracts.*;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.hibernate.Session;
@@ -42,15 +37,17 @@ public class UserMvcController {
     private final AvatarService avatarService;
     private final PhoneService phoneService;
     private final RoleService roleService;
+    private final CommentService commentService;
 
     @Autowired
-    public UserMvcController(UserService userService, AuthenticationHelper authenticationHelper, MapperHelper mapperHelper, AvatarService avatarService, PhoneService phoneService, RoleService roleService) {
+    public UserMvcController(UserService userService, AuthenticationHelper authenticationHelper, MapperHelper mapperHelper, AvatarService avatarService, PhoneService phoneService, RoleService roleService, CommentService commentService) {
         this.userService = userService;
         this.authenticationHelper = authenticationHelper;
         this.mapperHelper = mapperHelper;
         this.avatarService = avatarService;
         this.phoneService = phoneService;
         this.roleService = roleService;
+        this.commentService = commentService;
     }
 
     @ModelAttribute("isAdmin")
@@ -482,10 +479,18 @@ public class UserMvcController {
     }
 
     @GetMapping("/{id}/comments")
-    public String showUserComments(@PathVariable int id, Model model, HttpSession session) {
+    public String showUserComments(@PathVariable int id, @ModelAttribute("filterCommentOptions") FilterCommentDto filterCommentDto,
+                                   Model model, HttpSession session) {
+        FilteredCommentsOptions filteredCommentsOptions = new FilteredCommentsOptions(filterCommentDto.getKeyWord());
+
+
         try {
             User user = authenticationHelper.tryGetUserFromSession(session);
             User userToDisplay = userService.getUserById(user, id);
+            List<Comment> comments = commentService.getAllCommentsFromUser(userToDisplay.getId(), filteredCommentsOptions);
+            model.addAttribute("filterCommentOptions", filterCommentDto);
+            model.addAttribute("comments", comments);
+            model.addAttribute("userId", userToDisplay.getId());
             model.addAttribute("user", userToDisplay);
             return "UserAllCommentsView";
         } catch (UnauthorizedOperationException e) {

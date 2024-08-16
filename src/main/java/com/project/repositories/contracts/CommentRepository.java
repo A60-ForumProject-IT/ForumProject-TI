@@ -9,8 +9,7 @@ import java.util.List;
 public interface CommentRepository {
     List<Comment> getAllCommentsFromPost(Post post, FilteredCommentsOptions filteredCommentsOptions);
 
-    List<Comment> getAllCommentsFromUser(int userId);
-    
+
     Comment getCommentByContent(String content);
 
     void createComment(Comment comment);
@@ -21,5 +20,5 @@ public interface CommentRepository {
 
     void deleteComment(Comment comment);
 
-    List<Comment> getAllUserComments(int userId);
+    List<Comment> getAllUserComments(int userId, FilteredCommentsOptions filteredCommentsOptions);
 }

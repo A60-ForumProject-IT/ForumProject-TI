@@ -4,12 +4,14 @@ import com.project.exceptions.EntityNotFoundException;
 import com.project.models.Comment;
 import com.project.models.FilteredCommentsOptions;
 import com.project.models.Post;
+import com.project.models.User;
 import com.project.repositories.contracts.CommentRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +34,7 @@ public class CommentRepositoryImpl implements CommentRepository {
             List<String> filtered = new ArrayList<>();
             Map<String, Object> params = new HashMap<>();
 
-            filteredCommentsOptions.getKewWord().ifPresent(value -> {
+            filteredCommentsOptions.getKeyWord().ifPresent(value -> {
                 filtered.add("content like :keyWord");
                 params.put("keyWord", String.format("%%%s%%", value));
             });
@@ -48,14 +50,10 @@ public class CommentRepositoryImpl implements CommentRepository {
         }
     }
 
-    @Override
-    public List<Comment> getAllCommentsFromUser(int userId) {
-        try (Session session = sessionFactory.openSession()) {
-            Query<Comment> query = session.createQuery("FROM Comment WHERE userId = :userId", Comment.class);
-            query.setParameter("userId", userId);
-            return query.list();
-        }
-    }
+//    @Override
+//    public List<Comment> getAllCommentsFromUser(int userId, FilteredCommentsOptions filteredCommentsOptions) {
+//
+//    }
 
     @Override
     public Comment getCommentByContent(String content) {
@@ -92,7 +90,7 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     @Override
     public void update(Comment comment) {
-        try(Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.merge(comment);
             session.getTransaction().commit();
@@ -102,7 +100,7 @@ public class CommentRepositoryImpl implements CommentRepository {
     @Override
     public void deleteComment(Comment comment) {
 
-        try(Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.remove(comment);
             session.getTransaction().commit();
@@ -110,7 +108,27 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
-    public List<Comment> getAllUserComments(int userId) {
-        return getAllCommentsFromUser(userId);
+    public List<Comment> getAllUserComments(int userId, FilteredCommentsOptions filteredCommentsOptions) {
+        try (Session session = sessionFactory.openSession()) {
+            StringBuilder hql = new StringBuilder("FROM Comment WHERE userId.id = :userId");
+
+            List<String> filtered = new ArrayList<>();
+            Map<String, Object> params = new HashMap<>();
+
+            filteredCommentsOptions.getKeyWord().ifPresent(value -> {
+                filtered.add("content LIKE :keyWord");
+                params.put("keyWord", String.format("%%%s%%", value));
+            });
+
+            if (!filtered.isEmpty()) {
+                hql.append(" AND ").append(String.join(" AND ", filtered));
+            }
+
+            Query<Comment> query = session.createQuery(hql.toString(), Comment.class);
+            query.setParameter("userId", userId);
+            query.setProperties(params);
+
+            return query.list();
+        }
     }
 }

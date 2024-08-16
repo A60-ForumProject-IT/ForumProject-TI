@@ -9,12 +9,20 @@
 <body>
 <form th:replace="ForumFormFragment.html :: header"></form>
 <div class="body-content">
-
+    <form action="#" th:action="@{/ti/users/{id}/comments(id=${userId})}" method="get"
+          th:object="${filterCommentOptions}" class="filter-form">
+        <h2 th:text="#{comments.filter.options}" class="h2-3d-dark">Filter Options</h2>
+        <div class="filter-inputs">
+            <input type="text" placeholder="Search by word..." th:field="*{keyWord}"/>
+            <input type="submit" value="Search" class="filter-button"/>
+        </div>
+    </form>
     <div class="posts-container">
         <h2 th:text="${user.firstName}+'’s all comments'" class="h2-3d-dark">Forum Posts</h2>
-        <div th:each="comment : ${user.comments}" class="comment-item-container">
+        <div th:each="comment : ${comments}" class="comment-item-container">
             <p class="comment-content">
-                <a th:href="@{/ti/forum/posts/__${comment.getCommentedPost().getPostId()}__}" th:text="${comment.content}">Comment content</a>
+                <a th:href="@{/ti/forum/posts/__${comment.getCommentedPost().getPostId()}__}"
+                   th:text="${comment.content}">Comment content</a>
             </p>
             <div class="comment-meta">
                 <div class="comment-meta-info">

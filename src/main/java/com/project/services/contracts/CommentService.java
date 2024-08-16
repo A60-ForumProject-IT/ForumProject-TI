@@ -18,5 +18,6 @@ public interface CommentService {
 
     Comment getCommentById(int commentId);
 
-    List<Comment> getAllUserComments(int user);
+
+    List<Comment> getAllCommentsFromUser(int id, FilteredCommentsOptions filteredCommentsOptions);
 }

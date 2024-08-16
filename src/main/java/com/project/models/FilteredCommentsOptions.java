@@ -7,9 +7,9 @@ import java.util.Optional;
 @Getter
 @Setter
 public class FilteredCommentsOptions {
-    private Optional<String> kewWord;
+    private Optional<String> keyWord;
 
     public FilteredCommentsOptions(String kewWord) {
-        this.kewWord = Optional.ofNullable(kewWord);
+        this.keyWord = Optional.ofNullable(kewWord);
     }
 }

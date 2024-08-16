@@ -45,7 +45,7 @@ public class TagRepositoryImpl implements TagRepository {
             List<String> filters = new ArrayList<>();
             Map<String, Object> params = new HashMap<>();
 
-            filteredCommentsOptions.getKewWord().ifPresent(value -> {
+            filteredCommentsOptions.getKeyWord().ifPresent(value -> {
                 filters.add("t.tag like :keyWord");
                 params.put("keyWord", String.format("%%%s%%", value));
             });

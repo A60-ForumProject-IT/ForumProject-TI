@@ -59,6 +59,23 @@ public class CommentRestController {
         }
     }
 
+    @GetMapping("/user/{id}")
+    public List<Comment> getAllCommentsFromUser(@RequestHeader HttpHeaders headers,
+                                                @PathVariable int id,
+                                                @RequestParam(required = false) String keyWord) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            FilteredCommentsOptions filteredCommentsOptions = new FilteredCommentsOptions(keyWord);
+            return commentService.getAllCommentsFromUser(id, filteredCommentsOptions);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
     @PostMapping("/{postId}")
     public ResponseEntity<String> createComment(@RequestBody @Valid CommentDto commentDto,
                                                 @RequestHeader HttpHeaders headers,

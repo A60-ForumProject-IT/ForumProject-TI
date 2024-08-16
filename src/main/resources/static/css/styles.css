@@ -50,7 +50,7 @@ header h3 a:hover {
 }
 
 .body-content:hover {
-    background-color: rgba(40, 43, 48, 0.8); /* Фонов цвят с прозрачност при hover */
+    background-color: rgba(40, 43, 48, 0.95);
 }
 
 h1, h2, h3, h4 {
@@ -425,10 +425,6 @@ input[type="text"]:focus, input[type="number"]:focus, select:focus {
 
 header:hover {
     opacity: 0.95;
-}
-
-.filter-form {
-    margin-bottom: 20px;
 }
 
 .nav-links-center {
@@ -913,11 +909,6 @@ header:hover {
     padding: 15px;
     border-radius: 10px;
     margin-bottom: 20px;
-}
-
-.filter-inputs {
-    display: flex;
-    gap: 10px;
 }
 
 .filter-select {

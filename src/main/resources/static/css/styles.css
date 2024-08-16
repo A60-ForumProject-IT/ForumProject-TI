@@ -157,13 +157,16 @@ footer p {
 }
 
 .user-info {
-    margin-bottom: 10px;
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 15px;
 }
 
 .user-info label {
-    display: inline-block;
     width: 150px;
     font-weight: bold;
+    text-align: right;
+    margin-right: 10px;
 }
 
 .user-info input {
@@ -800,7 +803,8 @@ header:hover {
 .login-form input[type="password"] {
     width: 100%;
     padding: 10px;
-    margin-bottom: 15px;
+    margin-top: 8px;
+    /*margin-bottom: 5px;*/
     border-radius: 5px;
     border: 1px solid #444;
     background-color: #1d1f21;
@@ -865,10 +869,14 @@ header:hover {
 }
 
 .error-form-error {
+    position: absolute;
+    left: 105%;
+    top: 50%;
+    transform: translateY(-50%);
     color: indianred;
-    font-size: 1.5rem;
-    margin-top: 10px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+    font-size: 0.9rem;
+    white-space: nowrap;
+    margin-left: 10px;
 }
 
 .h3-3d-dark-error {
@@ -1006,6 +1014,10 @@ header:hover {
 .form-group-submit-button {
     text-align: center;
     margin-top: 20px;
+}
+
+.form-group label {
+    color: indianred;
 }
 
 .form-group-submit-button .btn-submit {
@@ -1791,4 +1803,35 @@ button:hover, input[type="submit"]:hover, .btn-danger:hover, .btn-submit:hover, 
     background-color: #ff79c6;
     transform: translateY(-2px);
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+#error-form-error-username {
+    color: indianred;
+}
+
+#error-form-error-password {
+    color: indianred;
+}
+
+.input-container {
+    position: relative;
+    width: 100%;
+}
+
+.input-container input {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #444;
+    background-color: #1d1f21;
+    color: #ffffff;
+}
+
+.input-container input:focus {
+    border-color: #50fa7b;
+    outline: none;
+}
+
+#login-button {
+    margin-top: 25px;
 }

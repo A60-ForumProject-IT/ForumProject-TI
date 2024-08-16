@@ -132,4 +132,14 @@ public class MapperHelper {
         postDto.setContent(post.getContent());
         return postDto;
     }
+
+    public UserDto toUserDto(User user) {
+        UserDto userDto = new UserDto();
+        userDto.setFirstName(user.getFirstName());
+        userDto.setLastName(user.getLastName());
+        userDto.setEmail(user.getEmail());
+        userDto.setPassword(user.getPassword());
+        userDto.setAvatar(user.getAvatar());
+        return userDto;
+    }
 }

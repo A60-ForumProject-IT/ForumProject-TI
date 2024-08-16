@@ -12,7 +12,6 @@
     <h2 class="h2-3d-dark">Edit User Information</h2>
 
     <div class="edit-user-container">
-        <!-- Контейнер за профилната снимка и бутоните -->
         <div class="profile-picture-container">
             <img th:object="${avatarUrl}" th:src="${avatarUrl}" alt="Profile Picture" width="150" height="150"/>
             <form  th:action="@{/ti/users/edit/avatar}" method="post" enctype="multipart/form-data">
@@ -22,33 +21,43 @@
             </form>
         </div>
 
-        <!-- Контейнер за данните, които се променят -->
         <form th:action="@{/ti/users/edit}" th:object="${userDto}" method="post" enctype="multipart/form-data" class="user-info-container">
             <div class="user-info">
                 <label th:text="#{user.label.firstName}">First Name:</label>
-                <input type="text" th:field="*{firstName}" required/>
-                <label class="error-form-error" th:errors="*{firstName}"></label>
+                <div class="input-container">
+                    <input type="text" th:field="*{firstName}" required/>
+                    <label class="error-form-error" th:errors="*{firstName}"></label>
+                </div>
             </div>
             <div class="user-info">
                 <label th:text="#{user.label.lastName}">Last Name:</label>
-                <input type="text" th:field="*{lastName}" required/>
-                <label class="error-form-error" th:errors="*{lastName}"></label>
+                <div class="input-container">
+                    <input type="text" th:field="*{lastName}" required/>
+                    <label class="error-form-error" th:errors="*{lastName}"></label>
+                </div>
             </div>
             <div class="user-info">
                 <label th:text="#{user.label.email}">Email:</label>
-                <input type="email" th:field="*{email}" required/>
-                <label class="error-form-error" th:errors="*{email}"></label>
+                <div class="input-container">
+                    <input type="email" th:field="*{email}" required/>
+                    <label class="error-form-error" th:errors="*{email}"></label>
+                </div>
             </div>
             <div class="user-info">
                 <label th:text="#{user.label.password}">Password:</label>
-                <input type="password" th:field="*{password}" required/>
-                <label class="error-form-error" th:errors="*{password}"></label>
+                <div class="input-container">
+                    <input type="password" th:field="*{password}" required/>
+                    <label class="error-form-error" th:errors="*{password}"></label>
+                </div>
             </div>
             <div class="user-info">
-                <label th:text="#{user.label.password-confirm}">Password:</label>
-                <input type="password" th:field="*{passwordConfirmation}" required/>
-                <label class="error-form-error" th:errors="*{passwordConfirmation}"></label>
+                <label th:text="#{user.label.password-confirm}">Confirm Password:</label>
+                <div class="input-container">
+                    <input type="password" th:field="*{passwordConfirmation}" required/>
+                    <label class="error-form-error" th:errors="*{passwordConfirmation}"></label>
+                </div>
             </div>
+
             <div>
                 <button type="submit">Save</button>
             </div>
@@ -58,14 +67,16 @@
             <form th:object="${phoneNumber}" th:action="@{/ti/users/admin/{id}/phone(id=${userId})}" method="post">
                 <div class="user-info">
                     <label for="phoneNumber">Phone:</label>
-                    <input type="text" id="phoneNumber" th:field="*{phoneNumber}" required/>
-                    <label class="error-form-error" th:errors="*{phoneNumber}"></label>
+                    <div class="input-container">
+                        <input type="text" id="phoneNumber" th:field="*{phoneNumber}" required/>
+                        <label class="error-form-error" th:errors="*{phoneNumber}"></label>
+                    </div>
                 </div>
+
                 <div>
                     <button type="submit">Add Phone</button>
                 </div>
             </form>
-
         </div>
     </div>
 </div>

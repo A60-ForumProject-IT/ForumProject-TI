@@ -99,9 +99,10 @@ public class UserMvcController {
     public String showEditUserPage(Model model, HttpSession session) {
         try {
             User currentUser = authenticationHelper.tryGetUserFromSession(session);
+            UserDto userDto = mapperHelper.toUserDto(currentUser);
             model.addAttribute("user", currentUser);
             model.addAttribute("avatarUrl", currentUser.getAvatar().getAvatar());
-            model.addAttribute("userDto", new UserDto());
+            model.addAttribute("userDto", userDto);
             model.addAttribute("userId", currentUser.getId());  // Добави userId в модела
             model.addAttribute("isAdmin", currentUser.getRole().getRoleId() == 3);
             model.addAttribute("phoneNumber", new PhoneNumberDto());
@@ -126,6 +127,9 @@ public class UserMvcController {
             model.addAttribute("phoneNumber", new PhoneNumberDto());
             return "EditUserView";
         }
+
+        String avatarUrl = currentUser.getAvatar() != null ? currentUser.getAvatar().getAvatar() : "/images/default-avatar.png";
+        model.addAttribute("avatarUrl", avatarUrl);
 
         try {
             if (!userToBeEdited.getPassword().equals(userToBeEdited.getPasswordConfirmation())) {
@@ -384,14 +388,18 @@ public class UserMvcController {
 
         User currentUser = authenticationHelper.tryGetUserFromSession(session);
         if (bindingResult.hasErrors()) {
+            UserDto userDto = mapperHelper.toUserDto(currentUser);
             model.addAttribute("phoneNumber", phoneNumberDto);
             model.addAttribute("userId", currentUser.getId());
-            model.addAttribute("userDto", new UserDto());
+            model.addAttribute("userDto", userDto);
             model.addAttribute("user", currentUser);
             model.addAttribute("avatarUrl", currentUser.getAvatar().getAvatar());
             model.addAttribute("isAdmin", currentUser.getRole().getRoleId() == 3);
             return "EditUserView";
         }
+
+        String avatarUrl = currentUser.getAvatar() != null ? currentUser.getAvatar().getAvatar() : "/images/default-avatar.png";
+        model.addAttribute("avatarUrl", avatarUrl);
 
         try {
             PhoneNumber phoneNumber = mapperHelper.getFromPhoneDto(phoneNumberDto);

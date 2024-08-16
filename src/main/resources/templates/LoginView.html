@@ -11,24 +11,28 @@
 
 <div class="body-content">
     <div class="login-outer-container">
-        <div class="spacer"></div> <!-- Spacer преди формата -->
+        <div class="spacer"></div>
 
         <div class="login-container">
             <form class="login-form" action="#" th:action="@{/ti/auth/login}" th:object="${login}" method="post">
                 <h2>Login</h2>
-                <label th:text="#{user.label.username}">Username</label>
-                <input type="text" th:field="*{username}"/>
-                <label class="error-form-error" th:errors="*{username}">Username error placeholder</label>
+                <div>
+                    <label th:text="#{user.label.username}">Username</label>
+                    <input type="text" th:field="*{username}"/>
+                    <label id="error-form-error-username" th:errors="*{username}">Username error placeholder</label>
+                </div>
 
-                <label th:text="#{user.label.password}">Password</label>
-                <input type="password" th:field="*{password}"/>
-                <label class="error-form-error" th:errors="*{password}">Password error placeholder</label>
+                <div>
+                    <label th:text="#{user.label.password}">Password</label>
+                    <input type="password" th:field="*{password}"/>
+                    <label id="error-form-error-password" th:errors="*{password}">Password error placeholder</label>
+                </div>
 
-                <input type="submit" value="Login"/>
+                <input id="login-button" type="submit" value="Login"/>
             </form>
         </div>
 
-        <div class="spacer"></div> <!-- Spacer след формата -->
+        <div class="spacer"></div>
     </div>
 </div>
 

@@ -22,10 +22,10 @@ public class RoleServiceImplTests {
 
     @Test
     public void getRoleById_Should_ReturnRole_When_MethodCalled() {
-        Mockito.when(roleMockRepository.getRoleById(2))
+        Mockito.when(roleMockRepository.getRoleById(1))
                 .thenReturn(TestHelpers.createUserRole());
 
-        Role role = roleMockService.getRoleById(2);
+        Role role = roleMockService.getRoleById(1);
 
         Assertions.assertEquals(1, role.getRoleId());
     }

@@ -8,6 +8,8 @@
 </head>
 <body>
 <header th:replace="~{ForumFormFragment.html :: header}"></header>
+<form th:replace="~{ForumFormFragment.html :: images}"></form>
+
 <div class="body-content">
     <h2 class="h2-3d-dark">Register</h2>
     <form class="registration-form" th:action="@{/ti/auth/register}" th:object="${register}" method="post">

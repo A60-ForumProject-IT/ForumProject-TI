@@ -8,6 +8,8 @@
 </head>
 <body>
 <header th:replace="~{ForumFormFragment.html :: header}"></header>
+<form th:replace="~{ForumFormFragment.html :: images}"></form>
+
 <div class="body-content">
     <form action="#" th:action="@{/ti/users/admin/users}" method="get" th:object="${filterUsersOptions}"
           class="filter-form">

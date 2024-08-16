@@ -8,6 +8,8 @@
 </head>
 <body>
 <form th:replace="ForumFormFragment.html :: header"></form>
+<form th:replace="~{ForumFormFragment.html :: images}"></form>
+
 <div class="body-content">
     <div class="posts-container">
         <h2 th:text="${user.firstName}+'’s all posts'"  class="h2-3d-dark">Forum Posts</h2>

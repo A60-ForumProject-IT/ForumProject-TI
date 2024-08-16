@@ -7,7 +7,10 @@
     <link rel="stylesheet" href="../static/css/styles.css" th:href="@{/css/styles.css}">
 </head>
 <body>
+
 <form th:replace="ForumFormFragment.html :: header"></form>
+<form th:replace="~{ForumFormFragment.html :: images}"></form>
+
 <div class="body-content">
     <form action="#" th:action="@{/ti/forum/posts}" method="get" th:object="${filterPostOptions}" class="filter-form">
         <h2 th:text="#{posts.filter.options}" class="h2-3d-dark">Filter Options</h2>

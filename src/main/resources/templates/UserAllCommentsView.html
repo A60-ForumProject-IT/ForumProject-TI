@@ -8,6 +8,8 @@
 </head>
 <body>
 <form th:replace="ForumFormFragment.html :: header"></form>
+<form th:replace="~{ForumFormFragment.html :: images}"></form>
+
 <div class="body-content">
     <form action="#" th:action="@{/ti/users/{id}/comments(id=${userId})}" method="get"
           th:object="${filterCommentOptions}" class="filter-form">

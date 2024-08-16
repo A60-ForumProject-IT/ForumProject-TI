@@ -31,7 +31,7 @@
                 <a th:href="@{/ti/forum/posts}">
                     <i class="fas fa-comments"></i> Forum Posts
                 </a>
-                <a th:href="@{/ti/users/edit}">
+                <a th:if="${isAuthenticated}" th:href="@{/ti/users/edit}">
                     <i class="fas fa-user-edit"></i> Edit User
                 </a>
                 <a th:if="${isAuthenticated && (isAdmin || isModerator)}" th:href="@{/ti/users/admin}">

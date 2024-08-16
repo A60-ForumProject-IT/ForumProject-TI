@@ -100,7 +100,7 @@ public class UserMvcController {
             model.addAttribute("user", currentUser);
             model.addAttribute("avatarUrl", currentUser.getAvatar().getAvatar());
             model.addAttribute("userDto", userDto);
-            model.addAttribute("userId", currentUser.getId());  // Добави userId в модела
+            model.addAttribute("userId", currentUser.getId());
             model.addAttribute("isAdmin", currentUser.getRole().getRoleId() == 3);
             model.addAttribute("phoneNumber", new PhoneNumberDto());
             return "EditUserView";
@@ -186,8 +186,8 @@ public class UserMvcController {
 
     @GetMapping("/admin/users")
     public String showAllUsers(@ModelAttribute("filterUsersOptions") FilterUserDto filterUserDto,
-                               @RequestParam(defaultValue = "0") int page,
-                               @RequestParam(defaultValue = "5") int size,
+                               @RequestParam(defaultValue = "1") int page,
+                               @RequestParam(defaultValue = "10") int size,
                                Model model, HttpSession session) {
         try {
             User user = authenticationHelper.tryGetUserFromSession(session);
@@ -206,11 +206,14 @@ public class UserMvcController {
                         filterUserDto.getSortBy(),
                         filterUserDto.getSortOrder()
                 );
+                int totalFilteredPosts = userService.getFilteredUsersCount(filteredUsersOptions);
+                int totalPages = (int) Math.ceil((double) totalFilteredPosts / size);
                 List<User> users = userService.getAllUsers(user, filteredUsersOptions, page, size);
                 model.addAttribute("filterUsersOptions", filterUserDto);
                 model.addAttribute("users", users);
                 model.addAttribute("currentPage", page);
-                model.addAttribute("pageSize", size);
+                model.addAttribute("totalPages", totalPages);
+                model.addAttribute("size", size);
                 return "AllUsersView";
             }
             return "ErrorView";

@@ -53,8 +53,8 @@ public class UserRepositoryImpl implements UserRepository {
             hql.append(generateOrderBy(filteredUsersOptional));
             Query<User> query = session.createQuery(hql.toString(), User.class);
             query.setProperties(params);
-            query.setFirstResult(page * size); // Начален запис
-            query.setMaxResults(size); // Колко записа да вземе
+            query.setFirstResult((page-1) * size);
+            query.setMaxResults(size);
             return query.list();
         }
 
@@ -208,5 +208,33 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    @Override
+    public int getFilteredUsersCount(FilteredUsersOptions filteredUsersOptions) {
+        try (Session session = sessionFactory.openSession()) {
+            StringBuilder hql = new StringBuilder("SELECT COUNT(u) FROM User u ");
+            List<String> filtered = new ArrayList<>();
+            Map<String, Object> params = new HashMap<>();
 
+            filteredUsersOptions.getUsername().ifPresent(value -> {
+                filtered.add("username like :username ");
+                params.put("username", String.format("%%%s%%", value));
+            });
+            filteredUsersOptions.getFirstName().ifPresent(value -> {
+                filtered.add("firstName like :firstName ");
+                params.put("firstName", String.format("%%%s%%", value));
+            });
+
+            filteredUsersOptions.getEmail().ifPresent(value -> {
+                filtered.add("email like :email ");
+                params.put("email", String.format("%%%s%%", value));
+            });
+
+            if (!filtered.isEmpty()) {
+                hql.append(" where ").append(String.join(" AND ", filtered));
+            }
+            Query<Long> query = session.createQuery(hql.toString(), Long.class);
+            query.setProperties(params);
+            return Math.toIntExact(query.uniqueResult());
+        }
+    }
 }

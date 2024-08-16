@@ -213,4 +213,9 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.userToBeDemoted(userToBeDemoted);
     }
+
+    @Override
+    public int getFilteredUsersCount(FilteredUsersOptions filteredUsersOptions) {
+        return userRepository.getFilteredUsersCount(filteredUsersOptions);
+    }
 }

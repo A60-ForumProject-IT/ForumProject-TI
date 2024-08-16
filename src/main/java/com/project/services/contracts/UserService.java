@@ -32,4 +32,5 @@ public interface UserService {
     void userToBeDemoted(User userToBeDemoted);
 
 
+    int getFilteredUsersCount(FilteredUsersOptions filteredUsersOptions);
 }

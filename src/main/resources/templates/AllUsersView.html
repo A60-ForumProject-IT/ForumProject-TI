@@ -9,7 +9,8 @@
 <body>
 <header th:replace="~{ForumFormFragment.html :: header}"></header>
 <div class="body-content">
-    <form action="#" th:action="@{/ti/users/admin/users}" method="get" th:object="${filterUsersOptions}" class="filter-form">
+    <form action="#" th:action="@{/ti/users/admin/users}" method="get" th:object="${filterUsersOptions}"
+          class="filter-form">
         <label class="filter-label" th:text="#{posts.filter.options}">Filter Options</label>
         <div class="filter-inputs">
             <input type="text" placeholder="Username" th:field="*{username}" class="filter-input"/>
@@ -45,8 +46,8 @@
         </div>
         <div class="user-item" th:each="user : ${users}">
             <div class="user-info1">
-                <div class="user-detail" >
-                <a href="#" th:href="@{/ti/users/__${user.id}__}" th:text="${user.username}"> </a>
+                <div class="user-detail">
+                    <a href="#" th:href="@{/ti/users/__${user.id}__}" th:text="${user.username}"> </a>
                 </div>
                 <div class="user-detail" th:text="${user.firstName}">First name</div>
                 <div class="user-detail" th:text="${user.email}">Email</div>
@@ -54,13 +55,27 @@
         </div>
     </div>
 
-    <!-- Пагинация -->
-    <div class="pagination">
-        <a th:href="@{/ti/users/admin/users(page=${currentPage - 1}, size=${pageSize})}"
-           th:if="${currentPage > 0}">Previous</a>
-        <span>Page <span th:text="${currentPage + 1}">1</span></span>
-        <a th:href="@{/ti/users/admin/users(page=${currentPage + 1}, size=${pageSize})}"
-           th:if="${users.size() == pageSize}">Next</a>
+    <!-- Updated pagination section -->
+    <div class="pagination" th:if="${totalPages != null and totalPages > 1}">
+        <ul>
+            <li th:if="${currentPage > 1}">
+                <a th:href="@{/ti/users/admin/users(page=${currentPage - 1}, size=${size}, sortBy=${filterUsersOptions.sortBy}, sortOrder=${filterUsersOptions.sortOrder}, username=${filterUsersOptions.username}, firstName=${filterUsersOptions.firstName}, email=${filterUsersOptions.email})}"
+                   aria-label="Previous">
+                    <span aria-hidden="true">«</span>
+                </a>
+            </li>
+            <li th:each="i : ${#numbers.sequence(1, totalPages)}">
+                <a th:href="@{/ti/users/admin/users(page=${i}, size=${size}, sortBy=${filterUsersOptions.sortBy}, sortOrder=${filterUsersOptions.sortOrder}, username=${filterUsersOptions.username}, firstName=${filterUsersOptions.firstName}, email=${filterUsersOptions.email})}"
+                   th:text="${i}"
+                   th:class="${currentPage == i} ? 'active' : ''">1</a>
+            </li>
+            <li th:if="${currentPage < totalPages}">
+                <a th:href="@{/ti/users/admin/users(page=${currentPage + 1}, size=${size}, sortBy=${filterUsersOptions.sortBy}, sortOrder=${filterUsersOptions.sortOrder}, username=${filterUsersOptions.username}, firstName=${filterUsersOptions.firstName}, email=${filterUsersOptions.email})}"
+                   aria-label="Next">
+                    <span aria-hidden="true">»</span>
+                </a>
+            </li>
+        </ul>
     </div>
 </div>
 <footer th:replace="~{ForumFormFragment.html :: footer}"></footer>

@@ -31,4 +31,6 @@ public interface UserRepository {
 
 
     void userToBeDemoted(User userToBeDemoted);
+
+    int getFilteredUsersCount(FilteredUsersOptions filteredUsersOptions);
 }

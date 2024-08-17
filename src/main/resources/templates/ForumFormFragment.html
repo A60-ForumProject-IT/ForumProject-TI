@@ -42,14 +42,11 @@
                 </a>
             </div>
             <div class="nav-links-right">
-                <a th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}">
-                    <i class="fas fa-sign-out-alt"></i> Logout
+                <a th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}" class="auth-icon">
+                    <i class="fas fa-sign-out-alt"></i>
                 </a>
-                <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}">
-                    <i class="fas fa-sign-in-alt"></i> Login
-                </a>
-                <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/register}">
-                    <i class="fas fa-user-plus"></i> Registration
+                <a th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}" class="auth-icon">
+                    <i class="fas fa-sign-in-alt"></i>
                 </a>
             </div>
         </nav>

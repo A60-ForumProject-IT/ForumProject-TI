@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Authentication</title>
+    <link rel="stylesheet" href="../static/css/styles.css" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+<form th:replace="~{ForumFormFragment.html :: header}"></form>
+<form th:replace="~{ForumFormFragment.html :: images}"></form>
+
+<div class="auth-container">
+    <div class="login-container">
+        <div class="auth-buttons">
+            <button id="loginButton" class="auth-tab-button active">Login</button>
+            <button id="registerButton" class="auth-tab-button">Register</button>
+        </div>
+
+        <div id="loginForm" class="auth-form">
+            <h2>Login</h2>
+            <form action="#" th:action="@{/ti/auth/login}" th:object="${login}" method="post">
+                <div class="form-group-registration">
+                    <label th:text="#{user.label.username}">Username</label>
+                    <input type="text" class="form-input-registration" th:field="*{username}" required/>
+                    <label class="error-message" th:errors="*{username}">Username error placeholder</label>
+                </div>
+
+                <div class="form-group-registration">
+                    <label th:text="#{user.label.password}">Password</label>
+                    <input type="password" class="form-input-registration" th:field="*{password}" required/>
+                    <label class="error-message" th:errors="*{password}">Password error placeholder</label>
+                </div>
+
+                <input id="login-button" type="submit" value="Login"/>
+            </form>
+        </div>
+
+        <div id="registerForm" class="auth-form" style="display: none;">
+            <h2>Register</h2>
+            <form th:action="@{/ti/auth/register}" th:object="${register}" method="post">
+                <div class="form-group-registration">
+                    <label class="form-label" th:text="#{user.label.username}">Username</label>
+                    <input type="text" class="form-input-registration" th:field="*{username}" required/>
+                    <label class="error-message" th:errors="*{username}"></label>
+                </div>
+
+                <div class="form-group-registration">
+                    <label class="form-label" th:text="#{user.label.password}">Password</label>
+                    <input type="password" class="form-input-registration" th:field="*{password}" required/>
+                    <label class="error-message" th:errors="*{password}"></label>
+                </div>
+
+                <div class="form-group-registration">
+                    <label class="form-label" th:text="#{user.label.password-confirm}">Confirm password</label>
+                    <input type="password" class="form-input-registration" th:field="*{confirmPassword}" required/>
+                    <label class="error-message" th:errors="*{confirmPassword}"></label>
+                </div>
+
+                <div class="form-group-registration">
+                    <label class="form-label" th:text="#{user.label.email}">Email</label>
+                    <input type="email" class="form-input-registration" th:field="*{email}" required/>
+                    <label class="error-message" th:errors="*{email}"></label>
+                </div>
+
+                <div class="form-group-registration">
+                    <label class="form-label" th:text="#{user.label.firstName}">First name</label>
+                    <input type="text" class="form-input-registration" th:field="*{firstName}" required/>
+                    <label class="error-message" th:errors="*{firstName}"></label>
+                </div>
+
+                <div class="form-group-registration">
+                    <label class="form-label" th:text="#{user.label.lastName}">Last name</label>
+                    <input type="text" class="form-input-registration" th:field="*{lastName}" required/>
+                    <label class="error-message" th:errors="*{lastName}"></label>
+                </div>
+
+                <input type="submit" value="Register" class="btn-submit centered-btn"/>
+            </form>
+        </div>
+    </div>
+</div>
+
+<form th:replace="~{ForumFormFragment.html :: footer}"></form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var loginButton = document.getElementById("loginButton");
+        var registerButton = document.getElementById("registerButton");
+
+        var activeForm = localStorage.getItem('activeForm');
+
+        if (activeForm === 'register') {
+            showRegisterForm();
+        } else {
+            showLoginForm();
+        }
+
+        loginButton.addEventListener('click', function() {
+            localStorage.setItem('activeForm', 'login');
+            showLoginForm();
+        });
+
+        registerButton.addEventListener('click', function() {
+            localStorage.setItem('activeForm', 'register');
+            showRegisterForm();
+        });
+    });
+
+    function showLoginForm() {
+        document.getElementById("loginForm").style.display = "block";
+        document.getElementById("registerForm").style.display = "none";
+        document.getElementById("loginButton").classList.add("active");
+        document.getElementById("registerButton").classList.remove("active");
+    }
+
+    function showRegisterForm() {
+        document.getElementById("loginForm").style.display = "none";
+        document.getElementById("registerForm").style.display = "block";
+        document.getElementById("loginButton").classList.remove("active");
+        document.getElementById("registerButton").classList.add("active");
+    }
+</script>
+
+</body>
+</html>

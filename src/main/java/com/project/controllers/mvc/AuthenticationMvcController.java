@@ -88,14 +88,18 @@ public class AuthenticationMvcController {
     @GetMapping("/login")
     public String showLoginPage(Model model) {
         model.addAttribute("login", new LoginDto());
-        return "LoginView";
+        model.addAttribute("register", new RegistrationDto());
+        model.addAttribute("showLogin", true);
+        return "AuthView";
     }
 
     @PostMapping("/login")
     public String handleLogin(@Valid @ModelAttribute("login") LoginDto login,
-                              BindingResult bindingResult, HttpSession session) {
+                              BindingResult bindingResult, HttpSession session, Model model) {
         if (bindingResult.hasErrors()) {
-            return "LoginView";
+            model.addAttribute("register", new RegistrationDto());
+            model.addAttribute("showLogin", true);
+            return "AuthView";
         }
         try {
             authenticationHelper.verifyAuthentication(login.getUsername(), login.getPassword());
@@ -103,7 +107,9 @@ public class AuthenticationMvcController {
             return "redirect:/ti";
         } catch (AuthenticationException e) {
             bindingResult.rejectValue("username", "error.login", e.getMessage());
-            return "LoginView";
+            model.addAttribute("register", new RegistrationDto());
+            model.addAttribute("showLogin", true);
+            return "AuthView";
         }
     }
 
@@ -115,19 +121,25 @@ public class AuthenticationMvcController {
 
     @GetMapping("/register")
     public String showRegister(Model model) {
+        model.addAttribute("login", new LoginDto());
         model.addAttribute("register", new RegistrationDto());
-        return "RegisterView";
+        model.addAttribute("showLogin", false);
+        return "AuthView";
     }
 
     @PostMapping("/register")
     public String handleRegister(@Valid @ModelAttribute("register") RegistrationDto registrationDto,
-                                 BindingResult bindingResult) {
+                                 BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            return "RegisterView";
+            model.addAttribute("login", new LoginDto());
+            model.addAttribute("showLogin", false);
+            return "AuthView";
         }
         if (!registrationDto.getPassword().equals(registrationDto.getConfirmPassword())) {
             bindingResult.rejectValue("confirmPassword", "registration_error", "Passwords do not match");
-            return "RegisterView";
+            model.addAttribute("login", new LoginDto());
+            model.addAttribute("showLogin", false);
+            return "AuthView";
         }
 
         try {
@@ -140,8 +152,10 @@ public class AuthenticationMvcController {
             return "redirect:/ti/auth/login";
         } catch (DuplicateEntityException e) {
             bindingResult.rejectValue("username", "registration_error", e.getMessage());
+            model.addAttribute("login", new LoginDto());
+            model.addAttribute("showLogin", false);
+            return "AuthView";
         }
 
-        return "RegisterView";
     }
 }

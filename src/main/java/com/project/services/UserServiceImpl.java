@@ -23,6 +23,11 @@ public class UserServiceImpl implements UserService {
     public static final String YOU_CAN_T_BLOCK_YOURSELF = "You can't block yourself";
     public static final String YOU_CAN_T_DELETE_ADMINS = "You can't delete admins";
     public static final String YOU_CAN_T_DELETE_YOURSELF = "You can't delete yourself";
+    public static final String CAN_T_UNBLOCK_YOURSELF = "You can't unblock yourself";
+    public static final String CAN_T_UNBLOCK_ADMINS = "You can't unblock admins";
+    public static final int ADMIN = 3;
+    public static final int MODERATOR = 2;
+    public static final int USER = 1;
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -104,14 +109,14 @@ public class UserServiceImpl implements UserService {
         try {
             PermissionHelper.isAdminOrModerator(user, INVALID_PERMISSION);
             User userToBlock = userRepository.getUserById(id);
-            if (user.getRole().getRoleId() == 2 && userToBlock.getRole().getRoleId() == 3) {
+            if (user.getRole().getRoleId() == MODERATOR && userToBlock.getRole().getRoleId() == ADMIN) {
                 throw new UnauthorizedOperationException(YOU_CAN_T_BLOCK_ADMINS);
             }
             if (user.getId() == id) {
                 throw new UnauthorizedOperationException(YOU_CAN_T_BLOCK_YOURSELF);
             }
 
-            if (userToBlock.getRole().getRoleId()==3){
+            if (userToBlock.getRole().getRoleId()==ADMIN){
                 throw new UnauthorizedOperationException(YOU_CAN_T_BLOCK_ADMINS);
             }
             if (userToBlock.isBlocked()) {
@@ -133,11 +138,11 @@ public class UserServiceImpl implements UserService {
         try {
             PermissionHelper.isAdminOrModerator(user, INVALID_PERMISSION);
             User userToUnblock = userRepository.getUserById(id);
-            if (user.getRole().getRoleId() == 2 && userToUnblock.getRole().getRoleId() == 3) {
-                throw new UnauthorizedOperationException("You can't unblock admins");
+            if (user.getRole().getRoleId() == MODERATOR && userToUnblock.getRole().getRoleId() == ADMIN) {
+                throw new UnauthorizedOperationException(CAN_T_UNBLOCK_ADMINS);
             }
             if (user.getId() == id) {
-                throw new UnauthorizedOperationException("You can't unblock yourself");
+                throw new UnauthorizedOperationException(CAN_T_UNBLOCK_YOURSELF);
             }
             if (!userToUnblock.isBlocked()) {
                 alreadyUnblocked = true;
@@ -157,13 +162,13 @@ public class UserServiceImpl implements UserService {
         try {
             PermissionHelper.isAdminOrModerator(user, INVALID_PERMISSION);
             User userToDelete = userRepository.getUserById(id);
-            if (user.getRole().getRoleId() == 2 && userToDelete.getRole().getRoleId() == 3) {
+            if (user.getRole().getRoleId() == MODERATOR && userToDelete.getRole().getRoleId() == ADMIN) {
                 throw new UnauthorizedOperationException(YOU_CAN_T_DELETE_ADMINS);
             }
             if (user.getId() == id) {
                 throw new UnauthorizedOperationException(YOU_CAN_T_DELETE_YOURSELF);
             }
-            if (userToDelete.getRole().getRoleId()==3){
+            if (userToDelete.getRole().getRoleId()== ADMIN){
                 throw new UnauthorizedOperationException(YOU_CAN_T_DELETE_ADMINS);
             }
             userRepository.deleteUser(userToDelete);
@@ -196,7 +201,7 @@ public class UserServiceImpl implements UserService {
         }
 
         if (!isAdminOrModerator) {
-            userToBeAdmin.setRole(roleRepository.getRoleById(2));
+            userToBeAdmin.setRole(roleRepository.getRoleById(MODERATOR));
         }
         userRepository.userToBeModerator(userToBeAdmin);
     }
@@ -220,7 +225,7 @@ public class UserServiceImpl implements UserService {
         }
 
         if (isAdminOrModerator) {
-            userToBeDemoted.setRole(roleRepository.getRoleById(1));
+            userToBeDemoted.setRole(roleRepository.getRoleById(USER));
         }
         userRepository.userToBeDemoted(userToBeDemoted);
     }

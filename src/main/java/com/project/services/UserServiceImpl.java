@@ -19,6 +19,10 @@ public class UserServiceImpl implements UserService {
     private static final String ALREADY_BLOCKED = "User is already blocked";
     public static final String ALREADY_NOT_BLOCKED = "User is already not blocked";
     public static final String CAN_T_EDIT_INFORMATION_IN_OTHER_USER_ACCOUNTS = "You can't edit information in other user accounts";
+    public static final String YOU_CAN_T_BLOCK_ADMINS = "You can't block admins";
+    public static final String YOU_CAN_T_BLOCK_YOURSELF = "You can't block yourself";
+    public static final String YOU_CAN_T_DELETE_ADMINS = "You can't delete admins";
+    public static final String YOU_CAN_T_DELETE_YOURSELF = "You can't delete yourself";
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -101,10 +105,14 @@ public class UserServiceImpl implements UserService {
             PermissionHelper.isAdminOrModerator(user, INVALID_PERMISSION);
             User userToBlock = userRepository.getUserById(id);
             if (user.getRole().getRoleId() == 2 && userToBlock.getRole().getRoleId() == 3) {
-                throw new UnauthorizedOperationException("You can't block admins");
+                throw new UnauthorizedOperationException(YOU_CAN_T_BLOCK_ADMINS);
             }
             if (user.getId() == id) {
-                throw new UnauthorizedOperationException("You can't block yourself");
+                throw new UnauthorizedOperationException(YOU_CAN_T_BLOCK_YOURSELF);
+            }
+
+            if (userToBlock.getRole().getRoleId()==3){
+                throw new UnauthorizedOperationException(YOU_CAN_T_BLOCK_ADMINS);
             }
             if (userToBlock.isBlocked()) {
                 alreadyBlocked = true;
@@ -150,10 +158,13 @@ public class UserServiceImpl implements UserService {
             PermissionHelper.isAdminOrModerator(user, INVALID_PERMISSION);
             User userToDelete = userRepository.getUserById(id);
             if (user.getRole().getRoleId() == 2 && userToDelete.getRole().getRoleId() == 3) {
-                throw new UnauthorizedOperationException("You can't delete admins");
+                throw new UnauthorizedOperationException(YOU_CAN_T_DELETE_ADMINS);
             }
             if (user.getId() == id) {
-                throw new UnauthorizedOperationException("You can't delete yourself");
+                throw new UnauthorizedOperationException(YOU_CAN_T_DELETE_YOURSELF);
+            }
+            if (userToDelete.getRole().getRoleId()==3){
+                throw new UnauthorizedOperationException(YOU_CAN_T_DELETE_ADMINS);
             }
             userRepository.deleteUser(userToDelete);
         } catch (EntityNotFoundException e) {

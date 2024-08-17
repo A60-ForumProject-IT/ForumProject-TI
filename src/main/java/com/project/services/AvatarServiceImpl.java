@@ -17,6 +17,7 @@ import java.util.Map;
 @Service
 public class AvatarServiceImpl implements AvatarService {
     public static final int DEFAULT_AVATAR = 1;
+    public static final String NOT_THE_DEFAULT_AVATAR = "Avatar with ID 1 is not the default avatar";
     private final Cloudinary cloudinary;
     private final AvatarRepository avatarRepository;
     private final UserRepository userRepository;
@@ -79,7 +80,7 @@ public class AvatarServiceImpl implements AvatarService {
     public Avatar initializeDefaultAvatar() {
         Avatar defaultAvatar = avatarRepository.getAvatarById(1);
         if (!"/images/DefaultUserAvatar.jpg".equals(defaultAvatar.getAvatar())) {
-            throw new IllegalStateException("Avatar with ID 1 is not the default avatar");
+            throw new IllegalStateException(NOT_THE_DEFAULT_AVATAR);
         }
         return defaultAvatar;
     }

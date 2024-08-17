@@ -50,11 +50,6 @@ public class CommentRepositoryImpl implements CommentRepository {
         }
     }
 
-//    @Override
-//    public List<Comment> getAllCommentsFromUser(int userId, FilteredCommentsOptions filteredCommentsOptions) {
-//
-//    }
-
     @Override
     public Comment getCommentByContent(String content) {
         try (Session session = sessionFactory.openSession()) {

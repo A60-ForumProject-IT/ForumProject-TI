@@ -31,6 +31,8 @@ import java.util.List;
 public class UserMvcController {
 
     public static final String YOU_DONT_HAVE_ACCESS_TO_THIS_PAGE = "You dont have access to this page";
+    public static final int ADMIN = 3;
+    public static final int MODERATOR = 2;
     private final UserService userService;
     private final AuthenticationHelper authenticationHelper;
     private final MapperHelper mapperHelper;
@@ -167,7 +169,7 @@ public class UserMvcController {
     public String showAdminPortal(HttpSession session, Model model) {
         try {
             User user = authenticationHelper.tryGetUserFromSession(session);
-            if (user.getRole().getRoleId() == 3 || user.getRole().getRoleId() == 2) {
+            if (user.getRole().getRoleId() == ADMIN || user.getRole().getRoleId() == MODERATOR) {
                 return "AdminPanelView";
             }
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
@@ -198,7 +200,7 @@ public class UserMvcController {
                 return "ErrorView";
             }
 
-            if (user.getRole().getRoleId() == 3 || user.getRole().getRoleId() == 2) {
+            if (user.getRole().getRoleId() == ADMIN || user.getRole().getRoleId() == MODERATOR) {
                 FilteredUsersOptions filteredUsersOptions = new FilteredUsersOptions(
                         filterUserDto.getUsername(),
                         filterUserDto.getFirstName(),
@@ -254,7 +256,7 @@ public class UserMvcController {
     public String deleteUser(@PathVariable int id, Model model, HttpSession session) {
         try {
             User user = authenticationHelper.tryGetUserFromSession(session);
-            if (user.getRole().getRoleId() == 3 || user.getRole().getRoleId() == 2) {
+            if (user.getRole().getRoleId() == ADMIN || user.getRole().getRoleId() == MODERATOR) {
                 userService.deleteUser(user, id);
                 return "redirect:/ti/users/admin/users";
             }
@@ -280,7 +282,7 @@ public class UserMvcController {
     public String blockUser(@PathVariable int id, Model model, HttpSession session) {
         try {
             User user = authenticationHelper.tryGetUserFromSession(session);
-            if (user.getRole().getRoleId() == 3 || user.getRole().getRoleId() == 2) {
+            if (user.getRole().getRoleId() == ADMIN || user.getRole().getRoleId() == MODERATOR) {
                 userService.blockUser(user, id);
                 return "redirect:/ti/users/" + id;
             }
@@ -306,7 +308,7 @@ public class UserMvcController {
     public String unblockUser(@PathVariable int id, Model model, HttpSession session) {
         try {
             User user = authenticationHelper.tryGetUserFromSession(session);
-            if (user.getRole().getRoleId() == 3 || user.getRole().getRoleId() == 2) {
+            if (user.getRole().getRoleId() == ADMIN || user.getRole().getRoleId() == MODERATOR) {
                 userService.unblocked(user, id);
                 return "redirect:/ti/users/" + id;
             }
@@ -333,7 +335,7 @@ public class UserMvcController {
         try {
             User user = authenticationHelper.tryGetUserFromSession(session);
             User userToBePromoted = userService.getUserById(user, id);
-            if (user.getRole().getRoleId() == 3) {
+            if (user.getRole().getRoleId() == ADMIN) {
                 userService.userToBeAdmin(userToBePromoted);
                 return "redirect:/ti/users/" + id;
             }
@@ -360,7 +362,7 @@ public class UserMvcController {
         try {
             User user = authenticationHelper.tryGetUserFromSession(session);
             User userToBeDemoted = userService.getUserById(user, id);
-            if (user.getRole().getRoleId() == 3) {
+            if (user.getRole().getRoleId() == ADMIN) {
                 userService.userToBeDemoted(userToBeDemoted);
                 return "redirect:/ti/users/" + id;
             }
@@ -404,7 +406,7 @@ public class UserMvcController {
         try {
             userDto = mapperHelper.toUserDto(currentUser);
             PhoneNumber phoneNumber = mapperHelper.getFromPhoneDto(phoneNumberDto);
-            if (currentUser.getRole().getRoleId() == 3) {
+            if (currentUser.getRole().getRoleId() == ADMIN) {
                 phoneService.addPhoneToAnAdmin(currentUser, phoneNumber);
                 return "redirect:/ti/users/" + id;
             }
@@ -438,7 +440,7 @@ public class UserMvcController {
                               Model model, HttpSession session) {
         try {
             User user = authenticationHelper.tryGetUserFromSession(session);
-            if (user.getRole().getRoleId() == 3 || user.getId() == id) {
+            if (user.getRole().getRoleId() == ADMIN || user.getId() == id) {
                 phoneService.removePhoneFromAdmin(user, phoneId);
                 return "redirect:/ti/users/" + id;
             }

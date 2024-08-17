@@ -172,15 +172,6 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
-//    try (Session session = sessionFactory.openSession()) {
-//        Query<User> query = session.createQuery("from User where username = :username", User.class);
-//        query.setParameter("username", username);
-//        List<User> users = query.list();
-//        if (users.isEmpty()) {
-//            throw new EntityNotFoundException("User", "username", username);
-//        }
-//        return users.get(0);
-
     @Override
     public Long countAllUsers() {
 

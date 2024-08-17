@@ -14,6 +14,8 @@ import java.util.List;
 
 @Repository
 public class PhoneRepositoryImpl implements PhoneRepository {
+    public static final String NUMBER_CANNOT_BE_NULL = "PhoneNumber cannot be null.";
+    public static final String FAILED_TO_DELETE_PHONE_NUMBER = "Failed to delete phone number: ";
     private final SessionFactory sessionFactory;
 
     @Autowired
@@ -46,7 +48,7 @@ public class PhoneRepositoryImpl implements PhoneRepository {
     @Override
     public void removePhoneFromAdmin(PhoneNumber phoneNumber) {
         if (phoneNumber == null) {
-            throw new IllegalArgumentException("PhoneNumber cannot be null.");
+            throw new IllegalArgumentException(NUMBER_CANNOT_BE_NULL);
         }
 
         try (Session session = sessionFactory.openSession()) {
@@ -57,7 +59,7 @@ public class PhoneRepositoryImpl implements PhoneRepository {
             session.remove(phoneNumber);
             session.getTransaction().commit();
         } catch (Exception e) {
-            throw new RuntimeException("Failed to delete phone number: " + phoneNumber.getId(), e);
+            throw new RuntimeException(FAILED_TO_DELETE_PHONE_NUMBER + phoneNumber.getId(), e);
         }
     }
 

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class PhoneServiceImpl implements PhoneService {
     private static final String INVALID_PERMISSION = "You dont have permissions! Only admins can do this operation.";
+    public static final String DO_NOT_HAVE_PERMISSION_TO_REMOVE_THIS_PHONE_NUMBER = "You do not have permission to remove this phone number.";
     private final PhoneRepository phoneRepository;
     private final UserRepository userRepository;
 
@@ -48,7 +49,7 @@ public class PhoneServiceImpl implements PhoneService {
         PhoneNumber phoneNumber = phoneRepository.getPhoneNumberById(phoneId);
 
         if (phoneNumber.getUser().getId() != user.getId()) {
-            throw new UnauthorizedOperationException("You do not have permission to remove this phone number.");
+            throw new UnauthorizedOperationException(DO_NOT_HAVE_PERMISSION_TO_REMOVE_THIS_PHONE_NUMBER);
         }
         user.getPhoneNumbers().remove(phoneNumber);
         userRepository.update(user);

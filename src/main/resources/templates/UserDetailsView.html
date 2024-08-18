@@ -23,7 +23,7 @@
                 <p><strong>Last Name:</strong></p>
                 <p><strong>Email:</strong></p>
                 <p><strong>Role:</strong></p>
-                <div th:if="${isAdmin || isModerator}"><strong>Phones:</strong></div>
+                <div th:if="${user.getRole().roleId==3}"><strong>Phones:</strong></div>
             </div>
             <div class="user-info-right">
                 <p><span class="user-info-right" th:text="${user.username}"></span></p>

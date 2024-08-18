@@ -27,21 +27,21 @@
             <div class="post-right-actions">
                 <div class="like-dislike-buttons">
                     <a id="like-button"
-                       th:if="${loggedInUser.getId() != post.getPostedBy().getId()}"
+                       th:if="${loggedInUser.getId() != post.getPostedBy().getId() && !loggedInUser.isBlocked()}"
                        th:href="@{__${requestURI}__/like}">
                         <i class="fa fa-thumbs-up"></i>
                     </a>
                     <i class="fa fa-thumbs-up static-icon"
-                       th:if="${loggedInUser.getId() == post.getPostedBy().getId()}"></i>
+                       th:if="${loggedInUser.getId() == post.getPostedBy().getId() ||  loggedInUser.isBlocked()}"></i>
                     <span th:text="${post.getUsersWhoLikedPost().size()}">4</span>
 
                     <a id="dislike-button"
-                       th:if="${loggedInUser.getId() != post.getPostedBy().getId()}"
+                       th:if="${loggedInUser.getId() != post.getPostedBy().getId() && !loggedInUser.isBlocked()}"
                        th:href="@{__${requestURI}__/dislike}">
                         <i class="fa fa-thumbs-down"></i>
                     </a>
                     <i class="fa fa-thumbs-down static-icon"
-                       th:if="${loggedInUser.getId() == post.getPostedBy().getId()}"></i>
+                       th:if="${loggedInUser.getId() == post.getPostedBy().getId() ||  loggedInUser.isBlocked()}"></i>
                     <span th:text="${post.getUsersWhoDislikedPost().size()}">3</span>
                 </div>
 

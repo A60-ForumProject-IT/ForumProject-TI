@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-<header th:replace="ForumFormFragment.html :: header"></header>
+<header th:replace="~{ForumFormFragment.html :: header}"></header>
 <form th:replace="~{ForumFormFragment.html :: images}"></form>
 
 
@@ -32,6 +32,6 @@
     </form>
 </div>
 
-<footer th:replace="ForumFormFragment.html :: footer"></footer>
+<footer th:replace="~{ForumFormFragment.html :: footer}"></footer>
 </body>
 </html>

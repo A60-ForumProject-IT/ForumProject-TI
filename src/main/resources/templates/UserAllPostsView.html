@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../static/css/styles.css" th:href="@{/css/styles.css}">
 </head>
 <body>
-<form th:replace="ForumFormFragment.html :: header"></form>
+<header th:replace="~{ForumFormFragment.html :: header}"></header>
 <form th:replace="~{ForumFormFragment.html :: images}"></form>
 
 <div class="body-content">
@@ -58,6 +58,6 @@
         </div>
     </div>
 </div>
-<form th:replace="ForumFormFragment.html :: footer"></form>
+<footer th:replace="~{ForumFormFragment.html :: footer}"></footer>
 </body>
 </html>

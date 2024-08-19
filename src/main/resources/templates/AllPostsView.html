@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<form th:replace="ForumFormFragment.html :: header"></form>
+<header th:replace="~{ForumFormFragment.html :: header}"></header>
 <form th:replace="~{ForumFormFragment.html :: images}"></form>
 
 <div class="body-content">
@@ -130,6 +130,6 @@
        class="btn-danger">Create New Post</a>
 </form>
 
-<form th:replace="ForumFormFragment.html :: footer"></form>
+<footer th:replace="~{ForumFormFragment.html :: footer}"></footer>
 </body>
 </html>

@@ -9,7 +9,7 @@
 
 </head>
 <body>
-<header th:replace="ForumFormFragment.html :: header"></header>
+<header th:replace="~{ForumFormFragment.html :: header}"></header>
 <form th:replace="~{ForumFormFragment.html :: images}"></form>
 
 
@@ -40,7 +40,7 @@
             <div th:each="tag : ${tagsInPost}" th:unless="${tagsInPost.isEmpty()}">
                 <div class="tag-item">
                     <span class="tag-name" th:text="${'#' + tag}">#SomeVeryLongWord</span>
-                    <a href="#" th:href="@{__${requestURI}__/remove-tag/__${tag.getId()}__}" class="btn-danger">Remove</a>
+                    <a href="#" th:href="@{__${requestURI}__/remove-tag/__${tag.getId()}__}" class="btn-danger" >Remove</a>
                 </div>
             </div>
         </div>
@@ -57,6 +57,6 @@
     </div>
 </div>
 
-<footer th:replace="ForumFormFragment.html :: footer"></footer>
+<footer th:replace="~{ForumFormFragment.html :: footer}"></footer>
 </body>
 </html>
